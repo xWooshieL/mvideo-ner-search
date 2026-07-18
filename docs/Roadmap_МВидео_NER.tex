@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
 \usepackage[russian]{babel}
-\usepackage[left=1.6cm,right=1.6cm,top=2.2cm,bottom=1.8cm]{geometry}
+\usepackage[left=1.7cm,right=1.7cm,top=2.3cm,bottom=2cm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{xcolor}
 \usepackage{tikz}
@@ -13,280 +13,335 @@
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{tabularx}
-\usepackage{ragged2e}
 \usepackage{microtype}
-\usepackage{graphicx}
 
-\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds,decorations.pathmorphing}
+\usetikzlibrary{arrows.meta,positioning,calc}
 
 \definecolor{ink}{RGB}{28,28,30}
-\definecolor{paper}{RGB}{250,247,242}
-\definecolor{rulec}{RGB}{210,200,190}
+\definecolor{paper}{RGB}{252,250,246}
+\definecolor{rulec}{RGB}{200,190,178}
 \definecolor{mvred}{RGB}{196,30,38}
-\definecolor{inksoft}{RGB}{90,88,84}
-\definecolor{mint}{RGB}{45,110,100}
-\definecolor{sand}{RGB}{232,220,200}
+\definecolor{inksoft}{RGB}{95,92,88}
+\definecolor{mint}{RGB}{40,105,95}
+\definecolor{sand}{RGB}{236,226,210}
 \definecolor{slate}{RGB}{55,70,85}
 
 \hypersetup{colorlinks=true,linkcolor=mvred,urlcolor=mvred}
+
 \pagestyle{fancy}
 \fancyhf{}
-\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrulewidth}{0.25pt}
 \fancyhead[L]{\small\textcolor{inksoft}{М.Видео $\cdot$ Intelligent Search}}
-\fancyhead[R]{\small\textcolor{inksoft}{Roadmap команды}}
+\fancyhead[R]{\small\textcolor{inksoft}{Roadmap}}
 \fancyfoot[C]{\thepage}
-\setlength{\headheight}{13pt}
+\setlength{\headheight}{14pt}
 
-\titleformat{\section}{\large\bfseries\color{ink}}{\thesection.}{0.4em}{}[\vspace{1pt}{\color{mvred}\hrule height 1.1pt}]
-\titleformat{\subsection}{\normalsize\bfseries\color{slate}}{\thesubsection.}{0.35em}{}
+\titleformat{\section}
+  {\large\bfseries\color{ink}}
+  {\thesection.}{0.4em}{}
+  [\vspace{3pt}{\color{mvred}\titlerule[1.1pt]}\vspace{6pt}]
 
-\newcommand{\daybox}[4]{%
-\begin{tikzpicture}
-  \node[draw=rulec, fill=paper, line width=0.7pt, inner sep=9pt, text width=0.92\textwidth, rounded corners=1pt] (b) {%
-    {\bfseries\color{mvred}#1}\quad{\bfseries #2}\\[4pt]
-    {\scriptsize\color{inksoft}\textbf{делаем}}\par
-    #3\\[5pt]
-    {\scriptsize\color{mint}\textbf{на выходе}}\par
-    #4
-  };
-\end{tikzpicture}\par\vspace{0.55em}
-}
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{slate}}
+  {\thesubsection.}{0.35em}{}
 
-\setlist[itemize]{leftmargin=1.2em,itemsep=0.2em,topsep=0.25em}
-\setlength{\parskip}{0.35em}
+\setlist[enumerate]{leftmargin=1.35em,itemsep=0.28em,topsep=0.35em,parsep=0pt}
+\setlength{\parskip}{0.4em}
 \setlength{\parindent}{0pt}
+
+% ---- day card: no overlapping header bars ----
+\newcommand{\daycard}[4]{%
+  \vspace{0.35em}%
+  \noindent
+  \begin{tikzpicture}
+    \node[
+      draw=rulec,
+      fill=white,
+      line width=0.65pt,
+      inner sep=10pt,
+      text width=\dimexpr\textwidth-22pt\relax,
+      rounded corners=2pt
+    ] {%
+      {\color{mvred}\bfseries #1}~~{\bfseries #2}\par\vspace{6pt}%
+      {\scriptsize\bfseries\color{inksoft}ЧТО ДЕЛАЕМ}\par\vspace{2pt}%
+      #3\par\vspace{7pt}%
+      {\scriptsize\bfseries\color{mint}ЧТО ДОЛЖНО ПОЛУЧИТЬСЯ}\par\vspace{2pt}%
+      #4%
+    };
+  \end{tikzpicture}%
+  \vspace{0.7em}%
+}
 
 \begin{document}
 \pagecolor{paper}
 \color{ink}
 
-% ---------- COVER ----------
-\begin{tikzpicture}[remember picture,overlay]
-  \fill[sand] ([yshift=0cm]current page.north west) rectangle ([yshift=-4.8cm]current page.north east);
-  \fill[mvred] ([yshift=-4.8cm]current page.north west) rectangle ([yshift=-4.95cm]current page.north east);
+% ===================== COVER =====================
+% Sand band ONLY in top margin area — does not cover title text
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[sand]
+    (current page.north west)
+    rectangle
+    ([yshift=-2.6cm]current page.north east);
+  \fill[mvred]
+    ([yshift=-2.6cm]current page.north west)
+    rectangle
+    ([yshift=-2.72cm]current page.north east);
 \end{tikzpicture}
 
-\vspace*{0.3cm}
-{\footnotesize\color{inksoft} БУТКЕМП $\cdot$ КЕЙС М.ВИДЕО $\cdot$ NLP / SEARCH}\\[0.6cm]
-{\fontsize{26}{30}\selectfont\bfseries Roadmap}\\[0.15cm]
-{\fontsize{16}{20}\selectfont\color{mvred}\bfseries от теории к standalone-поисковику}\\[0.55cm]
-{\normalsize Не «пять одинаковых колонок из методички», а рабочий план команды:\\[2pt]
-сначала читаем и договариваемся о языке задачи, к середине буткемпа уже есть EDA + живой MVP,\\[2pt]
-дальше --- своя разметка, жёстче факты, эмбеддинговый поиск и упаковка под защиту.}\\[0.7cm]
+\vspace*{1.5cm}
+
+{\footnotesize\bfseries\color{inksoft}БУТКЕМП $\cdot$ КЕЙС М.ВИДЕО $\cdot$ NLP / SEARCH}
+
+\vspace{0.85cm}
+
+{\fontsize{28}{32}\selectfont\bfseries Roadmap}
+
+\vspace{0.25cm}
+
+{\fontsize{15}{18}\selectfont\color{mvred}\bfseries от теории к standalone-поисковику}
+
+\vspace{0.55cm}
+
+{\color{mvred}\hrule height 1.2pt}
+
+\vspace{0.55cm}
+
+Нормальный план команды: сначала читаем и договариваемся, о чём вообще задача.
+К середине буткемпа уже есть EDA и живой MVP.
+Дальше --- своя разметка, более жёсткие факты, поиск по эмбеддингам и упаковка под защиту.
+
+\vspace{0.65cm}
 
 \noindent
-\begin{tabular}{@{}p{0.48\textwidth}@{\hspace{0.04\textwidth}}p{0.48\textwidth}@{}}
-{\scriptsize\color{inksoft}ПРИНЦИП} & {\scriptsize\color{inksoft}СЖАТЫЙ СРОК}\\
-\textbf{Факты из запроса должны помогать найти SKU,} не просто красиво выглядеть в JSON. &
-\textbf{EDA + MVP --- к дню 2--3.} Параллельно копим свою разметку и не врём себе метриками.
+\begin{tabular}{@{}p{0.47\textwidth}@{\hspace{0.06\textwidth}}p{0.47\textwidth}@{}}
+{\scriptsize\bfseries\color{inksoft}ПРИНЦИП} &
+{\scriptsize\bfseries\color{inksoft}СРОКИ}\\[3pt]
+Факты из запроса должны помогать найти нужный SKU, а не просто красиво лежать в JSON. &
+EDA + MVP --- к дню 2--3. Параллельно копим свою разметку и не врём себе на метриках.
 \end{tabular}
 
 \vspace{0.9cm}
 
-\section*{Как читать этот план}
-\addcontentsline{toc}{section}{Как читать этот план}
+\section*{Как это читать}
+\addcontentsline{toc}{section}{Как это читать}
 
-План специально \textbf{неровный}: в начале больше теории и синхронизации, в середине --- плотная инженерия, ближе к защите --- продукт и история для стейкхолдеров.
+План специально кривоватый по нагрузке --- и это ок.
+В начале больше теории и синхронизации, в середине плотная инженерия, ближе к защите --- продукт и история для стейкхолдеров.
 
-\vspace{0.3em}
+\vspace{0.45cm}
 \begin{center}
 \begin{tikzpicture}[
-  box/.style={draw=rulec, fill=white, inner sep=5pt, font=\scriptsize\bfseries, rounded corners=1pt},
+  box/.style={
+    draw=rulec, fill=white, inner sep=5pt,
+    font=\scriptsize\bfseries, rounded corners=1.5pt,
+    minimum height=0.72cm
+  },
   arr/.style={-{Stealth[length=2mm]}, thick, inksoft}
 ]
-  \node[box] (t) at (0,0) {0 теория};
-  \node[box] (a) at (2.5,0) {1 каркас};
-  \node[box] (b) at (5.1,0) {2 EDA+MVP};
-  \node[box] (c) at (7.8,0) {3 своя разметка};
-  \node[box] (d) at (10.4,0) {4 поиск};
-  \node[box] (e) at (12.7,0) {5 защита};
-  \draw[arr] (t)--(a); \draw[arr] (a)--(b); \draw[arr] (b)--(c); \draw[arr] (c)--(d); \draw[arr] (d)--(e);
-  \node[font=\tiny\color{mvred}] at (5.1,-0.55) {жёсткий чекпоинт};
+  \node[box] (t) {0 теория};
+  \node[box, right=0.28 of t] (a) {1 каркас};
+  \node[box, right=0.28 of a] (b) {2 EDA+MVP};
+  \node[box, right=0.28 of b] (c) {3 разметка};
+  \node[box, right=0.28 of c] (d) {4 поиск};
+  \node[box, right=0.28 of d] (e) {5 защита};
+  \draw[arr] (t) -- (a);
+  \draw[arr] (a) -- (b);
+  \draw[arr] (b) -- (c);
+  \draw[arr] (c) -- (d);
+  \draw[arr] (d) -- (e);
+  \node[font=\tiny\color{mvred}, below=0.22 of b] {жёсткий чекпоинт};
 \end{tikzpicture}
 \end{center}
-
-\vspace{0.4cm}
-
-% ---------- DAY 0 ----------
-\section{День 0 --- до буткемпа: язык задачи}
-
-Пока нет «вайбкодинга ради скрина». Есть чтение и общий словарь.
-
-\daybox{00}{Теория и насмотренность}{%
-\begin{itemize}
-  \item Лонгриды / семинары по классическому ML и последовательностям: признаки, overfitting, train/test, метрики.
-  \item NLP-база: токенизация, BIO, чем NER отличается от классификации всего запроса целиком.
-  \item CRF vs «просто нейросеть»: когда хватает линейной модели на признаках токена.
-  \item Word2Vec / эмбеддинги / косинус --- задел под поиск по пространству, не обязательно внедрять в день~1.
-  \item Трансформеры --- понимать идею; в MVP не тащить тяжёлый BERT, если SLA $<100$~мс на CPU.
-\end{itemize}
-}{%
-\begin{itemize}
-  \item Общий язык: \textit{факт}, \textit{SKU}, \textit{weak label}, \textit{entity F1}, \textit{latency}.
-  \item Короткий конспект «что читали / что берём в кейс» (1--2 страницы на команду).
-\end{itemize}
-}
-
-\noindent\textit{Черновой стек чтения (подставить свои источники):} курсные лонгриды по ИИ, блок про RNN/attention/трансформеры, заметки по TF-IDF и метрикам $P/R/F1$.
 
 \vspace{0.35cm}
 
-% ---------- DAY 1 ----------
-\section{День 01 --- Погружение $\rightarrow$ сразу в данные}
+% ===================== DAY 0 =====================
+\section{День 0 --- до буткемпа: просто понять язык}
 
-Не заканчиваем день только «роадмапом на доске». К вечеру уже трогаем parquet.
+Пока никто ничего не кодит ради скрина. Читаем и договариваемся, что значат слова.
 
-\daybox{01}{Синхронизация + скелет репо + первый взгляд на данные}{%
-\begin{itemize}
-  \item Сверить понимание кейса: запрос $\to$ JSON-факты $<100$~мс; конверсия через релевантность.
-  \item Роли: данные/EDA, модель/NER, сервис/UI, доки/защита --- но без жёстких стен, все смотрят метрики.
-  \item Зафиксировать целевой JSON: \texttt{brand}, \texttt{category}, \texttt{attributes}, \texttt{entities}, \texttt{latency\_ms}.
-  \item Поднять репозиторий, \texttt{.gitignore} на сырые гигабайты, черновик README.
-  \item Открыть \texttt{query\_clicks} / \texttt{sku\_desc}: схемы, объёмы, 20 сырых примеров в ноутбук.
-\end{itemize}
+\daycard{00}{Теория и насмотренность}{%
+\begin{enumerate}
+  \item Лонгриды и семинары: признаки, overfitting, train/test, метрики --- чтобы потом не путаться.
+  \item NLP-база: токены, BIO, чем NER отличается от <<классифицируем весь запрос целиком>>.
+  \item CRF vs <<давайте сразу нейросеть>>: когда хватает модели на признаках токена.
+  \item Эмбеддинги и косинус --- это задел под поиск. В день 1 тащить не обязательно.
+  \item Трансформеры понимать полезно, но тяжёлый BERT в MVP под SLA $<100$ мс на CPU явно не тащим.
+\end{enumerate}
 }{%
-\begin{itemize}
-  \item Утверждённый мини-план на дни 2--5 (этот документ).
-  \item Ноутбук \texttt{01\_overview}: размеры, колонки, 0 «магии» в данных.
-\end{itemize}
+\begin{enumerate}
+  \item У всех в голове один словарь: факт, SKU, weak label, entity F1, latency.
+  \item Короткий конспект на команду: что прочитали и что реально берём в кейс.
+\end{enumerate}
 }
 
-% ---------- DAY 2 ----------
-\section{День 02 --- Чекпоинт: EDA готов, MVP дышит}
+\noindent\textit{Что читать:} лонгриды курса, куски про последовательности / attention, TF-IDF и $P/R/F1$. Свои источники --- ок, главное чтобы команда говорила на одном языке.
 
-Это день, к которому нельзя опоздать. Если сюда не дошли --- режем скоуп, не расползаемся в «красивый рефакторинг».
+% ===================== DAY 1 =====================
+\section{День 01 --- Погружение, но сразу лезем в данные}
 
-\daybox{02}{EDA + weak labels + первый CRF + тонкий сервис}{%
-\begin{itemize}
-  \item EDA: длины запросов, топ-бренды/запросы, цена vs позиция, co-occurrence, TF-IDF heatmaps --- пачка графиков в \texttt{figures/}.
-  \item Словари из кликов: бренды / категорийные фразы $\to$ \texttt{artifacts/*.txt}.
-  \item Правила ATTR (память, цвет, диагональ\ldots) + BIO-авторазметка.
-  \item Обучить CRF (\texttt{sklearn-crfsuite}): $P(y\mid x)$, holdout на авто-тегах, entity F1 / token Acc.
-  \item Поднять \texttt{/extract} (и debug), чтобы любой из команды вбивал запрос и видел JSON.
-\end{itemize}
+День не заканчивается только планом на доске. К вечеру parquet уже открыт.
+
+\daycard{01}{Синхронизация + репо + первый взгляд}{%
+\begin{enumerate}
+  \item Сверить кейс: запрос $\to$ JSON с фактами, быстрее 100 мс. Иначе зачем всё это.
+  \item Роли набросать (данные, модель, сервис/UI, доки), но без культа <<это не моё>>.
+  \item Зафиксировать JSON: brand, category, attributes, entities, latency\_ms.
+  \item Поднять репозиторий, гигабайты сырых данных в gitignore, черновик README.
+  \item Открыть query\_clicks и sku\_desc: схемы, размеры, штук 20 живых строк в ноутбук.
+\end{enumerate}
 }{%
-\begin{itemize}
-  \item \textbf{EDA-пакет закрыт} (ноутбуки + $\ge10$ графиков).
-  \item \textbf{MVP-ядро:} запрос $\to$ факты JSON, p95 latency заметно ниже 100~мс.
-  \item Честный дисклеймер в доке: метрики пока против weak labels, не против ручного gold.
-\end{itemize}
+\begin{enumerate}
+  \item Этот roadmap утверждён как рабочий план на дни 2--5.
+  \item Ноутбук overview: колонки, объёмы, без магии <<оно само>>.
+\end{enumerate}
+}
+
+% ===================== DAY 2 =====================
+\section{День 02 --- Сюда нельзя опоздать: EDA + MVP}
+
+Если к вечеру нет JSON-сервиса --- на день 3 не прыгаем в <<приложение мечты>>. Сначала дожимаем факты.
+
+\daycard{02}{EDA, словари, CRF, тонкий сервис}{%
+\begin{enumerate}
+  \item EDA: длины запросов, топы, цена vs позиция, heatmaps --- пачка картинок в figures/.
+  \item Из кликов собрать словари брендов и категорий $\to$ artifacts/*.txt.
+  \item Правила на ATTR (память, цвет, диагональ...) + авто-BIO.
+  \item Обучить CRF: по сути максимизируем $P(y\mid x)$, где $y$ --- теги, $x$ --- слова запроса.
+  \item Поднять /extract (и debug), чтобы любой из команды вбил запрос и сразу увидел JSON.
+\end{enumerate}
+}{%
+\begin{enumerate}
+  \item EDA закрыт: ноутбуки + куча графиков.
+  \item MVP-ядро живо: запрос $\to$ факты, latency нормально укладывается в SLA.
+  \item В доке честно написано: метрики пока против weak labels, не против ручного gold.
+\end{enumerate}
 }
 
 \begin{center}
-\fbox{\parbox{0.9\textwidth}{\centering\textbf{Gate:} нет JSON-сервиса к концу дня~2 --- на день~3 не начинаем «приложение мечты»,\\сначала дожимаем извлечение фактов.}}
+\fbox{\parbox{0.88\textwidth}{\centering
+\textbf{Gate дня 2.} Нет JSON к вечеру --- эмбеддинги и standalone подождут.\\[2pt]
+Сначала извлечение фактов, потом красивости.
+}}
 \end{center}
 
-\vspace{0.45cm}
+\vspace{0.55cm}
 
-% ---------- DAY 3 ----------
-\section{День 03 --- Своя разметка и шесть ударов по качеству фактов}
+% ===================== DAY 3 =====================
+\section{День 03 --- Своя разметка и шесть ударов по качеству}
 
-Здесь команда перестаёт «верить словарю» и начинает мерить правду.
+Тут перестаём слепо верить словарю и начинаем мерить правду.
 
-\daybox{03}{Gold / synthetic + точность фактов}{%
-\begin{itemize}
-  \item Ручная разметка выборки запросов (цель: сотни, не «три примера»). Формат: span + тип.
-  \item Чуть синтетики: шаблоны \texttt{\{category\} \{brand\} \{attr\}} + шум/опечатки.
-  \item Прогнать текущий CRF по gold: честный entity F1 --- это новая правда.
-  \item Дожать шесть направлений (ниже) хотя бы на уровне v1.
-  \item Дообучить / переобучить CRF (и при необходимости правила) на смеси weak + gold.
-\end{itemize}
+\daycard{03}{Gold / синтетика / переобучение}{%
+\begin{enumerate}
+  \item Руками разметить пачку запросов (лучше сотни, не три примера). Span + тип.
+  \item Чуть синтетики: шаблоны <<категория бренд attr>> + шум и опечатки.
+  \item Прогнать текущий CRF по gold --- вот это уже честный F1.
+  \item Закрыть шесть пунктов ниже хотя бы в версии v1.
+  \item Переобучить модель на смеси weak + gold.
+\end{enumerate}
 }{%
-\begin{itemize}
-  \item Файл gold-разметки в репо + скрипт оценки на нём.
-  \item Короткая таблица «было / стало» по ошибкам: бренд$\leftrightarrow$модель, нормализация, ATTR.
-\end{itemize}
+\begin{enumerate}
+  \item Gold-файл в репо + скрипт оценки на нём.
+  \item Табличка <<было / стало>> по типичным косякам.
+\end{enumerate}
 }
 
-\subsection*{Шесть пунктов --- не wishlist, а backlog дня 3}
-\begin{enumerate}[leftmargin=1.4em,itemsep=0.35em]
-  \item \textbf{Факты точнее} --- меньше мусора, чтобы фильтры поиска не врали.
-  \item \textbf{Бренд $\neq$ модель} --- \textit{iphone}/\textit{galaxy s25} не обязаны быть vendor-строкой один-в-один.
-  \item \textbf{Нормализация} --- \textit{айфон}/\textit{iphone}/\textit{Apple} сходятся к канону.
-  \item \textbf{Устойчивость к шуму} --- опечатки, регистр, склейки \texttt{16гб}.
-  \item \textbf{Своя разметка + синтетика} --- честные метрики, не только self-check словаря.
-  \item \textbf{Query$\leftrightarrow$click score} --- правила «согласованной пары» (бренд совпал, токены в title, позиция клика); отбор clean-пар под следующую модель, не «100\% идеал».
+\subsection*{Шесть пунктов --- это backlog, а не мечты в стол}
+\begin{enumerate}
+  \item Факты точнее --- меньше мусора, фильтры поиска не врут.
+  \item Бренд и модель не путаем: iphone / galaxy s25 --- это не всегда просто vendor-строка.
+  \item Нормализация: айфон / iphone / Apple сходятся к одному канону.
+  \item Устойчивость к шуму: опечатки, регистр, склейки вроде 16гб.
+  \item Своя разметка + синтетика --- честные метрики, а не self-check словаря.
+  \item Score пары query$\leftrightarrow$click: бренд совпал, токены в title, позиция клика. Берём <<хорошо согласованные>> пары, без сказки про 100\% идеал.
 \end{enumerate}
 
-% ---------- DAY 4 ----------
-\section{День 04 --- Standalone: NER в фундаменте, сверху поиск}
+% ===================== DAY 4 =====================
+\section{День 04 --- Standalone: NER внизу, поиск сверху}
 
-Не заменяем NER эмбеддингами. Склеиваем.
+Эмбеддинги не вместо NER. Вместе.
 
-\daybox{04}{Приложение + эмбеддинговый поиск по каталогу}{%
-\begin{itemize}
-  \item UI/лаба: ввод запроса, подсветка сущностей, JSON, latency vs SLA (уже можно усилить до «поиска»).
-  \item Индекс по \texttt{sku\_desc} / сэмплу каталога: эмбеддинги title (TF-IDF+SVD на старте; sentence-embeddings --- если влезаем по времени/CPU).
-  \item Ранжирование-гибрид: (a)~фильтры/буст по фактам NER, (b)~косинус в пространстве запрос--SKU.
-  \item Показать 5--10 выдач «до/после» фактов --- это лучший слайд защиты.
-  \item Заготовка под пункт~6: таблица high-score пар query--click для будущего дообучения.
-\end{itemize}
+\daycard{04}{Приложение + поиск по каталогу}{%
+\begin{enumerate}
+  \item UI: строка поиска, подсветка сущностей, JSON, latency vs 100 мс.
+  \item Индекс по sku\_desc / куску каталога. На старте можно TF-IDF+SVD, если sentence-embeddings не влезают по времени.
+  \item Гибрид: буст/фильтры по фактам NER + близость запрос--SKU в пространстве.
+  \item Сделать 5--10 выдач <<до / после фактов>> --- это лучший слайд на защите.
+  \item Заготовка под пункт 6: таблица high-score пар query--click.
+\end{enumerate}
 }{%
-\begin{itemize}
-  \item Standalone-демо: строка поиска $\to$ факты + топ SKU.
-  \item Понятная схема на один слайд: \texttt{query $\xrightarrow{\text{NER}}$ facts $\xrightarrow{\text{retrieve}}$ SKU}.
-\end{itemize}
+\begin{enumerate}
+  \item Демо: вбил запрос $\to$ увидел факты и топ SKU.
+  \item Одна схема на слайд: query $\to$ NER $\to$ facts $\to$ retrieve $\to$ SKU.
+\end{enumerate}
 }
 
-\vspace{0.2cm}
+\vspace{0.25cm}
 \begin{center}
 \begin{tikzpicture}[
-  n/.style={draw=slate, fill=white, font=\small\bfseries, inner sep=6pt, rounded corners=1pt},
+  n/.style={draw=slate, fill=white, font=\small\bfseries, inner sep=6pt, rounded corners=1.5pt},
   e/.style={-{Stealth}, thick, mvred}
 ]
   \node[n] (q) {query};
-  \node[n, right=0.85 of q] (ner) {NER / факты};
-  \node[n, right=0.85 of ner] (emb) {эмбеддинги};
-  \node[n, right=0.85 of emb] (sku) {top SKU};
-  \draw[e] (q)--(ner); \draw[e] (ner)--(emb); \draw[e] (emb)--(sku);
-  \node[font=\scriptsize\color{inksoft}, below=0.15 of ner] {фундамент};
-  \node[font=\scriptsize\color{inksoft}, below=0.15 of emb] {поиск};
+  \node[n, right=0.7 of q] (ner) {NER / факты};
+  \node[n, right=0.7 of ner] (emb) {эмбеддинги};
+  \node[n, right=0.7 of emb] (sku) {top SKU};
+  \draw[e] (q) -- (ner);
+  \draw[e] (ner) -- (emb);
+  \draw[e] (emb) -- (sku);
+  \node[font=\scriptsize\color{inksoft}, below=0.12 of ner] {фундамент};
+  \node[font=\scriptsize\color{inksoft}, below=0.12 of emb] {поиск};
 \end{tikzpicture}
 \end{center}
 
-% ---------- DAY 5 ----------
+\vspace{0.35cm}
+
+% ===================== DAY 5 =====================
 \section{День 05 --- Упаковка и защита}
 
-\daybox{05}{История для людей, не только для git log}{%
-\begin{itemize}
-  \item Собрать питч: проблема $\to$ факты $\to$ метрики (weak vs gold) $\to$ демо UI/поиска $\to$ что дальше.
-  \item Прогнать сценарии: категорийный запрос, бренд+ATTR, грязный запрос, провал модели --- и что с ним делать.
-  \item Ретро: что срезали, что переоценили, где клики врали.
-\end{itemize}
+\daycard{05}{История для людей, не только git log}{%
+\begin{enumerate}
+  \item Питч: проблема $\to$ факты $\to$ метрики (weak vs gold) $\to$ демо $\to$ что дальше.
+  \item Прогнать живые сценарии: голая категория, бренд+ATTR, грязный запрос, и где модель тупит.
+  \item Ретро без понтов: что срезали, что переоценили, где клики врали.
+\end{enumerate}
 }{%
-\begin{itemize}
-  \item Защита пройдена с живым демо и честной зоной роста.
-  \item Roadmap «после буткемпа»: нормальный dual-encoder, больше gold, A/B на выдаче.
-\end{itemize}
+\begin{enumerate}
+  \item Защита с живым демо и честной зоной роста.
+  \item After: нормальный dual-encoder, больше gold, когда-нибудь A/B на выдаче.
+\end{enumerate}
 }
 
-\vspace{0.5cm}
+\vspace{0.4cm}
 
-\section{Кто за что отвечает (живой вариант)}
-\begin{tabular}{@{}p{3.2cm}p{11.5cm}@{}}
+\section{Кто за что (без бюрократии)}
+\begin{tabular}{@{}p{3.1cm}p{11.6cm}@{}}
 \toprule
 \textbf{Зона} & \textbf{Фокус} \\
 \midrule
 Данные / EDA & parquet, графики, словари, score query--click \\
-NER / метрики & BIO, CRF, gold-разметка, F1, нормализация \\
+NER / метрики & BIO, CRF, gold, F1, нормализация \\
 Поиск / app & UI, индекс, эмбеддинги, гибридная выдача \\
-Доки / питч & LaTeX, README, слайды, «что сказать за 5 минут» \\
+Доки / питч & LaTeX, README, слайды, <<рассказать за 5 минут>> \\
 \bottomrule
 \end{tabular}
 
 \vspace{0.55cm}
 
-\section{Анти-цели (чтобы не умереть)}
-\begin{itemize}
-  \item Не тащить огромный LLM в runtime ради демо, если убиваем SLA.
-  \item Не рисовать 40 графиков вместо gold-разметки на день~3.
-  \item Не обещать «идеальный поиск М.Видео за неделю» --- обещаем \textbf{работающий контур} факты$\to$выдача и понятный next step.
-\end{itemize}
+\section{Чего сознательно не делаем}
+\begin{enumerate}
+  \item Не тащим огромный LLM в runtime, если он убивает SLA.
+  \item Не рисуем 40 графиков вместо gold-разметки на день 3.
+  \item Не обещаем <<идеальный поиск М.Видео за неделю>>. Обещаем рабочий контур факты$\to$выдача и понятный next step.
+\end{enumerate}
 
-\vspace{0.7cm}
+\vspace{0.8cm}
 \begin{center}
 \color{inksoft}\small
-План живой: если день~2 горит --- режем эмбеддинги до TF-IDF, но не режем JSON-MVP и честность про метрики.
+Если день 2 горит --- режем эмбеддинги до простого TF-IDF.\\
+Но JSON-MVP и честность про метрики не режем.
 \end{center}
 
 \end{document}
