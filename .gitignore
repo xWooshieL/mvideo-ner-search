@@ -53,7 +53,8 @@ huggingface/
 *.synctex.gz
 *.fls
 *.fdb_latexmk
-docs/*.pdf
+# keep documentation PDF in repo
+# docs/*.pdf
 
 # Temp
 tmp/
