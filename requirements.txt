@@ -1,0 +1,20 @@
+numpy>=1.24
+pandas>=2.0
+pyarrow>=14.0
+scikit-learn>=1.3
+sklearn-crfsuite>=0.5
+python-crfsuite>=0.9.9
+rapidfuzz>=3.0
+joblib>=1.3
+matplotlib>=3.7
+seaborn>=0.13
+tqdm>=4.66
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.0
+# gensim optional (may fail on very new Python); notebooks fall back to TF-IDF+SVD
+# gensim>=4.3
+# umap-learn>=0.5
+seqeval>=1.2
+ipykernel>=6.0
+jupyter>=1.0

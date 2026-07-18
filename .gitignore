@@ -1,0 +1,61 @@
+# Data (too large for git)
+файлы/
+data/raw/
+*.parquet
+*.pkl
+*.pickle
+!models/*.pkl
+!models/*.joblib
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Models / caches (large)
+models/checkpoints/
+*.pt
+*.bin
+*.onnx
+.cache/
+huggingface/
+
+# Keep figures and small artifacts
+!figures/
+!docs/figures/
+
+# LaTeX build
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+docs/*.pdf
+
+# Temp
+tmp/
+temp/
+*.tmp
