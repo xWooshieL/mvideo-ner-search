@@ -86,10 +86,14 @@ pip install -r requirements.txt
 # Полный пайплайн: EDA-графики + словари + baseline + CRF + бенчмарк
 python scripts/run_pipeline.py
 
-# API
+# API + красивый demo UI (поиск + отладка JSON/BIO)
 uvicorn src.service.app:app --reload --port 8000
-# POST http://localhost:8000/extract  {"query": "пылесос dyson"}
+# Открой http://localhost:8000
+# POST /extract         {"query": "пылесос dyson"}
+# POST /extract/debug   + BIO словарь/CRF для отладки
 ```
+
+UI лежит в `web/` — подсветка сущностей, карточки фактов, latency vs SLA, история запросов, копирование JSON.
 
 Ноутбуки: `notebooks/01_…` → `12_…` (все вычисления продублированы / запускаются из `.ipynb`).
 

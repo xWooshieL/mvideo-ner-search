@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>М.Видео — Query NER Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Manrope:wght@500;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="brand-block">
+      <div class="logo" aria-label="М.Видео">М.<span>Видео</span></div>
+      <p class="tag">Intelligent Search · NER Lab</p>
+    </div>
+    <div class="status-row">
+      <span id="apiStatus" class="pill pill-warn">API…</span>
+      <span class="pill">SLA &lt; 100 мс</span>
+      <button type="button" id="btnTheme" class="ghost" title="Переключить акцент">✦</button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section class="hero">
+      <h1 class="display">
+        <span class="display-brand">М.Видео</span>
+        <span class="display-rest">разбор поискового запроса</span>
+      </h1>
+      <p class="lede">Введи запрос — сразу увидишь бренд, категорию, атрибуты и сырой JSON. Удобно для отладки и защиты кейса.</p>
+
+      <form id="searchForm" class="search-shell" autocomplete="off">
+        <label class="sr-only" for="queryInput">Поисковый запрос</label>
+        <div class="search-row">
+          <input
+            id="queryInput"
+            name="query"
+            type="search"
+            placeholder="например: ноутбук asus 16 гб"
+            autofocus
+          />
+          <button type="submit" class="btn-primary" id="btnSearch">
+            <span>Разобрать</span>
+            <kbd>Enter</kbd>
+          </button>
+        </div>
+        <div class="examples" id="examples"></div>
+      </form>
+    </section>
+
+    <section class="results" id="results" hidden>
+      <div class="highlight-panel">
+        <div class="panel-label">Подсветка сущностей</div>
+        <div id="highlight" class="highlight"></div>
+      </div>
+
+      <div class="facts">
+        <article class="fact fact-brand">
+          <span class="fact-k">BRAND</span>
+          <strong id="factBrand">—</strong>
+        </article>
+        <article class="fact fact-cat">
+          <span class="fact-k">CATEGORY</span>
+          <strong id="factCategory">—</strong>
+        </article>
+        <article class="fact fact-attr">
+          <span class="fact-k">ATTRIBUTES</span>
+          <strong id="factAttrs">—</strong>
+        </article>
+        <article class="fact fact-lat">
+          <span class="fact-k">LATENCY</span>
+          <strong id="factLatency">—</strong>
+          <div class="lat-bar"><i id="latFill"></i></div>
+          <small id="latHint">цель 100 мс</small>
+        </article>
+      </div>
+
+      <div class="chips" id="entityChips"></div>
+    </section>
+
+    <section class="debug" id="debugSection">
+      <div class="debug-head">
+        <h2>Отладка</h2>
+        <div class="debug-actions">
+          <button type="button" class="ghost" id="btnCopyJson">Копировать JSON</button>
+          <button type="button" class="ghost" id="btnClearHist">Очистить историю</button>
+          <label class="toggle">
+            <input type="checkbox" id="liveMode" checked />
+            live (debounce)
+          </label>
+        </div>
+      </div>
+
+      <div class="debug-grid">
+        <div class="panel">
+          <div class="panel-label">JSON ответ</div>
+          <pre id="jsonOut" class="code">// введи запрос и нажми Enter</pre>
+        </div>
+        <div class="panel">
+          <div class="panel-label">BIO · словарь</div>
+          <div id="bioDict" class="bio-table empty">—</div>
+          <div class="panel-label mt">BIO · CRF</div>
+          <div id="bioCrf" class="bio-table empty">—</div>
+        </div>
+        <div class="panel panel-wide">
+          <div class="panel-label">История запросов (клик = повторить)</div>
+          <div id="history" class="history empty">Пока пусто</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span>Bootcamp · М.Видео NER</span>
+    <a href="/docs" target="_blank" rel="noreferrer">OpenAPI /docs</a>
+    <a href="https://github.com/xWooshieL/mvideo-ner-search" target="_blank" rel="noreferrer">GitHub</a>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

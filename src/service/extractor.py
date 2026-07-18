@@ -108,24 +108,26 @@ class QueryEntityExtractor:
             fuzzy = self._fuzzy_match(query)
             if structured["brand"] is None and fuzzy.get("brand"):
                 structured["brand"] = fuzzy["brand"]
-                entities.append(
-                    {
-                        "text": fuzzy["brand_match"],
-                        "label": "BRAND",
-                        "span": fuzzy.get("brand_span") or [0, 0],
-                    }
-                )
+                if fuzzy.get("brand_span"):
+                    entities.append(
+                        {
+                            "text": fuzzy["brand_match"],
+                            "label": "BRAND",
+                            "span": fuzzy["brand_span"],
+                        }
+                    )
             if structured["category"] is None and fuzzy.get("category"):
                 structured["category"] = fuzzy["category"]
-                entities.append(
-                    {
-                        "text": fuzzy["category_match"],
-                        "label": "CATEGORY",
-                        "span": fuzzy.get("category_span") or [0, 0],
-                    }
-                )
+                if fuzzy.get("category_span"):
+                    entities.append(
+                        {
+                            "text": fuzzy["category_match"],
+                            "label": "CATEGORY",
+                            "span": fuzzy["category_span"],
+                        }
+                    )
 
-        # Pass 4: ML classifiers as soft fallback
+        # Pass 4: ML classifiers as soft fallback (never invent brand-like categories)
         if structured["brand"] is None and self.brand_classifier is not None:
             try:
                 pred = self.brand_classifier.predict([query])[0]
@@ -137,7 +139,9 @@ class QueryEntityExtractor:
             try:
                 pred = self.category_classifier.predict([query])[0]
                 if pred and pred != "__UNK__":
-                    structured["category"] = pred
+                    pn = _normalize(str(pred))
+                    if pn not in self.labeler.brands and pn not in self.labeler.brand_canonical:
+                        structured["category"] = pred
             except Exception:
                 pass
 
@@ -150,6 +154,25 @@ class QueryEntityExtractor:
             "attributes": structured["attributes"],
             "latency_ms": round(latency_ms, 3),
         }
+
+    def extract_debug(self, query: str) -> Dict[str, Any]:
+        """Same as extract, plus BIO pipelines for UI debugging."""
+        t0 = time.perf_counter()
+        query = (query or "").strip()
+        base = self.extract(query)
+        dict_bio = self.labeler.label_query(query) if query else []
+        crf_bio = self.ner_model.predict_query(query) if (query and self.ner_model) else []
+        base["debug"] = {
+            "dict_bio": [{"token": t, "tag": tag} for t, tag in dict_bio],
+            "crf_bio": [{"token": t, "tag": tag} for t, tag in crf_bio],
+            "has_crf": self.ner_model is not None,
+            "has_brand_clf": self.brand_classifier is not None,
+            "has_category_clf": self.category_classifier is not None,
+            "n_brands_dict": len(self.labeler.brands),
+            "n_categories_dict": len(self.labeler.categories),
+            "wall_ms": round((time.perf_counter() - t0) * 1000.0, 3),
+        }
+        return base
 
     def _merge_entities(self, primary: List[Dict], secondary: List[Dict]) -> List[Dict]:
         """Prefer dictionary spans; add non-overlapping ML entities."""
@@ -215,22 +238,18 @@ class QueryEntityExtractor:
                     out["brand_span"] = [m.start(), m.end()]
 
         if self._category_list:
-            cat_pool = self._category_list[:3000]
-            match = process.extractOne(
-                q,
-                cat_pool,
-                scorer=fuzz.partial_ratio,
-                score_cutoff=self.fuzzy_threshold,
-            )
-            # Prefer token-level category match
-            for tok in lower:
-                if tok in self.labeler.categories:
-                    out["category"] = self.labeler.category_canonical[tok]
-                    out["category_match"] = tok
-                    break
-            if "category" not in out and match:
-                out["category"] = self.labeler.category_canonical.get(match[0], match[0])
-                out["category_match"] = match[0]
+            # Prefer exact token / phrase match only (avoid fuzzy brand bleed)
+            for n in (3, 2, 1):
+                for i in range(len(lower) - n + 1):
+                    phrase = " ".join(lower[i : i + n])
+                    if phrase in self.labeler.categories:
+                        out["category"] = self.labeler.category_canonical[phrase]
+                        out["category_match"] = phrase
+                        # approximate span via normalized search
+                        m = re.search(re.escape(phrase), q)
+                        if m:
+                            out["category_span"] = [m.start(), m.end()]
+                        return out
         return out
 
     def _substring_fallback(self, q_norm: str, query: str) -> Dict[str, Any]:
