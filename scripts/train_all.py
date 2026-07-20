@@ -138,7 +138,7 @@ def train_classifiers(df, models: Path, figures: Path, artifacts: Path) -> dict:
                 ("tfidf", TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 4), min_df=2, max_features=50000)),
                 (
                     "clf",
-                    LogisticRegression(max_iter=200, n_jobs=-1, solver="saga"),
+                    LogisticRegression(max_iter=200, solver="saga"),
                 ),
             ]
         )
@@ -188,7 +188,7 @@ def train_classifiers(df, models: Path, figures: Path, artifacts: Path) -> dict:
                 ("tfidf", TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 4), min_df=2, max_features=40000)),
                 (
                     "clf",
-                    LogisticRegression(max_iter=200, n_jobs=-1, solver="saga"),
+                    LogisticRegression(max_iter=200, solver="saga"),
                 ),
             ]
         )
