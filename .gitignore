@@ -6,6 +6,8 @@ data/raw/
 *.pickle
 !models/*.pkl
 !models/*.joblib
+*.zip
+presentation.pdf
 
 # Python
 __pycache__/

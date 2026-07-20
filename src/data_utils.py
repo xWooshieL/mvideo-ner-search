@@ -16,8 +16,10 @@ import pyarrow.parquet as pq
 # Пути
 # ---------------------------------------------------------------------------
 
+
+
 ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = ROOT / "файлы"
+DATA_DIR = ROOT / "data"
 FIGURES_DIR = ROOT / "figures"
 ARTIFACTS_DIR = ROOT / "artifacts"
 NOTEBOOKS_DIR = ROOT / "notebooks"
