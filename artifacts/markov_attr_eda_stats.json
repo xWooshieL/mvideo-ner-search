@@ -1,0 +1,13 @@
+{
+  "sample_clicks": 150000,
+  "temp_n_patterns": 28,
+  "src_n_patterns": 7,
+  "attr_coverage_src": 0.06543333333333333,
+  "attr_coverage_temp": 0.09513333333333333,
+  "n_attr_spans": 3537,
+  "markov_test_accuracy_vs_regex": 0.6192090395480226,
+  "markov_unknown_rate": 0.3649717514124294,
+  "n_ambiguous_numbers": 27,
+  "queries_with_entity_tail_rate": 0.495375,
+  "tail_with_digit_rate": 0.5821347464042392
+}

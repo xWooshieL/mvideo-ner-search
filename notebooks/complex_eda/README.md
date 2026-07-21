@@ -1,6 +1,11 @@
 # Complex EDA: методы решения задачи M.Video NER
 
-Отчёт связывает **данные** (`query_clicks`, `sku_desc`, словари) с **выборами моделей**: зачем каждый метод применим, на чём учится, какой вход/выход, какие графики из [`01_eda.ipynb`](./01_eda.ipynb) это подтверждают.
+Отчёт связывает **данные** (`query_clicks`, `sku_desc`, словари) с **выборами моделей**: зачем каждый метод применим, на чём учится, какой вход/выход, какие графики это подтверждают.
+
+Ноутбуки:
+- [`01_methods_eda.ipynb`](./01_methods_eda.ipynb) — обзор методов  
+- [`02_markov_eda.ipynb`](./02_markov_eda.ipynb) — типизация ATTR (Markov / vs RNN)  
+- [`03_click_eda.ipynb`](./03_click_eda.ipynb) — разметка релевантности кликов
 
 > Целевой вход продакшена — **поисковый запрос**, выход — структурированные факты (`brand`, `category`, `attributes`) за **&lt; 100 мс**.  
 > Клики и карточки SKU — **топливо** для словарей, weak labels и retrieval, а не объект парсинга в инференсе.
@@ -276,13 +281,46 @@ query
 
 ## 11. Практический roadmap
 
-1. Запустить [`01_eda.ipynb`](./01_eda.ipynb) — таблицы, гипотезы, графики.  
-2. Mini-gold 200–500 запросов.  
-3. Rules → Weak BIO → CRF (уже в репо).  
-4. Brand classifier на кликах, где brand ∉ query.  
-5. Transformer — если CRF упирается в gold.  
-6. Seq2Seq/LLM — доп. разметка, не единственный online.  
-7. Retrieval — демо «факты + top SKU».
+1. Запустить [`01_methods_eda.ipynb`](./01_methods_eda.ipynb).  
+2. Перенести расширенные правила из `temp/labeling.py` в `src/ner/labeling.py`.  
+3. [`02_markov_eda.ipynb`](./02_markov_eda.ipynb) — бейзлайн типизации ATTR.  
+4. Brand/category classifier (бренд часто вне текста).  
+5. [`03_click_eda.ipynb`](./03_click_eda.ipynb) — разметить 100–300 пар → denoiser кликов.  
+6. CRF / transformer NER; seq2seq — offline teacher.  
+7. Словарь product-line (`g pro`, `v15`) отдельно от ATTR.
+
+---
+
+## 12. Выводы из ручного просмотра разметки (01)
+
+| Наблюдение | Следствие |
+|---|---|
+| Хвост `g pro x se` остаётся `O` | Это **не** ATTR-regex; нужна сущность MODEL / словарь линеек / лучший NER |
+| ~74% кликов без бренда в тексте | Нужен **query-level** классификатор бренда и категории |
+| Много типов ATTR | Не плодить «миллиард голов»; **BIO-ATTR → typer** (Markov/LogReg) |
+| Нет `user_id` | Классический user-RecSys недоступен; полезны pairwise click-relevance и веса позиции |
+
+### I. Markov для типа атрибута — будет ли работать? Не лучше ли RNN?
+
+Идея «`16` → `гб` ⇒ memory» формально — оценка \\(P(\\text{type}\\mid t_i, t_{i+1})\\) / \\(P(t_{i+1}\\mid t_i)\\).
+
+- На дискретных токенах это **почти выученные правила** (частотная таблица), не «магия».
+- **Смысл есть**: автосбор unit→type из данных + быстрый бейзлайн после `B/I-ATTR`.
+- **Не починит** `g pro` — там нет числа+единицы.
+- **RNN не обязателен сразу.** Достаточная лестница: regex/`temp` map → Markov/unit lexicon → LogReg(span + category hint) → RNN/Transformer только на омонимах (`32` ГБ vs Ом) и gold-ошибках.
+
+Подробности и графики: [`02_markov_eda.ipynb`](./02_markov_eda.ipynb).
+
+### II. Ручная разметка релевантности кликов
+
+100+ пар `(query, sku) → {0,1}` → бинарный clf → фильтр шума для brand/category и retrieval.
+
+Куда писать лейблы: `artifacts/click_relevance/labels.csv`  
+Кандидаты и гайд генерируются в [`03_click_eda.ipynb`](./03_click_eda.ipynb).
+
+### III. `temp/labeling.py`
+
+Расширенная карта ATTR (десятки типов: memory, size, power, ip_rating, …), улучшенный `tokenize` (`128гб`→`128 гб`), больше aliases/categories. Её нужно **вмержить в `src/ner/labeling.py`** и использовать в weak supervision — `02` уже читает паттерны из `temp/` для сравнения coverage.
 
 ---
 
@@ -290,7 +328,7 @@ query
 
 ```bash
 # из корня репозитория, с активированным .venv
-jupyter notebook notebooks/complex_eda/01_eda.ipynb
-# или пакетный прогон анализа:
-python notebooks/complex_eda/_run_01_eda.py
+jupyter notebook notebooks/complex_eda/01_methods_eda.ipynb
+jupyter notebook notebooks/complex_eda/02_markov_eda.ipynb
+jupyter notebook notebooks/complex_eda/03_click_eda.ipynb
 ```

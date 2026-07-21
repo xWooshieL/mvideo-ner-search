@@ -7,37 +7,104 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-# Attribute regex patterns (value capture groups → ATTR)
+# Базовый паттерн для захвата чисел и диапазонов.
+# Что он ловит: "15", "1.5", "1500-1800", "от 1.5 до 2", "до 500"
+# Объяснение: опционально ищет (от X до/тире), затем берет итоговое число Y.
+NUM = r"(?:(?:от\s*)?\d+(?:[.,/]\d+)?\s*(?:-|до|—)\s*)?\d+(?:[.,/]\d+)?"
+
 ATTR_PATTERNS: List[Tuple[re.Pattern, str]] = [
-    (re.compile(r"\b(\d+)\s*(?:gb|гб|Gb|GB)\b", re.I), "memory"),
-    (re.compile(r"\b(\d+)\s*(?:tb|тб|Tb|TB)\b", re.I), "storage"),
-    (re.compile(r"\b(\d+)\s*(?:мм|mm|см|cm|дюйм(?:а|ов)?|\"|'')\b", re.I), "size"),
-    (re.compile(r"\b(\d{3,4})\s*[xх×]\s*(\d{3,4})(?:\s*[xх×]\s*(\d{3,4}))?\b", re.I), "dimensions"),
-    (re.compile(r"\b(\d+)\s*(?:вт|w|Вт)\b", re.I), "power"),
-    (re.compile(r"\b(4k|8k|uhd|full\s*hd|fhd|hd)\b", re.I), "resolution"),
-    (re.compile(r"\b(wi[- ]?fi|bluetooth|nfc|5g|4g|lte)\b", re.I), "connectivity"),
+    # Память (оперативная / накопители)
+    (re.compile(rf"\b({NUM})\s*(?:gb|гб|гиг(?:ов)?|tb|тб|терабайт|mb|мб)\b", re.I), "memory_storage"),
+    # Габариты (ВхШхГ или ДxШ) - здесь оставляем свою логику из-за крестиков и звездочек
+    (re.compile(r"\b(\d+(?:[.,]\d+)?)\s*[xх×*]\s*(\d+(?:[.,]\d+)?)(?:\s*[xх×*]\s*(\d+(?:[.,]\d+)?))?\b", re.I),
+     "dimensions"),
+    # Размеры и диагонали экрана
+    (re.compile(rf"\b({NUM})\s*(?:мм|mm|см|cm|м|m|дюйм(?:а|ов)?|\"|''|inch)\b", re.I), "size"),
+    # Мощность
+    (re.compile(rf"\b({NUM})\s*(?:вт|w|ватт|квт|kw)\b", re.I), "power"),
+    # Сила тока
+    (re.compile(rf"\b({NUM})\s*(?:а|a|ампер)\b", re.I), "current"),
+    # Площадь обогрева
+    (re.compile(rf"\b({NUM})\s*(?:м2|m2|кв\.?\s*м|квадрат(?:ов)?)\b", re.I), "area"),
+    # Вес
+    (re.compile(rf"\b({NUM})\s*(?:кг|kg|г|g|грамм)\b", re.I), "weight"),
+    # Объем
+    (re.compile(rf"\b({NUM})\s*(?:л|l|литр(?:а|ов)?|мл|ml)\b", re.I), "volume"),
+    # Частота
+    (re.compile(rf"\b({NUM})\s*(?:гц|hz|кгц|khz|мгц|mhz)\b", re.I), "frequency"),
+    # Шум и чувствительность
+    (re.compile(rf"\b({NUM})\s*(?:дб|db)\b", re.I), "noise_level"),
+    # Кратность увеличения. УЛУЧШЕНО: ловит "до 500 крат" (микроскопы/бинокли)
+    (re.compile(rf"\b({NUM})\s*(?:xх|крат)\b", re.I), "magnification"),
+    # Расход / Скорость
+    (re.compile(rf"\b({NUM})\s*(?:г/мин|g/min|л/мин|l/min)\b", re.I), "flow_rate"),
+    # Разрешение экрана (Стандарты)
+    (re.compile(r"\b(4k|4к|8k|8к|2k|2к|1080p|720p|1440p|uhd|full\s*hd|fhd|hd)\b", re.I), "resolution_standard"),
+    # Точное разрешение экрана
+    (re.compile(r"\b(\d{3,5})\s*[xх×*]\s*(\d{3,5})\s*(?:пикс|pix|p)?\b", re.I), "resolution_exact"),
+    # Степень защиты
+    (re.compile(r"\b(IP\s*[0-6X][0-9X])\b", re.I), "ip_rating"),
+    # Технологии связи и порты
+    (re.compile(r"\b(wi[- ]?fi|bluetooth|bt|nfc|5g|4g|lte|3g|gps|usb[- ]?c|type[- ]?c|hdmi|vga)\b", re.I),
+     "connectivity"),
+    # Время и длительность
+    (re.compile(rf"\b({NUM})\s*(?:ч|h|час(?:а|ов)?|мин|min|минут(?:ы|у)?)\b", re.I), "time"),
+    # Температура
+    (re.compile(rf"\b({NUM})\s*(?:°C|\*C|°С|\*С|градус(?:ов)?)\b", re.I), "temperature"),
+    # Напряжение
+    (re.compile(rf"\b({NUM})\s*(?:в|v|вольт)\b", re.I), "voltage"),
+    # Количество (штуки, упаковки)
+    (re.compile(rf"\b({NUM})\s*(?:шт\.?|штук[иа]?)\b", re.I), "quantity"),
+    # Возрастные ограничения
+    (re.compile(r"\b(0|6|12|16|18)\s*\+\b", re.I), "age_restriction"),
+    # Ресурс расходников (например, картриджи: 42100 стр)
+    (re.compile(rf"\b({NUM})\s*(?:стр\.?|страниц(?:ы)?)\b", re.I), "pages_yield"),
+    # Гарантия и срок службы (15 лет, 10 месяцев, 2 недели)
+    (re.compile(rf"\b({NUM})\s*(?:год[а]?|лет|мес(?:яц(?:ев|а)?)?|недел[иь])\b", re.I), "warranty_period"),
+    # Сопротивление (аудио, наушники: 32 Ом)
+    (re.compile(rf"\b({NUM})\s*(?:ом|ohm)\b", re.I), "impedance"),
+    # Скорость вращения (вентиляторы, машинки для катышков: 8000 об/мин)
+    (re.compile(rf"\b({NUM})\s*(?:об/мин|rpm)\b", re.I), "rpm"),
+    # Разрешение матриц камер/микроскопов (12 МПикс)
+    (re.compile(rf"\b({NUM})\s*(?:мпикс|mpix|мп|mp)\b", re.I), "megapixels"),
+    # Производительность / Воздухообмен (вытяжки: 900 м3/ч)
+    (re.compile(rf"\b({NUM})\s*(?:м3/ч|m3/h|м³/ч)\b", re.I), "airflow_capacity"),
+    # Плотность (холсты, бумага: 280 г/м2)
+    (re.compile(rf"\b({NUM})\s*(?:г/м2|g/m2|г/м²)\b", re.I), "density"),
 ]
 
 COLORS = {
+    # Базовые русские цвета и все формы
     "белый", "белая", "белое", "белые",
     "черный", "чёрный", "черная", "чёрная", "черное", "чёрное",
-    "серый", "серая", "серое",
-    "красный", "красная", "красное",
-    "синий", "синяя", "синее",
-    "зеленый", "зелёный", "зеленая", "зелёная",
-    "золотой", "золотая", "золото",
-    "серебристый", "серебряный", "серебро",
-    "розовый", "розовая",
-    "голубой", "голубая",
-    "фиолетовый", "фиолетовая",
-    "оранжевый", "оранжевая",
-    "коричневый", "коричневая",
-    "бежевый", "бежевая",
-    "титановый", "графитовый", "space gray", "midnight", "starlight",
+    "серый", "серая", "серое", "серые",
+    "красный", "красная", "красное", "красные",
+    "синий", "синяя", "синее", "синие",
+    "зеленый", "зелёный", "зеленая", "зелёная", "зеленое", "зелёное", "зеленые", "зелёные",
+    "золотой", "золотая", "золотое", "золото",
+    "серебристый", "серебряный", "серебристая", "серебряная", "серебро",
+    "розовый", "розовая", "розовое",
+    "голубой", "голубая", "голубое",
+    "фиолетовый", "фиолетовая", "фиолетовое",
+    "оранжевый", "оранжевая", "оранжевое",
+    "коричневый", "коричневая", "коричневое",
+    "бежевый", "бежевая", "бежевое",
+    "желтый", "жёлтый", "желтая", "жёлтая", "желтое", "жёлтое",
+
+    # Популярные технологические / дизайнерские цвета из каталогов (добавлены медный и шоколадный)
+    "титановый", "титан", "графитовый", "графит", "мокрый асфальт",
+    "шампань", "персиковый", "бронзовый", "бронза", "латунь",
+    "мятный", "оливковый", "бирюзовый", "бордовый", "сливовый",
+    "медный", "шоколадный",
+
+    # Англоязычные цвета и фирменные наименования
+    "space gray", "midnight", "starlight", "silver", "gold",
+    "black", "white", "pink", "blue", "green", "graphite", "titanium"
 }
 
-# Product-line aliases → canonical brand (help weak labels for "iphone", "galaxy", …)
+# Расширенная карта алиасов
 BRAND_ALIASES = {
+    # Apple
     "iphone": "Apple",
     "айфон": "Apple",
     "айфоны": "Apple",
@@ -46,88 +113,193 @@ BRAND_ALIASES = {
     "ipad": "Apple",
     "айпад": "Apple",
     "airpods": "Apple",
+    "аирподс": "Apple",
+
+    # Samsung
     "galaxy": "Samsung",
+    "самсунг": "Samsung",
+    "samsung": "Samsung",
+
+    # Xiaomi / Poco / Redmi
     "редми": "Xiaomi",
     "redmi": "Xiaomi",
     "poco": "Xiaomi",
+    "поко": "Xiaomi",
+    "сяоми": "Xiaomi",
+    "ксяоми": "Xiaomi",
+    "xiaomi": "Xiaomi",
+
+    # Huawei / Honor
     "honor": "HONOR",
+    "хонор": "HONOR",
     "хуавей": "HUAWEI",
     "huawei": "HUAWEI",
+
+    # Другие популярные бренды
+    "ленова": "Lenovo",
+    "леново": "Lenovo",
+    "lenovo": "Lenovo",
+    "асус": "ASUS",
+    "asus": "ASUS",
+    "асер": "Acer",
+    "acer": "Acer",
+    "тошиба": "Toshiba",
+    "toshiba": "Toshiba",
+    "хайер": "Haier",
+    "haier": "Haier",
+    "китфорт": "Kitfort",
+    "kitfort": "Kitfort",
 }
 
-# Common Russian e-commerce category keywords (seed + will merge with data-driven)
 CATEGORY_SEEDS = {
-    "смартфон", "смартфоны", "телефон", "телефоны",
-    "ноутбук", "ноутбуки", "планшет", "планшеты",
+    # Смартфоны, гаджеты и связь
+    "смартфон", "смартфоны", "телефон", "телефоны", "смарт-часы", "фитнес-браслет",
+    "планшет", "планшеты", "умные часы", "часы", "браслет",
+
+    # Компьютеры, ноутбуки и комплектующие
+    "ноутбук", "ноутбуки", "льтрабук", "нетбук", "монитор", "мониторы",
+    "клавиатура", "клавиатуры", "мышь", "мышка", "мышки", "принтер", "принтеры",
+    "роутер", "роутеры", "маршрутизатор", "видеокарта", "видеокарты",
+    "процессор", "процессоры", "ssd", "hdd", "память", "материнская", "плата",
+    "блок", "питания", "корпус", "кулер", "оперативная память",
+
+    # Крупная бытовая техника (КБТ)
+    "холодильник", "холодильники", "стиральная", "машинка", "стиральная машина",
+    "сушильная", "сушильная машина", "посудомойка", "посудомоечная", "посудомоечная машина",
+    "плита", "плиты", "варочная", "панель", "варочная панель",
+    "духовка", "духовой", "шкаф", "духовой шкаф", "микроволновка", "микроволновая",
+    "микроволновая печь", "вытяжка", "вытяжки", "водонагреватель", "обогреватель",
+    "кондиционер", "сплит-система",
+
+    # Мелкая бытовая техника (МБТ) и кухня
+    "пылесос", "робот", "робот-пылесос", "вертикальный пылесос",
+    "чайник", "электрочайник", "кофемашина", "кофемолка", "кофеварка",
+    "блендер", "миксер", "мультиварка", "фен", "утюг", "отпариватель",
+    "мясорубка", "тостер", "гриль", "микроволновка", "пароварка", "фритюрница",
+    "электровафельница",
+
+    # ТВ, аудио и развлечения
     "телевизор", "телевизоры", "наушники", "колонка", "колонки",
-    "пылесос", "робот", "холодильник", "стиральная", "машинка",
-    "микроволновка", "микроволновая", "духовка", "духовой", "шкаф",
-    "плита", "варочная", "панель", "посудомойка", "посудомоечная",
-    "кондиционер", "фен", "утюг", "блендер", "миксер", "чайник",
-    "электрочайник", "мультиварка", "кофемашина", "кофемолка",
-    "монитор", "клавиатура", "мышь", "принтер", "роутер",
-    "фотоаппарат", "камера", "видеокарта", "процессор", "ssd",
-    "hdd", "память", "материнская", "блок", "питания",
-    "игровой", "консоль", "приставка", "smart", "часы", "браслет",
-    "сушильная", "вытяжка", "водонагреватель", "обогреватель",
+    "саундбар", "музыкальный центр", "проектор", "игровой", "консоль",
+    "приставка", "геймпад", "smart", "джжойстик",
+
+    # Фото, видео и оптика
+    "фотоаппарат", "камера", "видеокамера", "объектив", "штатив",
+    "микроскоп", "телескоп", "бинокль", "лупа",
+
+    # Сантехника и ремонт
+    "раковина", "унитаз", "ванна", "душевой", "уголок", "душевая кабина",
+    "смеситель", "полотенцесушитель", "инсталляция", "душевой поддон",
+
+    # Мебель, свет и интерьер (добавлены прожектор и торшер)
+    "кресло", "компьютерное кресло", "игровое кресло", "офисное кресло",
+    "шкаф", "этажерка", "вешалка", "напольная вешалка", "стол", "стул",
+    "камин", "электрокамин", "прожектор", "торшер",
+
+    # Посуда и товары для дома
+    "кастрюля", "сковорода", "ковш", "набор посуды", "кружка", "чашка",
+    "термос", "чайник заварочный", "фильтр для воды", "швабра", "насадка для швабры",
+    "шейкер", "поднос",
+
+    # Аксессуары, чехлы, расходники и уход (добавлены расческа, мотыга, укрывной материал)
+    "чехол", "чехлы", "клип-кейс", "защитное стекло", "пленка",
+    "картридж", "тонер", "аккумулятор", "батарейка", "зарядное устройство",
+    "кабель", "переходник", "рюкзак", "сумка для ноутбука",
+    "расческа", "массажная щетка", "мотыга", "укрывной материал", "держатель"
 }
 
 
 def tokenize(text: str) -> List[Tuple[str, int, int]]:
-    """Whitespace + punctuation-aware tokenization with char spans."""
+    """Продвинутая токенизация с учетом специфики e-commerce (разделение слипшихся чисел и единиц)."""
+    if not text:
+        return []
+
+    # Шаг 1 (Улучшение): Автоматически разделяем слипшиеся цифры и буквы (например, "128гб" -> "128 гб", "220в" -> "220 в")
+    # Это гарантирует, что наши регулярки атрибутов поймают их на ура.
+    normalized_text = re.sub(r"(\d+)([А-Яа-яA-Za-z]{1,4})\b", r"\1 \2", text)
+
     tokens: List[Tuple[str, int, int]] = []
-    for m in re.finditer(r"[A-Za-zА-Яа-яЁё0-9]+(?:[.\-/][A-Za-zА-Яа-яЁё0-9]+)*|[^\s]", text):
+    # Шаг 2: Надежный паттерн для поиска слов, чисел и сохранностью оригинальных позиций (сдвиги могут чуть измениться,
+    # но для BIO-разметки текста это критично только при строгом совпадении спэнов).
+    # Используем более классический и надежный сплит по словам и знакам.
+    for m in re.finditer(r"[A-Za-zА-Яа-яЁё0-9]+(?:[.\-/][A-Za-zА-Яа-яЁё0-9]+)*|[^\s]", normalized_text):
         tokens.append((m.group(0), m.start(), m.end()))
+
     return tokens
 
 
 def _normalize(s: str) -> str:
-    return re.sub(r"\s+", " ", (s or "").strip().lower().replace("ё", "е"))
+    if not s:
+        return ""
+    # 1. Приводим к нижнему регистру, меняем ё на е, убираем пробелы по краям
+    s = s.strip().lower().replace("ё", "е")
+    # 2. Убираем лишние знаки препинания, оставляя буквы, цифры, пробелы, дефисы и точки
+    # (дефисы и точки важны для моделей вроде "wi-fi" или "13.3")
+    s = re.sub(r"[^\w\s\-\.]", " ", s)
 
+    # 3. Сжимаем любые последовательности пробелов (включая табуляции и переносы) в один пробел
+    s = re.sub(r"\s+", " ", s)
+    return s.strip()
 
 @dataclass
 class WeakLabeler:
     brands: Set[str] = field(default_factory=set)
     categories: Set[str] = field(default_factory=set)
+    genres: Set[str] = field(default_factory=set)  # НОВОЕ: для жанров фильмов/игр
+    persons: Set[str] = field(default_factory=set)  # НОВОЕ: для актеров и режиссеров
     colors: Set[str] = field(default_factory=lambda: set(COLORS))
+
     # lower -> canonical display form
     brand_canonical: Dict[str, str] = field(default_factory=dict)
     category_canonical: Dict[str, str] = field(default_factory=dict)
+    genre_canonical: Dict[str, str] = field(default_factory=dict)  # НОВОЕ
+    person_canonical: Dict[str, str] = field(default_factory=dict)  # НОВОЕ
+
     # sorted longest-first phrase lists (token sequences)
     _brand_phrases: List[List[str]] = field(default_factory=list, repr=False)
     _category_phrases: List[List[str]] = field(default_factory=list, repr=False)
+    _genre_phrases: List[List[str]] = field(default_factory=list, repr=False)  # НОВОЕ
+    _person_phrases: List[List[str]] = field(default_factory=list, repr=False)
 
     @classmethod
     def from_files(
-        cls,
-        brands_path: Path | str,
-        categories_path: Path | str,
+            cls,
+            brands_path: Path | str,
+            categories_path: Path | str,
+            genres_path: Path | str | None = None,  # НОВОЕ: опциональный путь к жанрам
+            persons_path: Path | str | None = None,  # НОВОЕ: опциональный путь к персонам
     ) -> "WeakLabeler":
         brands = _load_lines(brands_path)
         categories = _load_lines(categories_path)
-        return cls.from_iterables(brands, categories)
+        genres = _load_lines(genres_path) if genres_path else []
+        persons = _load_lines(persons_path) if persons_path else []
+        return cls.from_iterables(brands, categories, genres, persons)
 
     @classmethod
     def from_iterables(
-        cls,
-        brands: Iterable[str],
-        categories: Iterable[str] | None = None,
+            cls,
+            brands: Iterable[str],
+            categories: Iterable[str] | None = None,
+            genres: Iterable[str] | None = None,  # НОВОЕ
+            persons: Iterable[str] | None = None,  # НОВОЕ
     ) -> "WeakLabeler":
+        # 1. Обработка брендов / вендоров
         brand_canonical: Dict[str, str] = {}
         for b in brands:
             b = (b or "").strip()
             if len(b) < 2:
                 continue
             key = _normalize(b)
-            # keep first / title-cased form; avoid ALLCAPS duplicates overwriting
             if key not in brand_canonical or (
-                brand_canonical[key].isupper() and not b.isupper()
+                    brand_canonical[key].isupper() and not b.isupper()
             ):
                 brand_canonical[key] = b
-        # aliases expand brand dictionary (overwrite with canonical brand names)
+
         for alias, canon in BRAND_ALIASES.items():
             brand_canonical[_normalize(alias)] = canon
             brand_canonical[_normalize(canon)] = canon
+
+        # 2. Обработка категорий
         cat_canonical: Dict[str, str] = {}
         brand_keys = set(brand_canonical.keys())
         for c in list(categories or []) + list(CATEGORY_SEEDS):
@@ -135,15 +307,39 @@ class WeakLabeler:
             if len(c) < 2:
                 continue
             cn = _normalize(c)
-            # do not treat known brands / aliases as categories
             if cn in brand_keys or cn in BRAND_ALIASES:
                 continue
             cat_canonical[cn] = c
+
+        # 3. НОВОЕ: Обработка жанров (например, боевик, драма, ужасы из JSON)
+        genre_canonical: Dict[str, str] = {}
+        default_genres = {"боевик", "драма", "триллер", "комедия", "ужасы", "фантастика", "фэнтези", "детектив",
+                          "мелодрама", "криминал", "приключения"}
+        for g in list(genres or []) + list(default_genres):
+            g = (g or "").strip()
+            if len(g) < 2:
+                continue
+            gn = _normalize(g)
+            genre_canonical[gn] = g
+
+        # 4. НОВОЕ: Обработка персон (актеры, режиссеры)
+        person_canonical: Dict[str, str] = {}
+        for p in persons or []:
+            p = (p or "").strip()
+            if len(p) < 3:  # Имена обычно длиннее
+                continue
+            pn = _normalize(p)
+            person_canonical[pn] = p
+
         obj = cls(
             brands=set(brand_canonical.keys()),
             categories=set(cat_canonical.keys()),
+            genres=set(genre_canonical.keys()),  # НОВОЕ
+            persons=set(person_canonical.keys()),  # НОВОЕ
             brand_canonical=brand_canonical,
             category_canonical=cat_canonical,
+            genre_canonical=genre_canonical,  # НОВОЕ
+            person_canonical=person_canonical,  # НОВОЕ
         )
         obj._compile_phrases()
         return obj
@@ -151,10 +347,18 @@ class WeakLabeler:
     def _compile_phrases(self) -> None:
         brand_phrases = [p.split() for p in self.brands if p]
         cat_phrases = [p.split() for p in self.categories if p]
+        genre_phrases = [p.split() for p in self.genres if p]  # НОВОЕ
+        person_phrases = [p.split() for p in self.persons if p]  # НОВОЕ
+
         brand_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
         cat_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
+        genre_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))  # НОВОЕ
+        person_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))  # НОВОЕ
+
         self._brand_phrases = brand_phrases
         self._category_phrases = cat_phrases
+        self._genre_phrases = genre_phrases  # НОВОЕ
+        self._person_phrases = person_phrases  # НОВОЕ
 
     def label_query(self, query: str) -> List[Tuple[str, str]]:
         """Return list of (token, BIO-tag)."""
@@ -168,23 +372,28 @@ class WeakLabeler:
         self._apply_phrases(lower_toks, tags, self._brand_phrases, "BRAND")
         # 2) Categories
         self._apply_phrases(lower_toks, tags, self._category_phrases, "CATEGORY")
-        # 3) Colors as ATTR
+        # 3) Genres (например, "боевик")
+        self._apply_phrases(lower_toks, tags, self._genre_phrases, "GENRE")
+        # 4) Persons (актеры, режиссеры вроде "Лиам Нисон")
+        self._apply_phrases(lower_toks, tags, self._person_phrases, "PERSON")
+
+        # 5) Colors as ATTR
         for i, lt in enumerate(lower_toks):
             if tags[i] != "O":
                 continue
             if lt in self.colors or lt.replace("ё", "е") in self.colors:
                 tags[i] = "B-ATTR"
-        # 4) Regex attributes on original query → map to tokens
+        # 6) Regex attributes on original query → map to tokens
         self._apply_attr_patterns(query, tokens, tags)
 
         return [(tokens[i][0], tags[i]) for i in range(len(tokens))]
 
     def _apply_phrases(
-        self,
-        lower_toks: List[str],
-        tags: List[str],
-        phrases: List[List[str]],
-        label: str,
+            self,
+            lower_toks: List[str],
+            tags: List[str],
+            phrases: List[List[str]],
+            label: str,
     ) -> None:
         n = len(lower_toks)
         for phrase in phrases:
@@ -194,16 +403,16 @@ class WeakLabeler:
             for i in range(n - plen + 1):
                 if any(tags[i + k] != "O" for k in range(plen)):
                     continue
-                if lower_toks[i : i + plen] == phrase:
+                if lower_toks[i: i + plen] == phrase:
                     tags[i] = f"B-{label}"
                     for k in range(1, plen):
                         tags[i + k] = f"I-{label}"
 
     def _apply_attr_patterns(
-        self,
-        query: str,
-        tokens: List[Tuple[str, int, int]],
-        tags: List[str],
+            self,
+            query: str,
+            tokens: List[Tuple[str, int, int]],
+            tags: List[str],
     ) -> None:
         for pattern, _name in ATTR_PATTERNS:
             for m in pattern.finditer(query):
@@ -218,9 +427,9 @@ class WeakLabeler:
                     first = False
 
     def label_dataset(
-        self,
-        queries: Sequence[str],
-        min_entities: int = 0,
+            self,
+            queries: Sequence[str],
+            min_entities: int = 0,
     ) -> List[List[Tuple[str, str]]]:
         labeled = []
         for q in queries:
@@ -237,7 +446,7 @@ def bio_to_entities(
     tokens_tags: Sequence[Tuple[str, str]],
     query: Optional[str] = None,
 ) -> List[Dict]:
-    """Convert BIO sequence to entity dicts with optional char spans."""
+    """Распаковщик BIO-цепочек. смотрит на поток BIO-тегов и склеивает слова обратно в осмысленные сущности по тегам B- и I-"""
     entities: List[Dict] = []
     i = 0
     # rebuild spans if query provided
@@ -269,7 +478,7 @@ def bio_to_entities(
 
 
 def entities_to_structured(entities: List[Dict], labeler: Optional[WeakLabeler] = None) -> Dict:
-    """Collapse entities into brand / category / attributes fields."""
+    """Превращает список найденных сущностей в итоговый JSON-пакет для ответа пользователю или аналитики, раскладывая всё по полочкам (бренд, категория, атрибуты)"""
     brand = None
     category = None
     attributes: Dict[str, List[str]] = {}
@@ -293,21 +502,53 @@ def entities_to_structured(entities: List[Dict], labeler: Optional[WeakLabeler] 
 
 
 def _guess_attr_type(text: str) -> str:
-    t = text.lower().replace("ё", "е")
-    if re.search(r"\d+\s*(gb|гб)", t):
+    t = text.lower().replace("ё", "е").strip()
+
+    if re.search(r"\d+\s*(gb|гб|гиг)", t):
         return "memory"
-    if re.search(r"\d+\s*(tb|тб)", t):
+
+    if re.search(r"\d+\s*(tb|тб|терабайт)", t):
         return "storage"
-    if re.search(r"(мм|mm|см|cm|дюйм|\")", t):
+
+    if re.search(r"\d+\s*(кг|kg|г|g|грамм)", t):
+        return "weight"
+
+    if re.search(r"\d+\s*(л|l|литр|мл|ml)", t):
+        return "volume"
+
+    if re.search(r"\d+\s*(мм|mm|см|cm|м|m|дюйм|inch|\")", t):
         return "size"
-    if re.search(r"[xх×]", t):
+
+    if re.search(r"[xх×*]", t):
         return "dimensions"
-    if re.search(r"(вт|w)\b", t):
+
+    if re.search(r"\d+\s*(вт|w|ватт|квт|kw)", t):
         return "power"
-    if t in COLORS or t.replace("ё", "е") in COLORS:
+
+    if re.search(r"\d+\s*(в|v|вольт)", t):
+        return "voltage"
+
+    if re.search(r"\d+\s*(а|a|ампер)", t):
+        return "current"
+
+    if re.search(r"\d+\s*(гц|hz|кгц|khz|мгц|mhz)", t):
+        return "frequency"
+
+    if re.search(r"\d+\s*(дб|db)", t):
+        return "noise_level"
+
+    if re.search(r"\d+\s*(ом|ohm)", t):
+        return "impedance"
+
+    if t in COLORS:
         return "color"
-    if re.search(r"(4k|8k|uhd|fhd|hd|wi-?fi|bluetooth|nfc|5g|4g)", t):
+
+    if re.search(
+        r"(4k|8k|2k|1080p|720p|1440p|uhd|fhd|hd|wi-?fi|bluetooth|nfc|5g|4g)",
+        t
+    ):
         return "tech"
+
     return "other"
 
 

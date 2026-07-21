@@ -1,0 +1,8 @@
+temp patterns=28 src=7
+clicks=120000 uq=33391
+tail_rate=0.490 digit_tail=0.581
+coverage src=0.0643 temp=0.0934
+spans=2356
+markov_acc=0.584 unk=0.404
+candidates=200 -> D:\Projects-26-06-2026\mvideo-ner-search\artifacts\click_relevance\candidates_to_label.csv
+DONE
