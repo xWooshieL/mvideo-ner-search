@@ -614,14 +614,14 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \numdot{2}\ Чистим шум: «искал айфон $\to$ кликнул чехол» не портит обучение.\par\vspace{4pt}
 \numdot{3}\ На метке 1 учим embed(query) $\approx$ embed(title + desc): описание дотаскивает цвет, память, синонимы.}
 \column{0.48\textwidth}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Как используем скор}\par\vspace{7pt}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Как это работает}\par\vspace{7pt}
 \begin{tikzpicture}[
   st/.style={rounded corners=2pt, fill=cardbg, inner sep=5.5pt, text width=\dimexpr\textwidth-24pt\relax, align=left, font=\fontsize{7.5}{9.5}\selectfont},
-  arr/.style={-{Stealth[length=2mm]}, line width=0.9pt, mvgray}
+  arr/.style={-{Stealth[length=2mm]}, line width=0.9pt, mvred}
 ]
-  \node[st] (s1) {NER достал факты $\to$ фильтр и буст в выдаче};
-  \node[st, below=4mm of s1] (s2) {$P(\text{match}=1 \mid \text{query},\ \text{sku\_text})$ — реранк поверх};
-  \node[st, below=4mm of s2] (s3) {модель: градиентный бустинг (CatBoost / XGBoost) на простых признаках};
+  \node[st] (s1) {\textbf{1.} Обучаем бустинг (CatBoost / XGBoost) на 100+ ручных метках 0/1};
+  \node[st, below=4mm of s1] (s2) {\textbf{2.} Модель проставляет $\text{match}=1/0$ на большой объём пар query$\leftrightarrow$SKU};
+  \node[st, below=4mm of s2] (s3) {\textbf{3.} Где $\text{match}=1$ — берём title + description карточки для реранка и обогащения};
   \draw[arr] (s1) -- (s2);
   \draw[arr] (s2) -- (s3);
 \end{tikzpicture}
