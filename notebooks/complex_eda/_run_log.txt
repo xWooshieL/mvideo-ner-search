@@ -1,0 +1,30 @@
+ROOT=D:\Projects-26-06-2026\mvideo-ner-search
+loaded clicks=150000 desc=40000
+{"query_clicks_full_rows": 30991350, "sku_desc_full_rows": 1177200, "skus_pkl_bytes": 1565150311, "sample_rows": 150000}
+summary {"unique_queries": 39428, "unique_skus": 51558, "unique_brands": 2895, "unique_subjects": 1737, "query_tokens_p50": 2.0, "query_tokens_p90": 4.0, "query_tokens_p99": 7.0, "query_chars_p50": 17.0, "query_chars_p90": 31.0, "price_median": 16012.5}
+brand_in_query=0.2694 absent=0.7306
+saved D:\Projects-26-06-2026\mvideo-ner-search\figures\complex_eda\01_query_length.png
+attr_cov    attr_type    share
+        size 0.012880
+      memory 0.007153
+connectivity 0.006627
+     storage 0.002460
+       power 0.001667
+  dimensions 0.000980
+  resolution 0.000720
+any_attr=0.0312
+saved D:\Projects-26-06-2026\mvideo-ner-search\figures\complex_eda\02_attr_regex_coverage.png
+DEMO [('ноутбук', 'B-CATEGORY'), ('asus', 'B-BRAND'), ('16', 'B-ATTR'), ('гб', 'I-ATTR')] -> {'brand': 'Asus', 'category': 'ноутбук', 'attributes': {'memory': '16 гб'}}
+weak {"n": 8000, "any_entity": 0.81525, "brand": 0.455875, "category": 0.61025, "attr": 0.069125, "multi_type": 0.295125, "has_I": 0.28275}
+saved D:\Projects-26-06-2026\mvideo-ner-search\figures\complex_eda\03_bio_class_distribution.png
+sents=6522
+crf {"token_accuracy": 0.8905896677683075, "micro_f1": 0.8511738957421409, "per_label": {"ATTR": 0.8513513513513513, "BRAND": 0.9459327812956649, "CATEGORY": 0.7784833769144565}}
+crf demo [('пылесос', 'B-CATEGORY'), ('dyson', 'B-BRAND'), ('v15', 'O')]
+saved D:\Projects-26-06-2026\mvideo-ner-search\figures\complex_eda\04_brand_in_query_vs_click.png
+ambiguous_queries_share=0.1747
+clf_top40 accuracy=0.780 macroF1=0.739
+span_click_agree=993/1190
+seq2seq_pairs=1653
+saved D:\Projects-26-06-2026\mvideo-ner-search\figures\complex_eda\05_retrieval_scores.png
+saved D:\Projects-26-06-2026\mvideo-ner-search\figures\complex_eda\06_position_price.png
+DONE

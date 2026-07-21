@@ -1,0 +1,37 @@
+{
+  "summary": {
+    "sample_rows": 200000,
+    "unique_queries": 49144,
+    "unique_skus": 59749,
+    "unique_brands": 3139,
+    "unique_subjects": 1870,
+    "query_tokens_p50": 2.0,
+    "query_tokens_p90": 4.0,
+    "query_tokens_p99": 7.0,
+    "query_chars_p50": 17.0,
+    "query_chars_p90": 31.0,
+    "price_median": 16165.0,
+    "nulls_query_text": 0
+  },
+  "brand_in_query_rate": 0.272148766666899,
+  "brand_absent_rate": 0.727851233333101,
+  "weak_coverage": {
+    "n": 12000,
+    "any_entity": 0.7975833333333333,
+    "brand": 0.45958333333333334,
+    "category": 0.5913333333333334,
+    "attr": 0.06916666666666667,
+    "multi_type": 0.29375,
+    "has_I": 0.26916666666666667
+  },
+  "attr_regex_any": 0.030795,
+  "attr_regex_by_type": {
+    "connectivity": 0.00639,
+    "memory": 0.007525,
+    "size": 0.012635,
+    "storage": 0.002085,
+    "power": 0.001995,
+    "resolution": 0.000775,
+    "dimensions": 0.000825
+  }
+}
