@@ -1,4 +1,4 @@
-"""Weak supervision: BIO labeling for search queries from brand/category dictionaries."""
+"""Weak supervision: BIO labeling for search queries with Natasha Lemmatization."""
 
 from __future__ import annotations
 
@@ -7,36 +7,124 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-# Attribute regex patterns (value capture groups → ATTR)
+# ИМПОРТ NATASHA ДЛЯ ЛЕММАТИЗАЦИИ
+from natasha import (
+    Doc,
+    MorphVocab,
+    NewsEmbedding,
+    NewsMorphTagger,
+    Segmenter,
+)
+
+segmenter = Segmenter()
+morph_vocab = MorphVocab()
+# морфологический теггер нужен, чтобы token.lemmatize() имел pos/feats
+_emb = NewsEmbedding()
+morph_tagger = NewsMorphTagger(_emb)
+
+NUM = r"(?:(?:от\s*)?\d+(?:[.,/]\d+)?\s*(?:-|до|—)\s*)?\d+(?:[.,/]\d+)?"
+
 ATTR_PATTERNS: List[Tuple[re.Pattern, str]] = [
-    (re.compile(r"\b(\d+)\s*(?:gb|гб|Gb|GB)\b", re.I), "memory"),
-    (re.compile(r"\b(\d+)\s*(?:tb|тб|Tb|TB)\b", re.I), "storage"),
-    (re.compile(r"\b(\d+)\s*(?:мм|mm|см|cm|дюйм(?:а|ов)?|\"|'')\b", re.I), "size"),
-    (re.compile(r"\b(\d{3,4})\s*[xх×]\s*(\d{3,4})(?:\s*[xх×]\s*(\d{3,4}))?\b", re.I), "dimensions"),
-    (re.compile(r"\b(\d+)\s*(?:вт|w|Вт)\b", re.I), "power"),
-    (re.compile(r"\b(4k|8k|uhd|full\s*hd|fhd|hd)\b", re.I), "resolution"),
-    (re.compile(r"\b(wi[- ]?fi|bluetooth|nfc|5g|4g|lte)\b", re.I), "connectivity"),
+    (
+        re.compile(
+            rf"\b({NUM})\s*(?:gb|гб|гиг(?:ов)?|tb|тб|терабайт|mb|мб)\b", re.I
+        ),
+        "memory_storage",
+    ),
+    (
+        re.compile(
+            r"\b(\d+(?:[.,]\d+)?)\s*[xх×*]\s*(\d+(?:[.,]\d+)?)(?:\s*[xх×*]\s*(\d+(?:[.,]\d+)?))?\b",
+            re.I,
+        ),
+        "dimensions",
+    ),
+    (
+        re.compile(
+            rf"\b({NUM})\s*(?:мм|mm|см|cm|м|m|дюйм(?:а|ов)?|\"|''|inch)\b", re.I
+        ),
+        "size",
+    ),
+    (re.compile(rf"\b({NUM})\s*(?:вт|w|ватт|квт|kw)\b", re.I), "power"),
+    (re.compile(rf"\b({NUM})\s*(?:а|a|ампер)\b", re.I), "current"),
+    (
+        re.compile(rf"\b({NUM})\s*(?:м2|m2|кв\.?\s*м|квадрат(?:ов)?)\b", re.I),
+        "area",
+    ),
+    (re.compile(rf"\b({NUM})\s*(?:кг|kg|г|g|грамм)\b", re.I), "weight"),
+    (
+        re.compile(rf"\b({NUM})\s*(?:л|l|литр(?:а|ов)?|мл|ml)\b", re.I),
+        "volume",
+    ),
+    (
+        re.compile(rf"\b({NUM})\s*(?:гц|hz|кгц|khz|мгц|mhz)\b", re.I),
+        "frequency",
+    ),
+    (re.compile(rf"\b({NUM})\s*(?:дб|db)\b", re.I), "noise_level"),
+    (
+        re.compile(
+            r"\b(4k|4к|8k|8к|2k|2к|1080p|720p|1440p|uhd|full\s*hd|fhd|hd)\b",
+            re.I,
+        ),
+        "resolution_standard",
+    ),
+    (
+        re.compile(
+            r"\b(wi[- ]?fi|bluetooth|bt|nfc|5g|4g|lte|3g|gps|usb[- ]?c|type[- ]?c|hdmi|vga)\b",
+            re.I,
+        ),
+        "connectivity",
+    ),
+    (
+        re.compile(
+            rf"\b({NUM})\s*(?:ч|h|час(?:а|ов)?|мин|min|минут(?:ы|у)?)\b", re.I
+        ),
+        "time",
+    ),
+    (
+        re.compile(rf"\b({NUM})\s*(?:°C|\*C|°С|\*С|градус(?:ов)?)\b", re.I),
+        "temperature",
+    ),
+    (re.compile(rf"\b({NUM})\s*(?:в|v|вольт)\b", re.I), "voltage"),
+    (re.compile(rf"\b({NUM})\s*(?:шт\.?|штук[иа]?)\b", re.I), "quantity"),
+    (
+        re.compile(
+            rf"\b({NUM})\s*(?:год[а]?|лет|мес(?:яц(?:ев|а)?)?|недел[иь])\b", re.I
+        ),
+        "warranty_period",
+    ),
 ]
 
 COLORS = {
-    "белый", "белая", "белое", "белые",
-    "черный", "чёрный", "черная", "чёрная", "черное", "чёрное",
-    "серый", "серая", "серое",
-    "красный", "красная", "красное",
-    "синий", "синяя", "синее",
-    "зеленый", "зелёный", "зеленая", "зелёная",
-    "золотой", "золотая", "золото",
-    "серебристый", "серебряный", "серебро",
-    "розовый", "розовая",
-    "голубой", "голубая",
-    "фиолетовый", "фиолетовая",
-    "оранжевый", "оранжевая",
-    "коричневый", "коричневая",
-    "бежевый", "бежевая",
-    "титановый", "графитовый", "space gray", "midnight", "starlight",
+    "белый",
+    "черный",
+    "серый",
+    "красный",
+    "синий",
+    "зеленый",
+    "золотой",
+    "серебристый",
+    "розовый",
+    "голубой",
+    "фиолетовый",
+    "оранжевый",
+    "коричневый",
+    "бежевый",
+    "желтый",
+    "титановый",
+    "графитовый",
+    "шампань",
+    "мятный",
+    "бирюзовый",
+    "бордовый",
+    "space gray",
+    "midnight",
+    "starlight",
+    "silver",
+    "gold",
+    "black",
+    "white",
 }
 
-# Product-line aliases → canonical brand (help weak labels for "iphone", "galaxy", …)
 BRAND_ALIASES = {
     "iphone": "Apple",
     "айфон": "Apple",
@@ -45,44 +133,72 @@ BRAND_ALIASES = {
     "макбук": "Apple",
     "ipad": "Apple",
     "айпад": "Apple",
-    "airpods": "Apple",
     "galaxy": "Samsung",
+    "самсунг": "Samsung",
     "редми": "Xiaomi",
     "redmi": "Xiaomi",
     "poco": "Xiaomi",
-    "honor": "HONOR",
-    "хуавей": "HUAWEI",
-    "huawei": "HUAWEI",
+    "поко": "Xiaomi",
+    "сяоми": "Xiaomi",
+    "xiaomi": "Xiaomi",
 }
 
-# Common Russian e-commerce category keywords (seed + will merge with data-driven)
-CATEGORY_SEEDS = {
-    "смартфон", "смартфоны", "телефон", "телефоны",
-    "ноутбук", "ноутбуки", "планшет", "планшеты",
-    "телевизор", "телевизоры", "наушники", "колонка", "колонки",
-    "пылесос", "робот", "холодильник", "стиральная", "машинка",
-    "микроволновка", "микроволновая", "духовка", "духовой", "шкаф",
-    "плита", "варочная", "панель", "посудомойка", "посудомоечная",
-    "кондиционер", "фен", "утюг", "блендер", "миксер", "чайник",
-    "электрочайник", "мультиварка", "кофемашина", "кофемолка",
-    "монитор", "клавиатура", "мышь", "принтер", "роутер",
-    "фотоаппарат", "камера", "видеокарта", "процессор", "ssd",
-    "hdd", "память", "материнская", "блок", "питания",
-    "игровой", "консоль", "приставка", "smart", "часы", "браслет",
-    "сушильная", "вытяжка", "водонагреватель", "обогреватель",
-}
+
+def lemmatize_text(text: str) -> List[str]:
+    """Приводит русские слова к начальной форме с помощью Natasha."""
+    if not text:
+        return []
+
+    # Предварительно разделяем склеенные числа и единицы
+    text = re.sub(r"(\d+)([А-Яа-яA-Za-z]{1,4})\b", r"\1 \2", text)
+
+    doc = Doc(text)
+    doc.segment(segmenter)
+    doc.tag_morph(morph_tagger)
+
+    lemmas = []
+    for token in doc.tokens:
+        # Для кириллицы применяем лемматизацию (pos/feats уже проставлены tag_morph)
+        if re.search(r"[а-яё]", token.text, re.I):
+            token.lemmatize(morph_vocab)
+            lemma = (token.lemma or token.text).lower().replace("ё", "е")
+        else:
+            lemma = token.text.lower()
+        lemmas.append(lemma)
+
+    return lemmas
+
+
+def _split_glued(text: str) -> str:
+    """Расклеивает число и короткую единицу: «16гб» -> «16 гб»."""
+    return re.sub(r"(\d+)([А-Яа-яA-Za-z]{1,4})\b", r"\1 \2", text)
 
 
 def tokenize(text: str) -> List[Tuple[str, int, int]]:
-    """Whitespace + punctuation-aware tokenization with char spans."""
-    tokens: List[Tuple[str, int, int]] = []
-    for m in re.finditer(r"[A-Za-zА-Яа-яЁё0-9]+(?:[.\-/][A-Za-zА-Яа-яЁё0-9]+)*|[^\s]", text):
+    """Токенизация со сдвигами символов.
+
+    ВАЖНО: спаны считаются относительно НОРМАЛИЗОВАННОГО текста
+    (после _split_glued). Регэкспы атрибутов должны гоняться по тому же
+    нормализованному тексту, иначе спаны разъедутся.
+    """
+    if not text:
+        return []
+    normalized_text = _split_glued(text)
+    tokens = []
+    for m in re.finditer(
+        r"[A-Za-zА-Яа-яЁё0-9]+(?:[.\-/][A-Za-zА-Яа-яЁё0-9]+)*|[^\s]",
+        normalized_text,
+    ):
         tokens.append((m.group(0), m.start(), m.end()))
     return tokens
 
 
 def _normalize(s: str) -> str:
-    return re.sub(r"\s+", " ", (s or "").strip().lower().replace("ё", "е"))
+    if not s:
+        return ""
+    s = s.strip().lower().replace("ё", "е")
+    s = re.sub(r"[^\w\s\-\.]", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
 
 
 @dataclass
@@ -90,10 +206,10 @@ class WeakLabeler:
     brands: Set[str] = field(default_factory=set)
     categories: Set[str] = field(default_factory=set)
     colors: Set[str] = field(default_factory=lambda: set(COLORS))
-    # lower -> canonical display form
+
     brand_canonical: Dict[str, str] = field(default_factory=dict)
     category_canonical: Dict[str, str] = field(default_factory=dict)
-    # sorted longest-first phrase lists (token sequences)
+
     _brand_phrases: List[List[str]] = field(default_factory=list, repr=False)
     _category_phrases: List[List[str]] = field(default_factory=list, repr=False)
 
@@ -103,15 +219,14 @@ class WeakLabeler:
         brands_path: Path | str,
         categories_path: Path | str,
     ) -> "WeakLabeler":
+        """Строит лейблер из текстовых словарей brands.txt / categories.txt."""
         brands = _load_lines(brands_path)
         categories = _load_lines(categories_path)
         return cls.from_iterables(brands, categories)
 
     @classmethod
     def from_iterables(
-        cls,
-        brands: Iterable[str],
-        categories: Iterable[str] | None = None,
+        cls, brands: Iterable[str], categories: Iterable[str] | None = None
     ) -> "WeakLabeler":
         brand_canonical: Dict[str, str] = {}
         for b in brands:
@@ -119,26 +234,20 @@ class WeakLabeler:
             if len(b) < 2:
                 continue
             key = _normalize(b)
-            # keep first / title-cased form; avoid ALLCAPS duplicates overwriting
-            if key not in brand_canonical or (
-                brand_canonical[key].isupper() and not b.isupper()
-            ):
-                brand_canonical[key] = b
-        # aliases expand brand dictionary (overwrite with canonical brand names)
+            brand_canonical[key] = b
+
         for alias, canon in BRAND_ALIASES.items():
             brand_canonical[_normalize(alias)] = canon
-            brand_canonical[_normalize(canon)] = canon
+
         cat_canonical: Dict[str, str] = {}
-        brand_keys = set(brand_canonical.keys())
-        for c in list(categories or []) + list(CATEGORY_SEEDS):
+        for c in categories or []:
             c = (c or "").strip()
             if len(c) < 2:
                 continue
-            cn = _normalize(c)
-            # do not treat known brands / aliases as categories
-            if cn in brand_keys or cn in BRAND_ALIASES:
-                continue
-            cat_canonical[cn] = c
+            # Лемматизируем категории из словарей
+            lemmatized_cat = " ".join(lemmatize_text(c))
+            cat_canonical[lemmatized_cat] = c
+
         obj = cls(
             brands=set(brand_canonical.keys()),
             categories=set(cat_canonical.keys()),
@@ -149,34 +258,52 @@ class WeakLabeler:
         return obj
 
     def _compile_phrases(self) -> None:
-        brand_phrases = [p.split() for p in self.brands if p]
-        cat_phrases = [p.split() for p in self.categories if p]
-        brand_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
-        cat_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
-        self._brand_phrases = brand_phrases
-        self._category_phrases = cat_phrases
+        self._brand_phrases = [p.split() for p in self.brands if p]
+        self._category_phrases = [p.split() for p in self.categories if p]
+        self._brand_phrases.sort(
+            key=lambda x: (-len(x), -sum(len(t) for t in x))
+        )
+        self._category_phrases.sort(
+            key=lambda x: (-len(x), -sum(len(t) for t in x))
+        )
 
     def label_query(self, query: str) -> List[Tuple[str, str]]:
-        """Return list of (token, BIO-tag)."""
+        """Главный метод: берет query, лемматизирует через Natasha, но размечает ИСХОДНЫЕ токены."""
         tokens = tokenize(query)
         if not tokens:
             return []
-        tags = ["O"] * len(tokens)
-        lower_toks = [_normalize(t[0]) for t in tokens]
 
-        # 1) Brands (longest match)
+        tags = ["O"] * len(tokens)
+
+        # 1. ЛЕММАТИЗАЦИЯ ВСЕГО ПРЕДЛОЖЕНИЯ ЧЕРЕЗ NATASHA
+        lemmatized_tokens = lemmatize_text(query)
+
+        # Синхронизация длин токенов при необходимости
+        if len(lemmatized_tokens) != len(tokens):
+            lower_toks = [_normalize(t[0]) for t in tokens]
+        else:
+            lower_toks = lemmatized_tokens
+
+        # 2. ПОИСК БРЕНДОВ В ЛЕММАТИЗИРОВАННОМ ТЕКСТЕ
         self._apply_phrases(lower_toks, tags, self._brand_phrases, "BRAND")
-        # 2) Categories
-        self._apply_phrases(lower_toks, tags, self._category_phrases, "CATEGORY")
-        # 3) Colors as ATTR
+
+        # 3. ПОИСК КАТЕГОРИЙ В ЛЕММАТИЗИРОВАННОМ ТЕКСТЕ (теперь "холодильниками" найдет "холодильник")
+        self._apply_phrases(
+            lower_toks, tags, self._category_phrases, "CATEGORY"
+        )
+
+        # 4. ПОИСК ЦВЕТОВ (теперь "красную" превратится в "красный" и найдет совпадение)
         for i, lt in enumerate(lower_toks):
             if tags[i] != "O":
                 continue
-            if lt in self.colors or lt.replace("ё", "е") in self.colors:
+            if lt in self.colors:
                 tags[i] = "B-ATTR"
-        # 4) Regex attributes on original query → map to tokens
-        self._apply_attr_patterns(query, tokens, tags)
 
+        # 5. РЕГУЛЯРКИ ДЛЯ ЧИСЛОВЫХ АТРИБУТОВ (память, размер, мощность)
+        # спаны токенов считаются по нормализованному тексту — гоним регэксп по нему же
+        self._apply_attr_patterns(_split_glued(query), tokens, tags)
+
+        # Возвращаем ИСХОДНЫЕ слова и полученные BIO-теги
         return [(tokens[i][0], tags[i]) for i in range(len(tokens))]
 
     def _apply_phrases(
@@ -222,7 +349,8 @@ class WeakLabeler:
         queries: Sequence[str],
         min_entities: int = 0,
     ) -> List[List[Tuple[str, str]]]:
-        labeled = []
+        """Размечает список запросов, оставляя только с >= min_entities сущностей."""
+        labeled: List[List[Tuple[str, str]]] = []
         for q in queries:
             sent = self.label_query(q)
             if not sent:
@@ -237,30 +365,29 @@ def bio_to_entities(
     tokens_tags: Sequence[Tuple[str, str]],
     query: Optional[str] = None,
 ) -> List[Dict]:
-    """Convert BIO sequence to entity dicts with optional char spans."""
+    """Сворачивает BIO-последовательность в список сущностей с char-спанами."""
     entities: List[Dict] = []
     i = 0
-    # rebuild spans if query provided
-    if query is not None:
-        tok_spans = tokenize(query)
-    else:
-        tok_spans = [(t, 0, 0) for t, _ in tokens_tags]
+    # спаны и вырезка текста — в координатах нормализованного текста
+    norm_query = _split_glued(query) if query is not None else None
+    tok_spans = tokenize(query) if query is not None else [
+        (t, 0, 0) for t, _ in tokens_tags
+    ]
 
     while i < len(tokens_tags):
-        tok, tag = tokens_tags[i]
+        _tok, tag = tokens_tags[i]
         if tag.startswith("B-"):
             label = tag[2:]
             j = i + 1
             while j < len(tokens_tags) and tokens_tags[j][1] == f"I-{label}":
                 j += 1
             text = " ".join(tokens_tags[k][0] for k in range(i, j))
-            span_start = tok_spans[i][1] if query is not None else None
-            span_end = tok_spans[j - 1][2] if query is not None else None
             ent: Dict = {"text": text, "label": label}
-            if span_start is not None:
-                # Prefer exact substring from query
+            if norm_query is not None and j - 1 < len(tok_spans):
+                span_start = tok_spans[i][1]
+                span_end = tok_spans[j - 1][2]
                 ent["span"] = [span_start, span_end]
-                ent["text"] = query[span_start:span_end]
+                ent["text"] = norm_query[span_start:span_end].strip()
             entities.append(ent)
             i = j
         else:
@@ -268,8 +395,10 @@ def bio_to_entities(
     return entities
 
 
-def entities_to_structured(entities: List[Dict], labeler: Optional[WeakLabeler] = None) -> Dict:
-    """Collapse entities into brand / category / attributes fields."""
+def entities_to_structured(
+    entities: List[Dict], labeler: Optional["WeakLabeler"] = None
+) -> Dict:
+    """Сворачивает сущности в поля brand / category / attributes."""
     brand = None
     category = None
     attributes: Dict[str, List[str]] = {}
@@ -281,33 +410,52 @@ def entities_to_structured(entities: List[Dict], labeler: Optional[WeakLabeler] 
             brand = labeler.brand_canonical.get(key, text) if labeler else text
         elif label == "CATEGORY" and category is None:
             key = _normalize(text)
-            category = labeler.category_canonical.get(key, text) if labeler else text
+            if labeler:
+                # категории в словаре канона хранятся в лемматизированной форме
+                lemma_key = " ".join(lemmatize_text(text))
+                category = labeler.category_canonical.get(
+                    lemma_key,
+                    labeler.category_canonical.get(key, text),
+                )
+            else:
+                category = text
         elif label == "ATTR":
             attr_type = _guess_attr_type(text)
             attributes.setdefault(attr_type, []).append(text)
     return {
         "brand": brand,
         "category": category,
-        "attributes": {k: v[0] if len(v) == 1 else v for k, v in attributes.items()},
+        "attributes": {
+            k: v[0] if len(v) == 1 else v for k, v in attributes.items()
+        },
     }
 
 
 def _guess_attr_type(text: str) -> str:
     t = text.lower().replace("ё", "е")
-    if re.search(r"\d+\s*(gb|гб)", t):
+    # цвет может прийти словоформой («белую») — сверяем и по лемме
+    if t in COLORS or " ".join(lemmatize_text(t)) in COLORS:
+        return "color"
+    if re.search(r"\d+\s*(gb|гб|гиг|mb|мб)", t):
         return "memory"
-    if re.search(r"\d+\s*(tb|тб)", t):
+    if re.search(r"\d+\s*(tb|тб|терабайт)", t):
         return "storage"
+    if re.search(r"[xх×*]\s*\d", t):
+        return "dimensions"
     if re.search(r"(мм|mm|см|cm|дюйм|\")", t):
         return "size"
-    if re.search(r"[xх×]", t):
-        return "dimensions"
-    if re.search(r"(вт|w)\b", t):
+    if re.search(r"(вт|w|ватт|квт|kw)\b", t):
         return "power"
-    if t in COLORS or t.replace("ё", "е") in COLORS:
-        return "color"
-    if re.search(r"(4k|8k|uhd|fhd|hd|wi-?fi|bluetooth|nfc|5g|4g)", t):
-        return "tech"
+    if re.search(r"(гц|hz|кгц|khz|мгц|mhz)", t):
+        return "frequency"
+    if re.search(r"(л|l|литр|мл|ml)\b", t):
+        return "volume"
+    if re.search(r"(кг|kg|грамм)\b", t):
+        return "weight"
+    if re.search(r"(4k|8k|2k|uhd|fhd|hd|1080p|720p|1440p)", t):
+        return "resolution"
+    if re.search(r"(wi-?fi|bluetooth|bt|nfc|5g|4g|lte|3g|gps|usb|hdmi|vga)", t):
+        return "connectivity"
     return "other"
 
 
@@ -315,4 +463,8 @@ def _load_lines(path: Path | str) -> List[str]:
     p = Path(path)
     if not p.exists():
         return []
-    return [ln.strip() for ln in p.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    return [
+        ln.strip()
+        for ln in p.read_text(encoding="utf-8").splitlines()
+        if ln.strip()
+    ]
