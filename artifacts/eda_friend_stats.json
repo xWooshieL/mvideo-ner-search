@@ -1,7 +1,5 @@
 {
-  "brand_in_query": 0.27,
-  "brand_only_sku": 0.73,
-  "tokens_p50": 2,
-  "tokens_p90": 4,
-  "tokens_p99": 8
+  "p50_tokens": 3,
+  "p90_tokens": 6,
+  "p99_tokens": 9
 }

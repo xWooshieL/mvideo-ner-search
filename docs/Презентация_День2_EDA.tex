@@ -1,4 +1,5 @@
 % !TeX program = xelatex
+% !TeX options = -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error "%DOC%"
 \documentclass[aspectratio=169,11pt]{beamer}
 
 % ———- голый beamer: никаких полос, тем и навигации ———-
@@ -186,7 +187,7 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \slidehead{eda · запросы}{Запросы короткие и категорийные}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.96\textwidth]{02_top_queries.png}
+\vspace{2pt}\centering\includegraphics[width=1.0\textwidth]{02_top_queries.png}
 \column{0.47\textwidth}
 \conclusion{Голова трафика — категории без бренда: «стиральная машинка», «холодильники», «аэрогриль».}
 \vspace{6pt}\par
@@ -248,9 +249,9 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \conclusion{Только в \textbf{27\%} кликов бренд написан в запросе. В \textbf{73\%} бренд известен лишь у карточки — одним словарём его не достать.}
 \vspace{6pt}\par
 {\smalltext
-\numdot{1}\ Отсюда обязателен слой \textbf{brand-классификатора} по кликам: «айфон 15» $\to$ Apple, хотя слова «Apple» нет.\par\vspace{4pt}
-\numdot{2}\ Клики — не мусор, а обучающий сигнал: majority-бренд запроса даёт метку без ручной разметки.\par\vspace{4pt}
-\numdot{3}\ Ограничение: \textbf{17\%} запросов кликают $\ge$2 бренда — берём majority с весом по позиции.}
+\numdot{1}\ Отсюда обязателен слой \textbf{бренд-классификатора} по кликам: «айфон 15» $\to$ Apple, хотя слова «Apple» нет.\par\vspace{4pt}
+\numdot{2}\ Клики — не мусор, а обучающий сигнал: самый частый бренд запроса даёт метку без ручной разметки.\par\vspace{4pt}
+\numdot{3}\ Ограничение: \textbf{17\%} запросов кликают $\ge$2 бренда — берём частотный с весом по позиции.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -264,12 +265,12 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \column{0.5\textwidth}
 \vspace{2pt}\centering\includegraphics[width=0.96\textwidth]{eda_token_length.png}
 \column{0.47\textwidth}
-\conclusion{Токены p50 / p90 / p99 = \textbf{2 / 4 / 8}. Запрос почти всегда $\le$ 8 слов — CRF летает на CPU под SLA.}
+\conclusion{Медиана 2 токена, 90\% запросов $\le$ 4 слов, 99\% $\le$ 8 слов — CRF летает на CPU под SLA.}
 \vspace{6pt}\par
 {\smalltext
-\numdot{1}\ Weak-разметка даёт $\ge$1 сущность у \textbf{$\sim$80\%} запросов: BRAND $\sim$46\%, CATEGORY $\sim$59\%, ATTR $\sim$7\%.\par\vspace{4pt}
-\numdot{2}\ У \textbf{$\sim$27\%} запросов есть \texttt{I-*} — многословные сущности, нужны именно границы span (BIO).\par\vspace{4pt}
-\numdot{3}\ Где weak нашёл BRAND, согласие с брендом клика \textbf{$\sim$83\%} — общий сигнал для multi-task.}
+\numdot{1}\ Перцентили длины: половина запросов $\le$2 слов, 9 из 10 $\le$4, почти все (99\%) $\le$8.\par\vspace{4pt}
+\numdot{2}\ Слабая разметка даёт $\ge$1 сущность у \textbf{$\sim$80\%} запросов: BRAND $\sim$46\%, CATEGORY $\sim$59\%, ATTR $\sim$7\%.\par\vspace{4pt}
+\numdot{3}\ У \textbf{$\sim$27\%} запросов есть \texttt{I-*} — многословные сущности, нужны именно границы span (BIO).}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -294,7 +295,7 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \hline
 \tcelll{\hnum{H5.} Атрибуты пишут единообразно} & \tcellc{Нет} & \tcellc{«16гб», «16 gb», «16 ГБ»}\\
 \hline
-\tcelll{\hnum{H6.} Бренд обычно написан в запросе} & \tcellc{Нет} & \tcellc{только 27\% — нужен classifier}\\
+\tcelll{\hnum{H6.} Бренд обычно написан в запросе} & \tcellc{Нет} & \tcellc{только 27\% — нужен классификатор}\\
 \hline
 \end{tabular}}
 \vspace{5pt}\par
@@ -413,14 +414,14 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \numdot{2}\ Чистим шум: «искал айфон $\to$ кликнул чехол» не портит обучение.\par\vspace{4pt}
 \numdot{3}\ На метке 1 учим embed(query) $\approx$ embed(title + desc): описание дотаскивает цвет, память, синонимы.}
 \column{0.48\textwidth}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Как используем скор}\par\vspace{5pt}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Как используем скор}\par\vspace{7pt}
 \begin{tikzpicture}[
-  st/.style={rounded corners=2pt, fill=cardbg, inner sep=5.5pt, text width=\dimexpr\textwidth-55pt\relax, font=\fontsize{7.5}{9.5}\selectfont},
-  arr/.style={-{Stealth[length=2.2mm]}, line width=0.9pt, mvgray}
+  st/.style={rounded corners=2pt, fill=cardbg, inner sep=5.5pt, text width=\dimexpr\textwidth-24pt\relax, align=left, font=\fontsize{7.5}{9.5}\selectfont},
+  arr/.style={-{Stealth[length=2mm]}, line width=0.9pt, mvgray}
 ]
-  \node[st] (s1) at (0,0) {NER достал факты $\to$ фильтр и буст в выдаче};
-  \node[st] (s2) at (0,-0.95) {$P(\text{match}=1 \mid \text{query},\ \text{sku\_text})$ — реранк поверх};
-  \node[st] (s3) at (0,-1.95) {модель: градиентный бустинг (CatBoost / XGBoost) на простых фичах};
+  \node[st] (s1) {NER достал факты $\to$ фильтр и буст в выдаче};
+  \node[st, below=4mm of s1] (s2) {$P(\text{match}=1 \mid \text{query},\ \text{sku\_text})$ — реранк поверх};
+  \node[st, below=4mm of s2] (s3) {модель: градиентный бустинг (CatBoost / XGBoost) на простых признаках};
   \draw[arr] (s1) -- (s2);
   \draw[arr] (s2) -- (s3);
 \end{tikzpicture}
@@ -432,12 +433,12 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 % 11b. SMOKE-TEST МЕТРИКИ CRF + СВОДКА МЕТОДОВ
 % ============================================================
 \begin{frame}[t]
-\slidehead{честные метрики · smoke-test}{CRF на weak BIO: где мы сейчас}
-\conclusion{Metrics на silver-метках оптимистичны — это ориентир, а не финальная оценка. Нужен mini-gold 200--500 запросов.}
+\slidehead{честные метрики · дымовой тест}{CRF на слабой BIO-разметке: где мы сейчас}
+\conclusion{Метрики на серебряных метках оптимистичны — это ориентир, а не финальная оценка. Нужен золотой набор 200--500 запросов, размеченный вручную.}
 \vspace{8pt}\par
 \begin{columns}[T]
 \column{0.42\textwidth}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Smoke-test на семпле}\par\vspace{5pt}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Быстрый тест на выборке}\par\vspace{5pt}
 \begin{tikzpicture}[
   st/.style={rounded corners=2pt, fill=cardbg, inner sep=6pt, text width=\dimexpr\textwidth-14pt\relax, font=\smalltext}
 ]
@@ -454,7 +455,7 @@ F1 ATTR & \InterBold 0.85\\
 {\InterSemi\fontsize{8.5}{10.5}\selectfont Что это значит}\par\vspace{5pt}
 {\smalltext
 \numdot{1}\ BRAND учится легко (0.95) — словарь почти решает задачу в голове каскада.\par\vspace{4pt}
-\numdot{2}\ CATEGORY слабее (0.78) — формулировки разнообразнее, тут нужен либо трансформер, либо больше weak-данных.\par\vspace{4pt}
+\numdot{2}\ CATEGORY слабее (0.78) — формулировки разнообразнее, тут нужен либо трансформер, либо больше слабо-размеченных данных.\par\vspace{4pt}
 \numdot{3}\ Итог: CRF — рабочая середина каскада, но категорию и хвост дотягиваем следующим слоем.}
 \end{columns}
 \slidefoot
@@ -501,7 +502,7 @@ F1 ATTR & \InterBold 0.85\\
 {\smalltext
 \numdot{4}\ Марковская модель атрибутов $\to$ в голову каскада.\par\vspace{5pt}
 \numdot{5}\ CRF на середину, сравнение BIO vs span-level.\par\vspace{5pt}
-\numdot{6}\ Матч-модель (бустинг) на первых 100+ метках $\to$ silver labels $\to$ реранк с description.}
+\numdot{6}\ Матч-модель (бустинг) на первых 100+ метках $\to$ серебряные метки $\to$ реранк с описанием карточки.}
 \end{columns}
 \vspace{12pt}\par
 \conclusion{К защите: каскад с покрытием edge-cases + честные метрики на ручном gold, а не self-check словаря.}
