@@ -1,7 +1,7 @@
 % !TeX program = xelatex
 \documentclass[aspectratio=169,11pt]{beamer}
 
-% ---------- голый beamer: никаких полос, тем и навигации ----------
+% ———- голый beamer: никаких полос, тем и навигации ———-
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{headline}{}
 \setbeamertemplate{footline}{}
@@ -9,12 +9,12 @@
 \setbeamersize{text margin left=0pt, text margin right=0pt}
 
 \usepackage{fontspec}
-\setmainfont{Inter}
-\setsansfont{Inter}
-\newfontfamily\InterBold{Inter Bold}
-\newfontfamily\InterSemi{Inter SemiBold}
+\setmainfont{Inter}[Ligatures=TeX]
+\setsansfont{Inter}[Ligatures=TeX]
+\newfontfamily\InterBold{Inter Bold}[Ligatures=TeX]
+\newfontfamily\InterSemi{Inter SemiBold}[Ligatures=TeX]
 
-\usepackage[russian]{babel}
+% без babel: для слайдов переносы не нужны, а его \cyrdash ломает длинное тире в Inter
 
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc}
@@ -22,7 +22,7 @@
 \usepackage{booktabs}
 \usepackage{array}
 
-% ---------- палитра М.Видео ----------
+% ———- палитра М.Видео ———-
 \definecolor{mvred}{HTML}{F20601}
 \definecolor{mvdark}{HTML}{1C1C1E}
 \definecolor{mvgray}{HTML}{6E6E73}
@@ -33,7 +33,7 @@
 
 \graphicspath{{assets/}{../figures/}{figures/}}
 
-% ---------- макро ----------
+% ———- макро ———-
 \newcommand{\kicker}[1]{{\color{mvred}\InterBold\fontsize{8}{10}\selectfont\MakeUppercase{#1}}}
 \newcommand{\slidetitle}[1]{{\color{mvdark}\InterBold\fontsize{15.5}{18}\selectfont #1}}
 
@@ -85,7 +85,7 @@
   \node[anchor=west, align=left] at ([xshift=0.88cm, yshift=-0.05cm]current page.west)
     {\color{white}\InterBold\fontsize{27}{31}\selectfont и слоистый NER};
   \node[anchor=west, align=left, text width=0.5\paperwidth] at ([xshift=0.9cm, yshift=-1.85cm]current page.west)
-    {\color{white}\fontsize{11}{15}\selectfont Что мы увидели в 31 млн кликов, какие гипотезы подтвердились, и почему задача кейса --- не «обычный NER», а максимум покрытия edge-cases.};
+    {\color{white}\fontsize{11}{15}\selectfont Что мы увидели в 31 млн кликов, какие гипотезы подтвердились, и почему задача кейса — не «обычный NER», а максимум покрытия edge-cases.};
   \node[anchor=south west] at ([xshift=0.9cm, yshift=0.5cm]current page.south west)
     {\color{white}\fontsize{9}{11}\selectfont Intelligent Search · Query Understanding};
 \end{tikzpicture}
@@ -164,12 +164,12 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \column{0.52\textwidth}
 \includegraphics[width=0.94\textwidth]{02_top_queries.png}
 \column{0.45\textwidth}
-\conclusion{Голова трафика --- категории без бренда: «стиральная машинка», «холодильники», «аэрогриль».}
+\conclusion{Голова трафика — категории без бренда: «стиральная машинка», «холодильники», «аэрогриль».}
 \vspace{6pt}\par
 {\smalltext
 \numdot{1}\ Медианная длина запроса $\approx$ 15--17 символов, 1--3 токена.\par\vspace{4pt}
 \numdot{2}\ В топ-15 нет атрибутов: люди уточняют фильтрами или кликами.\par\vspace{4pt}
-\numdot{3}\ Категорию надо ловить идеально --- самый частый факт.}
+\numdot{3}\ Категорию надо ловить идеально — самый частый факт.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -186,9 +186,9 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \conclusion{Топ-15 брендов покрывает огромную долю кликов, но хвост из 7 тысяч брендов правилами не закрыть.}
 \vspace{6pt}\par
 {\smalltext
-\numdot{1}\ Apple, Samsung, Haier, Xiaomi --- лидеры кликов.\par\vspace{4pt}
-\numdot{2}\ Цены с тяжёлым хвостом: медиана 16 тыс.~₽, средняя 31 тыс.~₽ --- premium тянет вправо.\par\vspace{4pt}
-\numdot{3}\ Словарь брендов --- сильный, но конечный инструмент: нужен слой для редких написаний.}
+\numdot{1}\ Apple, Samsung, Haier, Xiaomi — лидеры кликов.\par\vspace{4pt}
+\numdot{2}\ Цены с тяжёлым хвостом: медиана 16 тыс.~₽, средняя 31 тыс.~₽ — premium тянет вправо.\par\vspace{4pt}
+\numdot{3}\ Словарь брендов — сильный, но конечный инструмент: нужен слой для редких написаний.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -202,11 +202,11 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \column{0.5\textwidth}
 \includegraphics[width=\textwidth]{05_position_distribution.png}
 \column{0.47\textwidth}
-\conclusion{Медианная позиция клика --- 4. Ошибка разбора запроса почти гарантированно теряет клик.}
+\conclusion{Медианная позиция клика — 4. Ошибка разбора запроса почти гарантированно теряет клик.}
 \vspace{6pt}\par
 {\smalltext
-\numdot{1}\ 75\% кликов --- в первых 16 позициях.\par\vspace{4pt}
-\numdot{2}\ Позиция клика --- полезный сигнал качества пары query$\leftrightarrow$SKU (пригодится для разметки match).\par\vspace{4pt}
+\numdot{1}\ 75\% кликов — в первых 16 позициях.\par\vspace{4pt}
+\numdot{2}\ Позиция клика — полезный сигнал качества пары query$\leftrightarrow$SKU (пригодится для разметки match).\par\vspace{4pt}
 \numdot{3}\ Связь цены и позиции слабая: дорогие товары кликают и в топе, и глубоко.}
 \end{columns}
 \slidefoot
@@ -223,15 +223,15 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \toprule
 {\InterSemi Гипотеза} & {\InterSemi Статус} & {\InterSemi Комментарий}\\
 \midrule
-H1. Большинство запросов --- короткие категорийные интенты & {\color{okgreen}\InterSemi да} & топы --- чистые категории\\
+H1. Большинство запросов — короткие категорийные интенты & {\color{okgreen}\InterSemi да} & топы — чистые категории\\
 H2. Клики концентрируются в топе выдачи & {\color{okgreen}\InterSemi да} & медиана позиции = 4\\
 H3. Бренд в запросе $\Rightarrow$ клик по тому же бренду & {\color{okgreen}\InterSemi в основном} & heatmap query$\times$brand диагональна\\
 H4. Цена сильно влияет на позицию клика & {\color{warnorange}\InterSemi нет} & hexbin: связь слабая\\
-H5. Атрибуты в запросах пишут единообразно & {\color{warnorange}\InterSemi нет} & «16гб», «16 gb», «16 ГБ» --- зоопарк\\
+H5. Атрибуты в запросах пишут единообразно & {\color{warnorange}\InterSemi нет} & «16гб», «16 gb», «16 ГБ» — зоопарк\\
 \bottomrule
 \end{tabular}}
 \vspace{8pt}\par
-\conclusion{H5 --- главный аргумент за вероятностный подход: атрибуты нельзя закрыть одним regex.}
+\conclusion{H5 — главный аргумент за вероятностный подход: атрибуты нельзя закрыть одним regex.}
 \slidefoot
 \end{frame}
 
@@ -239,21 +239,21 @@ H5. Атрибуты в запросах пишут единообразно & {
 % 8. ПЕРЕПОСТАНОВКА ЗАДАЧИ
 % ============================================================
 \begin{frame}[t]
-\slidehead{постановка · переосмысление}{Задача --- не «обычный NER»}
-\conclusion{Главная цель --- максимизировать покрытие edge-cases, а не выбить красивый F1 на простых запросах.}
+\slidehead{постановка · переосмысление}{Задача — не «обычный NER»}
+\conclusion{Главная цель — максимизировать покрытие edge-cases, а не выбить красивый F1 на простых запросах.}
 \vspace{12pt}\par
 \begin{columns}[T]
 \column{0.48\textwidth}
 {\InterSemi\fontsize{8.5}{10.5}\selectfont Почему так}\par\vspace{6pt}
 {\smalltext
-\numdot{1}\ Голова запросов решается словарём за день --- это не подвиг.\par\vspace{5pt}
+\numdot{1}\ Голова запросов решается словарём за день — это не подвиг.\par\vspace{5pt}
 \numdot{2}\ Конверсию теряют хвосты: опечатки, редкие бренды, склейки, смесь языков.\par\vspace{5pt}
 \numdot{3}\ Ценность решения = сколько хвоста мы покрываем при SLA $<$ 100 мс.}
 \column{0.48\textwidth}
 \begin{tikzpicture}
 \node[fill=cardbg, rounded corners=3pt, inner sep=7pt, text width=\dimexpr\textwidth-14pt\relax]{
 {\InterSemi\fontsize{8.5}{10.5}\selectfont Работаем в вероятностном пространстве}\par\vspace{5pt}
-{\smalltext\color{mvgray} Каждый слой отдаёт не только ответ, но и уверенность. Если уверенность низкая --- запрос уходит на слой тяжелее. Так простое остаётся быстрым, а сложное --- решаемым.}
+{\smalltext\color{mvgray} Каждый слой отдаёт не только ответ, но и уверенность. Если уверенность низкая — запрос уходит на слой тяжелее. Так простое остаётся быстрым, а сложное — решаемым.}
 };
 \end{tikzpicture}
 \end{columns}
@@ -298,11 +298,11 @@ H5. Атрибуты в запросах пишут единообразно & {
 \slidehead{идея · марковская модель}{Марковская цепь для атрибутов}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\conclusion{По предыдущему токену предсказываем тип следующего: после «16» вероятнее всего «гб» --- значит, это memory.}
+\conclusion{По предыдущему токену предсказываем тип следующего: после «16» вероятнее всего «гб» — значит, это memory.}
 \vspace{8pt}\par
 {\smalltext
-\numdot{1}\ Обучаем переходы $P(t_{i+1} \mid t_i)$ на миллионах запросов --- бесплатная статистика.\par\vspace{5pt}
-\numdot{2}\ Число без юнита перестаёт быть загадкой: «16» перед «гб» --- память, перед «дюймов» --- диагональ.\par\vspace{5pt}
+\numdot{1}\ Обучаем переходы $P(t_{i+1} \mid t_i)$ на миллионах запросов — бесплатная статистика.\par\vspace{5pt}
+\numdot{2}\ Число без юнита перестаёт быть загадкой: «16» перед «гб» — память, перед «дюймов» — диагональ.\par\vspace{5pt}
 \numdot{3}\ Дёшево, интерпретируемо, работает в голове каскада рядом с правилами.}
 \column{0.46\textwidth}
 \begin{tikzpicture}[
@@ -325,7 +325,7 @@ H5. Атрибуты в запросах пишут единообразно & {
 \vspace{10pt}\par
 \begin{tikzpicture}
 \node[fill=pinkband, rounded corners=2pt, inner sep=6pt, text width=\dimexpr\textwidth-12pt\relax]{
-{\fontsize{8.5}{11}\selectfont\color{mvdark} attributes: \{«memory»: «16 гб»\} --- юнит восстановлен из контекста, даже если пользователь его не дописал}};
+{\fontsize{8.5}{11}\selectfont\color{mvdark} attributes: \{«memory»: «16 гб»\} — юнит восстановлен из контекста, даже если пользователь его не дописал}};
 \end{tikzpicture}
 \end{columns}
 \slidefoot
@@ -336,13 +336,13 @@ H5. Атрибуты в запросах пишут единообразно & {
 % ============================================================
 \begin{frame}[t]
 \slidehead{идея · разметка match}{Match 0/1: запрос попал в карточку?}
-\conclusion{100+ пар размечаем руками: 1 --- клик полностью соответствует запросу, 0 --- иначе. Модель доразмечает остальное.}
+\conclusion{100+ пар размечаем руками: 1 — клик полностью соответствует запросу, 0 — иначе. Модель доразмечает остальное.}
 \vspace{8pt}\par
 \begin{columns}[T]
 \column{0.48\textwidth}
 {\InterSemi\fontsize{8.5}{10.5}\selectfont Что это даёт}\par\vspace{5pt}
 {\smalltext
-\numdot{1}\ «Хорошие запросы» --- кандидаты на улучшение NER: запрос $\approx$ описанию карточки.\par\vspace{4pt}
+\numdot{1}\ «Хорошие запросы» — кандидаты на улучшение NER: запрос $\approx$ описанию карточки.\par\vspace{4pt}
 \numdot{2}\ Чистим шум: «искал айфон $\to$ кликнул чехол» не портит обучение.\par\vspace{4pt}
 \numdot{3}\ На метке 1 учим embed(query) $\approx$ embed(title + desc): описание дотаскивает цвет, память, синонимы.}
 \column{0.48\textwidth}
@@ -352,7 +352,7 @@ H5. Атрибуты в запросах пишут единообразно & {
   arr/.style={-{Stealth[length=2.2mm]}, line width=0.9pt, mvgray}
 ]
   \node[st] (s1) at (0,0) {NER достал факты $\to$ фильтр и буст в выдаче};
-  \node[st] (s2) at (0,-0.95) {$P(\text{match}=1 \mid \text{query},\ \text{sku\_text})$ --- реранк поверх};
+  \node[st] (s2) at (0,-0.95) {$P(\text{match}=1 \mid \text{query},\ \text{sku\_text})$ — реранк поверх};
   \node[st] (s3) at (0,-1.95) {модель: градиентный бустинг (CatBoost / XGBoost) на простых фичах};
   \draw[arr] (s1) -- (s2);
   \draw[arr] (s2) -- (s3);
@@ -372,14 +372,14 @@ H5. Атрибуты в запросах пишут единообразно & {
 \toprule
 {\InterSemi Риск} & {\InterSemi Почему больно} & {\InterSemi Решение}\\
 \midrule
-«Полное соответствие» размыто & «dyson» $\to$ пылесос Dyson --- это 1 или 0? & жёсткий гайд разметки с примерами до старта\\
+«Полное соответствие» размыто & «dyson» $\to$ пылесос Dyson — это 1 или 0? & жёсткий гайд разметки с примерами до старта\\
 100 примеров маловато & модель выучит шум выборки & 300--700 меток в день с каждого + проверка согласия\\
 Самореференция & модель учится на своих же метках, ошибки размножаются & holdout gold, который модель никогда не размечала\\
 Путаница с NER & это про query$\leftrightarrow$SKU, не про BIO на словах & отдельные пайплайны, отдельные метрики\\
 \bottomrule
 \end{tabular}}
 \vspace{8pt}\par
-\conclusion{Каждому риску --- конкретный процесс, а не «будем аккуратнее».}
+\conclusion{Каждому риску — конкретный процесс, а не «будем аккуратнее».}
 \slidefoot
 \end{frame}
 
@@ -393,7 +393,7 @@ H5. Атрибуты в запросах пишут единообразно & {
 {\InterSemi\fontsize{8.5}{10.5}\selectfont Разметка}\par\vspace{6pt}
 {\smalltext
 \numdot{1}\ Каждый день от каждого в команде: 300--700 пар вручную.\par\vspace{5pt}
-\numdot{2}\ Остальное --- автоматика: правила, алгоритмы, ИИ-агенты с выборочной проверкой глазами.\par\vspace{5pt}
+\numdot{2}\ Остальное — автоматика: правила, алгоритмы, ИИ-агенты с выборочной проверкой глазами.\par\vspace{5pt}
 \numdot{3}\ Gold-holdout откладываем сразу и не трогаем до финальной оценки.}
 \column{0.48\textwidth}
 {\InterSemi\fontsize{8.5}{10.5}\selectfont Следующие шаги}\par\vspace{6pt}
@@ -418,7 +418,7 @@ H5. Атрибуты в запросах пишут единообразно & {
   \node[anchor=west, align=left] at ([xshift=0.9cm, yshift=2.1cm]current page.west)
     {\color{white}\InterBold\fontsize{23}{27}\selectfont Спасибо!};
   \node[anchor=west, align=left, text width=0.52\paperwidth] at ([xshift=0.9cm, yshift=1.05cm]current page.west)
-    {\color{white}\fontsize{9.5}{13}\selectfont Вопросы, критика гипотез и споры про слои --- welcome.};
+    {\color{white}\fontsize{9.5}{13}\selectfont Вопросы, критика гипотез и споры про слои — welcome.};
   \node[anchor=west, align=left, text width=0.55\paperwidth] at ([xshift=0.9cm, yshift=-0.85cm]current page.west)
     {\color{white}\fontsize{8.5}{13}\selectfont
      {\InterSemi Команда:}\\[2pt]
