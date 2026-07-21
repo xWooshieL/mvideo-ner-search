@@ -1,0 +1,576 @@
+% !TeX program = xelatex
+% !TeX options = -shell-escape -synctex=1 -interaction=nonstopmode -file-line-error "%DOC%"
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ———- голый beamer: никаких полос, тем и навигации ———-
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{}
+\setbeamertemplate{frametitle}{}
+\setbeamersize{text margin left=0pt, text margin right=0pt}
+
+\usepackage{fontspec}
+\setmainfont{Inter}[Ligatures=TeX]
+\setsansfont{Inter}[Ligatures=TeX]
+\newfontfamily\InterBold{Inter Bold}[Ligatures=TeX]
+\newfontfamily\InterSemi{Inter SemiBold}[Ligatures=TeX]
+
+% без babel: для слайдов переносы не нужны, а его \cyrdash ломает длинное тире в Inter
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{hhline}
+\usepackage{tabularx}
+
+% колонки с вертикальным центрированием
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}}
+
+% ———- палитра М.Видео ———-
+\definecolor{mvred}{HTML}{F20601}
+\definecolor{mvdark}{HTML}{1C1C1E}
+\definecolor{mvgray}{HTML}{6E6E73}
+\definecolor{cardbg}{HTML}{F5F5F6}
+\definecolor{pinkband}{HTML}{FDECEC}
+\definecolor{okgreen}{HTML}{1F8A50}
+\definecolor{warnorange}{HTML}{C75000}
+
+\graphicspath{{assets/}{../figures/}{figures/}}
+
+% ———- макро ———-
+\newcommand{\kicker}[1]{{\color{mvred}\InterBold\fontsize{8}{10}\selectfont\MakeUppercase{#1}}}
+\newcommand{\slidetitle}[1]{{\color{mvdark}\InterBold\fontsize{15.5}{18}\selectfont #1}}
+
+\newcommand{\conclusion}[1]{%
+  \begin{tikzpicture}
+    \node[fill=pinkband, rounded corners=2pt, inner xsep=9pt, inner ysep=5.5pt,
+          text width=\dimexpr\textwidth-18pt\relax] {%
+      {\color{mvred}\InterBold\fontsize{8}{10}\selectfont ВЫВОД}\hspace{7pt}{\color{mvdark}\fontsize{8.5}{11}\selectfont #1}};
+  \end{tikzpicture}}
+
+\newcommand{\numdot}[1]{%
+  \tikz[baseline=-0.6ex]{\node[circle, fill=mvred, text=white, inner sep=1pt, minimum size=12pt, font=\InterBold\fontsize{7}{8}\selectfont]{#1};}}
+
+\newcommand{\cornerlogo}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=north east, xshift=-0.5cm, yshift=-0.38cm] at (current page.north east)
+      {\includegraphics[height=0.85cm]{m_letter.png}};
+  \end{tikzpicture}}
+
+% шапка и подвал контентного слайда (без кастомных окружений)
+\newcommand{\slidehead}[2]{%
+  \cornerlogo
+  \vspace{0.38cm}\par
+  \hspace{0.85cm}\begin{minipage}{\dimexpr\paperwidth-1.7cm\relax}
+  \kicker{#1}\par\vspace{3pt}
+  \slidetitle{#2}\par\vspace{7pt}}
+\newcommand{\slidefoot}{\end{minipage}}
+
+% мелкие текстовые стили
+\newcommand{\bodytext}{\fontsize{8.5}{11.5}\selectfont}
+\newcommand{\smalltext}{\fontsize{7.5}{10}\selectfont}
+
+% ---------- таблицы в стиле шаблона: чёрная шапка, светлые линии, красные акценты ----------
+\definecolor{tblline}{HTML}{DDDDDD}
+\arrayrulecolor{tblline}
+\newcommand{\ttext}{\fontsize{7}{9}\selectfont}
+% шапки: по центру и слева
+\newcommand{\thead}[1]{\cellcolor{mvdark}{\color{white}\InterSemi\ttext #1}}
+\newcommand{\theadl}[1]{\cellcolor{mvdark}{\color{white}\InterSemi\ttext #1}}
+% акцент-ячейка (красная)
+\newcommand{\tacc}[1]{\cellcolor{mvred}{\color{white}\InterSemi\ttext #1}}
+% обычные ячейки: центр и слева
+\newcommand{\tcellc}[1]{{\ttext\color{mvdark}#1}}
+\newcommand{\tcelll}[1]{{\ttext\color{mvdark}#1}}
+% выделения внутри ячеек
+\newcommand{\hnum}[1]{{\InterBold\color{mvdark}#1}}
+\newcommand{\hb}[1]{{\InterSemi\color{mvdark}#1}}
+\newcommand{\tnote}[1]{{\color{mvred}\itshape\fontsize{7}{9}\selectfont #1}}
+
+\setlength{\parskip}{0pt}
+
+\begin{document}
+
+% ============================================================
+% 1. ТИТУЛ
+% ============================================================
+\begin{frame}[plain]
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[mvred] (current page.south west) rectangle (current page.north east);
+  \node[anchor=east, inner sep=0pt] at ([xshift=0.32\paperwidth]current page.east)
+    {\includegraphics[height=1.06\paperheight]{kurs1_image1.png}};
+  \node[anchor=west, align=left] at ([xshift=0.9cm, yshift=2.05cm]current page.west)
+    {\color{white}\InterBold\fontsize{10}{12}\selectfont ДЕНЬ 02 · БУТКЕМП М.ВИДЕО · NLP / SEARCH};
+  \node[anchor=west, align=left] at ([xshift=0.88cm, yshift=0.9cm]current page.west)
+    {\color{white}\InterBold\fontsize{27}{31}\selectfont EDA, гипотезы};
+  \node[anchor=west, align=left] at ([xshift=0.88cm, yshift=-0.05cm]current page.west)
+    {\color{white}\InterBold\fontsize{27}{31}\selectfont и слоистый NER};
+  \node[anchor=west, align=left, text width=0.5\paperwidth] at ([xshift=0.9cm, yshift=-1.85cm]current page.west)
+    {\color{white}\fontsize{11}{15}\selectfont Что мы увидели в 31 млн кликов, какие гипотезы подтвердились, и почему задача кейса — не «обычный NER», а максимум покрытия edge-cases.};
+  \node[anchor=south west] at ([xshift=0.9cm, yshift=0.5cm]current page.south west)
+    {\color{white}\fontsize{9}{11}\selectfont Intelligent Search · Query Understanding};
+\end{tikzpicture}
+\end{frame}
+
+% ============================================================
+% 2. ЧТО СДЕЛАЛИ СЕГОДНЯ
+% ============================================================
+\begin{frame}[t]
+\slidehead{день 02 · итоги}{Что сделали сегодня}
+\conclusion{EDA закрыт, гипотезы проверены на данных, архитектура решения переосмыслена под edge-cases.}
+\vspace{12pt}\par
+\begin{columns}[T]
+\column{0.25\textwidth}
+\numdot{1}\ {\InterSemi\fontsize{8.5}{10.5}\selectfont EDA}\par\vspace{3pt}
+{\smalltext\color{mvgray} 31 млн кликов, 1.79 млн запросов: длины, топы, цены, позиции, схожести.}
+\column{0.25\textwidth}
+\numdot{2}\ {\InterSemi\fontsize{8.5}{10.5}\selectfont Гипотезы}\par\vspace{3pt}
+{\smalltext\color{mvgray} Сформулировали и проверили: что подтвердилось, а что нет.}
+\column{0.25\textwidth}
+\numdot{3}\ {\InterSemi\fontsize{8.5}{10.5}\selectfont Слои NER}\par\vspace{3pt}
+{\smalltext\color{mvgray} Правила $\to$ CRF $\to$ трансформеры: вероятностное пространство, а не один молоток.}
+\column{0.25\textwidth}
+\numdot{4}\ {\InterSemi\fontsize{8.5}{10.5}\selectfont Разметка}\par\vspace{3pt}
+{\smalltext\color{mvgray} План ручной разметки match 0/1 и марковская модель для атрибутов.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 3. ДАННЫЕ В ЦИФРАХ
+% ============================================================
+\begin{frame}[t]
+\slidehead{данные · масштаб}{С чем работаем}
+\conclusion{Данных достаточно и для словарей, и для обучения: узкое место не объём, а качество меток.}
+\vspace{8pt}\par
+\begin{columns}[T]
+\column{0.31\textwidth}
+{\color{mvred}\InterBold\fontsize{13.5}{15.5}\selectfont 30.99 млн}\par
+{\smalltext\color{mvgray} кликов: запрос $\to$ SKU (query\_clicks.parquet)}
+\vspace{6pt}\par
+{\color{mvred}\InterBold\fontsize{13.5}{15.5}\selectfont 1.79 млн}\par
+{\smalltext\color{mvgray} уникальных запросов}
+\vspace{6pt}\par
+{\color{mvred}\InterBold\fontsize{13.5}{15.5}\selectfont 1.18 млн}\par
+{\smalltext\color{mvgray} карточек title + description (sku\_desc.parquet)}
+\column{0.31\textwidth}
+{\color{mvred}\InterBold\fontsize{13.5}{15.5}\selectfont 333 тыс}\par
+{\smalltext\color{mvgray} уникальных SKU в кликах}
+\vspace{6pt}\par
+{\color{mvred}\InterBold\fontsize{13.5}{15.5}\selectfont 7 150}\par
+{\smalltext\color{mvgray} брендов}
+\vspace{6pt}\par
+{\color{mvred}\InterBold\fontsize{13.5}{15.5}\selectfont 546 тыс}\par
+{\smalltext\color{mvgray} офферов в YML-каталоге (6 963 категории)}
+\column{0.34\textwidth}
+\begin{tikzpicture}
+\node[fill=cardbg, rounded corners=3pt, inner sep=7pt, text width=\dimexpr\textwidth-14pt\relax]{
+{\InterSemi\fontsize{8}{10}\selectfont Пример строки клика}\par\vspace{4pt}
+{\fontsize{7}{9}\selectfont\color{mvgray}
+query: «galaxy s25»\par
+sku: Смартфон Samsung Galaxy S25 FE 8/256GB Black\par
+brand: Samsung · price: 50 703 ₽ · position: 2}
+};
+\end{tikzpicture}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 4. EDA: ЗАПРОСЫ
+% ============================================================
+\begin{frame}[t]
+\slidehead{eda · запросы}{Запросы короткие и категорийные}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=1.0\textwidth]{02_top_queries.png}
+\column{0.47\textwidth}
+\conclusion{Голова трафика — категории без бренда: «стиральная машинка», «холодильники», «аэрогриль».}
+\vspace{6pt}\par
+{\smalltext
+\numdot{1}\ Медианная длина запроса $\approx$ 15--17 символов, 1--3 токена.\par\vspace{4pt}
+\numdot{2}\ В топ-15 нет атрибутов: люди уточняют фильтрами или кликами.\par\vspace{4pt}
+\numdot{3}\ Категорию надо ловить идеально — самый частый факт.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 5. EDA: БРЕНДЫ И ЦЕНЫ
+% ============================================================
+\begin{frame}[t]
+\slidehead{eda · бренды и цены}{Бренды: голова мощная, хвост длинный}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth]{03_top_brands.png}
+\column{0.47\textwidth}
+\conclusion{Топ-15 брендов покрывает огромную долю кликов, но хвост из 7 тысяч брендов правилами не закрыть.}
+\vspace{6pt}\par
+{\smalltext
+\numdot{1}\ Apple, Samsung, Haier, Xiaomi — лидеры кликов.\par\vspace{4pt}
+\numdot{2}\ Цены с тяжёлым хвостом: медиана 16~тыс.~₽, средняя 31~тыс.~₽.\par\vspace{4pt}
+\numdot{3}\ Словарь брендов — сильный, но конечный: нужен слой для редких написаний.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 6. EDA: ПОЗИЦИИ КЛИКОВ
+% ============================================================
+\begin{frame}[t]
+\slidehead{eda · клики}{Клики живут в топе выдачи}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth]{05_position_distribution.png}
+\column{0.47\textwidth}
+\conclusion{Медианная позиция клика — 4. Ошибка разбора запроса почти гарантированно теряет клик.}
+\vspace{6pt}\par
+{\smalltext
+\numdot{1}\ 75\% кликов — в первых 16 позициях.\par\vspace{4pt}
+\numdot{2}\ Позиция клика — полезный сигнал качества пары query$\leftrightarrow$SKU (пригодится для разметки match).\par\vspace{4pt}
+\numdot{3}\ Связь цены и позиции слабая: дорогие товары кликают и в топе, и глубоко.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 6b. ГЛАВНЫЙ ИНСАЙТ: БРЕНД НЕ В ТЕКСТЕ
+% ============================================================
+\begin{frame}[t]
+\slidehead{eda · ключевой инсайт}{73\% брендов нет в тексте запроса}
+\begin{columns}[T]
+\column{0.44\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.98\textwidth]{eda_brand_in_query.png}
+\column{0.53\textwidth}
+\conclusion{Только в \textbf{27\%} кликов бренд написан в запросе. В \textbf{73\%} бренд известен лишь у карточки — одним словарём его не достать.}
+\vspace{6pt}\par
+{\smalltext
+\numdot{1}\ Отсюда обязателен слой \textbf{бренд-классификатора} по кликам: «айфон 15» $\to$ Apple, хотя слова «Apple» нет.\par\vspace{4pt}
+\numdot{2}\ Клики — не мусор, а обучающий сигнал: самый частый бренд запроса даёт метку без ручной разметки.\par\vspace{4pt}
+\numdot{3}\ Ограничение: \textbf{17\%} запросов кликают $\ge$2 бренда — берём частотный с весом по позиции.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 6c. ДЛИНА ЗАПРОСОВ И SEQUENCE LABELING
+% ============================================================
+\begin{frame}[t]
+\slidehead{eda · структура запроса}{Запрос короткий, но границы важны}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth]{eda_token_length.png}
+\column{0.47\textwidth}
+\conclusion{Медиана 2 токена, 90\% запросов $\le$ 4 слов, 99\% $\le$ 8 слов — CRF летает на CPU под SLA.}
+\vspace{6pt}\par
+{\smalltext
+\numdot{1}\ Перцентили длины: половина запросов $\le$2 слов, 9 из 10 $\le$4, почти все (99\%) $\le$8.\par\vspace{4pt}
+\numdot{2}\ Слабая разметка даёт $\ge$1 сущность у \textbf{$\sim$80\%} запросов: BRAND $\sim$46\%, CATEGORY $\sim$59\%, ATTR $\sim$7\%.\par\vspace{4pt}
+\numdot{3}\ У \textbf{$\sim$27\%} запросов есть \texttt{I-*} — многословные сущности, нужны именно границы span (BIO).}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 7. ГИПОТЕЗЫ
+% ============================================================
+\begin{frame}[t]
+\slidehead{eda · проверка гипотез}{Гипотезы: что подтвердилось}
+{\renewcommand{\arraystretch}{1.35}\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|L{6.4cm}|C{2.0cm}|C{4.0cm}|}
+\hline
+\theadl{Гипотеза} & \thead{Статус} & \thead{Комментарий}\\
+\hline
+\tcelll{\hnum{H1.} Запросы — короткие категорийные интенты} & \tacc{Да} & \tcellc{топы — чистые категории}\\
+\hline
+\tcelll{\hnum{H2.} Клики концентрируются в топе выдачи} & \tacc{Да} & \tcellc{медиана позиции = 4}\\
+\hline
+\tcelll{\hnum{H3.} Бренд в запросе $\Rightarrow$ клик того же бренда} & \tcellc{В основном} & \tcellc{heatmap диагональна}\\
+\hline
+\tcelll{\hnum{H4.} Цена сильно влияет на позицию клика} & \tcellc{Нет} & \tcellc{hexbin: связь слабая}\\
+\hline
+\tcelll{\hnum{H5.} Атрибуты пишут единообразно} & \tcellc{Нет} & \tcellc{«16гб», «16 gb», «16 ГБ»}\\
+\hline
+\tcelll{\hnum{H6.} Бренд обычно написан в запросе} & \tcellc{Нет} & \tcellc{только 27\% — нужен классификатор}\\
+\hline
+\end{tabular}}
+\vspace{5pt}\par
+\tnote{Красное = подтверждено данными. H5 — главный аргумент за вероятностный подход: атрибуты не закрыть одним regex.}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 7a. ДОКАЗАТЕЛЬСТВО H1
+% ============================================================
+\begin{frame}[t]
+\slidehead{доказательство · H1}{H1: запросы короткие и категорийные}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.98\textwidth]{01_query_length_dist.png}\par\vspace{4pt}
+\centering\includegraphics[width=0.98\textwidth]{02_top_queries.png}
+\column{0.47\textwidth}
+\conclusion{Медиана длины запроса — \textbf{17 символов} ($\approx$1--3 слова), а в топе — чистые категории без бренда и атрибутов.}
+\vspace{7pt}\par
+{\smalltext
+\numdot{1}\ Распределение длины (сверху) собрано в районе 10--20 символов — люди пишут коротко.\par\vspace{5pt}
+\numdot{2}\ Топ запросов (снизу): «стиральная машинка», «холодильники», «аэрогриль» — это категории, а не модели.\par\vspace{5pt}
+\numdot{3}\ Значит категорию надо ловить идеально: это самый частый и самый короткий факт в запросе.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 7b. ДОКАЗАТЕЛЬСТВО H2
+% ============================================================
+\begin{frame}[t]
+\slidehead{доказательство · H2}{H2: клики концентрируются в топе}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.98\textwidth]{05_position_distribution.png}\par\vspace{4pt}
+\centering\includegraphics[width=0.98\textwidth]{15_position_click_share.png}
+\column{0.47\textwidth}
+\conclusion{Медиана позиции клика — \textbf{4}, а первые позиции забирают львиную долю: ошибка разбора почти гарантированно теряет клик.}
+\vspace{7pt}\par
+{\smalltext
+\numdot{1}\ Распределение позиций (сверху) резко смещено влево — кликают по верхним строкам выдачи.\par\vspace{5pt}
+\numdot{2}\ Накопленная доля (снизу): $\approx$75\% кликов приходится на первые 16 позиций.\par\vspace{5pt}
+\numdot{3}\ Вывод для нас: точность разбора запроса прямо конвертируется в клик — промах отправляет товар вниз, куда не смотрят.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 8. ПЕРЕПОСТАНОВКА ЗАДАЧИ
+% ============================================================
+\begin{frame}[t]
+\slidehead{постановка · переосмысление}{Задача — не «обычный NER»}
+\conclusion{Главная цель — максимизировать покрытие edge-cases, а не выбить красивый F1 на простых запросах.}
+\vspace{12pt}\par
+\begin{columns}[T]
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Почему так}\par\vspace{6pt}
+{\smalltext
+\numdot{1}\ Голова запросов решается словарём за день — это не подвиг.\par\vspace{5pt}
+\numdot{2}\ Конверсию теряют хвосты: опечатки, редкие бренды, склейки, смесь языков.\par\vspace{5pt}
+\numdot{3}\ Ценность решения = сколько хвоста мы покрываем при SLA $<$ 100 мс.}
+\column{0.48\textwidth}
+\begin{tikzpicture}
+\node[fill=cardbg, rounded corners=3pt, inner sep=7pt, text width=\dimexpr\textwidth-14pt\relax]{
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Работаем в вероятностном пространстве}\par\vspace{5pt}
+{\smalltext\color{mvgray} Каждый слой отдаёт не только ответ, но и уверенность. Если уверенность низкая — запрос уходит на слой тяжелее. Так простое остаётся быстрым, а сложное — решаемым.}
+};
+\end{tikzpicture}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 9. СЛОИСТАЯ АРХИТЕКТУРА
+% ============================================================
+\begin{frame}[t]
+\slidehead{архитектура · слои}{Три слоя: голова, середина, хвост}
+\begin{center}
+\begin{tikzpicture}[
+  lay/.style={rounded corners=3pt, inner sep=7pt, text width=3.3cm, align=left, minimum height=2.4cm},
+  arr/.style={-{Stealth[length=2.6mm]}, line width=1pt, mvgray}
+]
+  \node[lay, fill=cardbg] (l1) at (0,0)
+    {{\color{mvred}\InterBold\small ГОЛОВА}\par\vspace{3pt}
+     {\InterSemi\footnotesize regex + правила + словари}\par\vspace{4pt}
+     {\fontsize{8}{10.5}\selectfont\color{mvgray}частые и простые запросы; мгновенно, прозрачно, дёшево}};
+  \node[lay, fill=cardbg] (l2) at (5.55,0)
+    {{\color{mvred}\InterBold\small СЕРЕДИНА}\par\vspace{3pt}
+     {\InterSemi\footnotesize CRF и аналоги}\par\vspace{4pt}
+     {\fontsize{8}{10.5}\selectfont\color{mvgray}token-level: BIO и другие схемы, либо переход к span-level разметке}};
+  \node[lay, fill=mvdark] (l3) at (11.1,0)
+    {{\color{mvred}\InterBold\small ХВОСТ}\par\vspace{3pt}
+     {\color{white}\InterSemi\footnotesize трансформеры + LLM}\par\vspace{4pt}
+     {\fontsize{8}{10.5}\selectfont\color{white!75!mvdark}edge-cases, которые не решаются правилами и обычной NER-моделью}};
+  \draw[arr] (l1.east) -- node[above=2.5pt, font=\fontsize{6.5}{7.5}\selectfont\color{mvgray}]{низкая увер.} (l2.west);
+  \draw[arr] (l2.east) -- node[above=2.5pt, font=\fontsize{6.5}{7.5}\selectfont\color{mvgray}]{низкая увер.} (l3.west);
+\end{tikzpicture}
+\end{center}
+\vspace{8pt}\par
+\conclusion{Каскад по уверенности: 90\% трафика решают дешёвые слои, тяжёлые модели работают только там, где реально нужны.}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 10. МАРКОВСКАЯ МОДЕЛЬ
+% ============================================================
+\begin{frame}[t]
+\slidehead{идея · марковская модель}{Марковская цепь для атрибутов}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\conclusion{По предыдущему токену предсказываем тип следующего: после «16» вероятнее всего «гб» — значит, это memory.}
+\vspace{8pt}\par
+{\smalltext
+\numdot{1}\ Обучаем переходы $P(t_{i+1} \mid t_i)$ на миллионах запросов — бесплатная статистика.\par\vspace{5pt}
+\numdot{2}\ Число без юнита перестаёт быть загадкой: «16» перед «гб» — память, перед «дюймов» — диагональ.\par\vspace{5pt}
+\numdot{3}\ Дёшево, интерпретируемо, работает в голове каскада рядом с правилами.}
+\column{0.46\textwidth}
+\begin{tikzpicture}[
+  tok/.style={rounded corners=2pt, fill=cardbg, inner sep=5pt, font=\InterSemi\fontsize{8.5}{10}\selectfont},
+  lab/.style={font=\fontsize{7.5}{9}\selectfont\color{mvred}},
+  arr/.style={-{Stealth[length=2.2mm]}, line width=0.9pt, mvred}
+]
+  \node[tok] (a) at (0,0) {ноутбук};
+  \node[tok] (b) at (1.95,0) {asus};
+  \node[tok] (c) at (3.5,0) {16};
+  \node[tok] (d) at (4.9,0) {гб};
+  \draw[arr] (a) -- (b);
+  \draw[arr] (b) -- (c);
+  \draw[arr] (c) to[bend left=35] node[above, font=\fontsize{7.5}{9}\selectfont\color{mvred}]{$P(\text{гб}\mid 16)$ высокое} (d);
+  \node[lab, below=2pt of a] {CATEGORY};
+  \node[lab, below=2pt of b] {BRAND};
+  \node[lab, below=2pt of c] {ATTR};
+  \node[lab, below=2pt of d] {ATTR};
+\end{tikzpicture}
+\vspace{10pt}\par
+\begin{tikzpicture}
+\node[fill=pinkband, rounded corners=2pt, inner sep=6pt, text width=\dimexpr\textwidth-12pt\relax]{
+{\fontsize{8.5}{11}\selectfont\color{mvdark} attributes: \{«memory»: «16 гб»\} — юнит восстановлен из контекста, даже если пользователь его не дописал}};
+\end{tikzpicture}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 11. РАЗМЕТКА MATCH 0/1
+% ============================================================
+\begin{frame}[t]
+\slidehead{идея · разметка match}{Match 0/1: запрос попал в карточку?}
+\conclusion{100+ пар размечаем руками: 1 — клик полностью соответствует запросу, 0 — иначе. Модель доразмечает остальное.}
+\vspace{8pt}\par
+\begin{columns}[T]
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Что это даёт}\par\vspace{5pt}
+{\smalltext
+\numdot{1}\ «Хорошие запросы» — кандидаты на улучшение NER: запрос $\approx$ описанию карточки.\par\vspace{4pt}
+\numdot{2}\ Чистим шум: «искал айфон $\to$ кликнул чехол» не портит обучение.\par\vspace{4pt}
+\numdot{3}\ На метке 1 учим embed(query) $\approx$ embed(title + desc): описание дотаскивает цвет, память, синонимы.}
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Как используем скор}\par\vspace{7pt}
+\begin{tikzpicture}[
+  st/.style={rounded corners=2pt, fill=cardbg, inner sep=5.5pt, text width=\dimexpr\textwidth-24pt\relax, align=left, font=\fontsize{7.5}{9.5}\selectfont},
+  arr/.style={-{Stealth[length=2mm]}, line width=0.9pt, mvgray}
+]
+  \node[st] (s1) {NER достал факты $\to$ фильтр и буст в выдаче};
+  \node[st, below=4mm of s1] (s2) {$P(\text{match}=1 \mid \text{query},\ \text{sku\_text})$ — реранк поверх};
+  \node[st, below=4mm of s2] (s3) {модель: градиентный бустинг (CatBoost / XGBoost) на простых признаках};
+  \draw[arr] (s1) -- (s2);
+  \draw[arr] (s2) -- (s3);
+\end{tikzpicture}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 11b. SMOKE-TEST МЕТРИКИ CRF + СВОДКА МЕТОДОВ
+% ============================================================
+\begin{frame}[t]
+\slidehead{честные метрики · дымовой тест}{CRF на слабой BIO-разметке: где мы сейчас}
+\conclusion{Метрики на серебряных метках оптимистичны — это ориентир, а не финальная оценка. Нужен золотой набор 3000--5000 запросов, размеченный вручную.}
+\vspace{8pt}\par
+\begin{columns}[T]
+\column{0.42\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Быстрый тест на выборке}\par\vspace{5pt}
+\begin{tikzpicture}[
+  st/.style={rounded corners=2pt, fill=cardbg, inner sep=6pt, text width=\dimexpr\textwidth-14pt\relax, font=\smalltext}
+]
+\node[st]{
+\begin{tabular}{@{}ll@{}}
+Token accuracy & \InterBold\color{mvred}0.89\\[3pt]
+Entity micro-F1 & \InterBold\color{mvred}0.85\\[3pt]
+F1 BRAND & \InterBold 0.95\\[3pt]
+F1 CATEGORY & \InterBold 0.78\\[3pt]
+F1 ATTR & \InterBold 0.85\\
+\end{tabular}};
+\end{tikzpicture}
+\column{0.54\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Что это значит}\par\vspace{5pt}
+{\smalltext
+\numdot{1}\ BRAND учится легко (0.95) — словарь почти решает задачу в голове каскада.\par\vspace{4pt}
+\numdot{2}\ CATEGORY слабее (0.78) — формулировки разнообразнее, тут нужен либо трансформер, либо больше слабо-размеченных данных.\par\vspace{4pt}
+\numdot{3}\ Итог: CRF — рабочая середина каскада, но категорию и хвост дотягиваем следующим слоем.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 12. ПОДВОДНЫЕ КАМНИ
+% ============================================================
+\begin{frame}[t]
+\slidehead{риски · честно}{Подводные камни и что с ними делать}
+{\renewcommand{\arraystretch}{1.35}\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|L{3.5cm}|L{4.4cm}|L{4.5cm}|}
+\hline
+\theadl{Риск} & \theadl{Последствие} & \theadl{Меры снижения}\\
+\hline
+\tcelll{\hb{«Соответствие» размыто}} & \tcelll{«dyson» $\to$ пылесос Dyson: 1 или 0?} & \tcelll{жёсткий гайд разметки до старта}\\
+\hline
+\tcelll{\hb{100 примеров маловато}} & \tcelll{модель выучит шум выборки} & \tcelll{300--700 меток в день + согласие}\\
+\hline
+\tcelll{\hb{Самореференция}} & \tcelll{ошибки размножаются на своих метках} & \tcelll{holdout gold вне авторазметки}\\
+\hline
+\tcelll{\hb{Путаница с NER}} & \tcelll{это query$\leftrightarrow$SKU, не BIO на словах} & \tcelll{отдельные пайплайны и метрики}\\
+\hline
+\end{tabular}}
+\vspace{5pt}\par
+\tnote{Каждый риск закрыт конкретной мерой снижения ещё до старта разметки.}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 13. ПЛАН РАЗМЕТКИ И NEXT STEPS
+% ============================================================
+\begin{frame}[t]
+\slidehead{план · дальше}{План разметки и следующие шаги}
+\begin{columns}[T]
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Разметка}\par\vspace{6pt}
+{\smalltext
+\numdot{1}\ Каждый день от каждого в команде: 300--700 пар вручную.\par\vspace{5pt}
+\numdot{2}\ Остальное — автоматика: правила, алгоритмы, ИИ-агенты с выборочной проверкой глазами.\par\vspace{5pt}
+\numdot{3}\ Gold-holdout откладываем сразу и не трогаем до финальной оценки.}
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Следующие шаги}\par\vspace{6pt}
+{\smalltext
+\numdot{4}\ Марковская модель атрибутов $\to$ в голову каскада.\par\vspace{5pt}
+\numdot{5}\ CRF на середину, сравнение BIO vs span-level.\par\vspace{5pt}
+\numdot{6}\ Матч-модель (бустинг) на первых 100+ метках $\to$ серебряные метки $\to$ реранк с описанием карточки.}
+\end{columns}
+\vspace{12pt}\par
+\conclusion{К защите: каскад с покрытием edge-cases + честные метрики на ручном gold, а не self-check словаря.}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 14. ФИНАЛ
+% ============================================================
+\begin{frame}[plain]
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[mvred] (current page.south west) rectangle (current page.north east);
+  \node[anchor=east, inner sep=0pt] at ([xshift=0.32\paperwidth]current page.east)
+    {\includegraphics[height=1.06\paperheight]{kurs1_image1.png}};
+  \node[anchor=west, align=left] at ([xshift=0.9cm, yshift=2.1cm]current page.west)
+    {\color{white}\InterBold\fontsize{23}{27}\selectfont Спасибо!};
+  \node[anchor=west, align=left, text width=0.52\paperwidth] at ([xshift=0.9cm, yshift=1.05cm]current page.west)
+    {\color{white}\fontsize{9.5}{13}\selectfont Вопросы, критика гипотез и споры про слои — welcome.};
+  \node[anchor=west, align=left, text width=0.55\paperwidth] at ([xshift=0.9cm, yshift=-0.85cm]current page.west)
+    {\color{white}\fontsize{8.5}{13}\selectfont
+     {\InterSemi Команда:}\\[2pt]
+     Новицкий Никита · @n.novitskiy\\
+     Борисов Никита · @n.borisov\\
+     Засухина Елизавета · @e.zasukhina\\
+     Олейников Александр · @a.oleynikov};
+  \node[anchor=south west] at ([xshift=0.9cm, yshift=0.5cm]current page.south west)
+    {\color{white}\fontsize{8}{10}\selectfont Презентация свёрстана в \TeX\ / \LaTeX\ · День 02 · EDA и гипотезы · Буткемп М.Видео};
+\end{tikzpicture}
+\end{frame}
+
+\end{document}
