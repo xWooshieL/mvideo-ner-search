@@ -23,6 +23,11 @@
 \usepackage{array}
 \usepackage{colortbl}
 \usepackage{hhline}
+\usepackage{tabularx}
+
+% колонки с вертикальным центрированием
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}}
 
 % ———- палитра М.Видео ———-
 \definecolor{mvred}{HTML}{F20601}
@@ -72,9 +77,17 @@
 \definecolor{tblline}{HTML}{DDDDDD}
 \arrayrulecolor{tblline}
 \newcommand{\ttext}{\fontsize{7}{9}\selectfont}
+% шапки: по центру и слева
 \newcommand{\thead}[1]{\cellcolor{mvdark}{\color{white}\InterSemi\ttext #1}}
+\newcommand{\theadl}[1]{\cellcolor{mvdark}{\color{white}\InterSemi\ttext #1}}
+% акцент-ячейка (красная)
 \newcommand{\tacc}[1]{\cellcolor{mvred}{\color{white}\InterSemi\ttext #1}}
-\newcommand{\tcell}[1]{{\ttext\color{mvdark}#1}}
+% обычные ячейки: центр и слева
+\newcommand{\tcellc}[1]{{\ttext\color{mvdark}#1}}
+\newcommand{\tcelll}[1]{{\ttext\color{mvdark}#1}}
+% выделения внутри ячеек
+\newcommand{\hnum}[1]{{\InterBold\color{mvdark}#1}}
+\newcommand{\hb}[1]{{\InterSemi\color{mvdark}#1}}
 \newcommand{\tnote}[1]{{\color{mvred}\itshape\fontsize{7}{9}\selectfont #1}}
 
 \setlength{\parskip}{0pt}
@@ -172,9 +185,9 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \begin{frame}[t]
 \slidehead{eda · запросы}{Запросы короткие и категорийные}
 \begin{columns}[T]
-\column{0.52\textwidth}
-\includegraphics[width=0.94\textwidth]{02_top_queries.png}
-\column{0.45\textwidth}
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth]{02_top_queries.png}
+\column{0.47\textwidth}
 \conclusion{Голова трафика — категории без бренда: «стиральная машинка», «холодильники», «аэрогриль».}
 \vspace{6pt}\par
 {\smalltext
@@ -192,14 +205,14 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \slidehead{eda · бренды и цены}{Бренды: голова мощная, хвост длинный}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\includegraphics[width=\textwidth]{03_top_brands.png}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth]{03_top_brands.png}
 \column{0.47\textwidth}
 \conclusion{Топ-15 брендов покрывает огромную долю кликов, но хвост из 7 тысяч брендов правилами не закрыть.}
 \vspace{6pt}\par
 {\smalltext
 \numdot{1}\ Apple, Samsung, Haier, Xiaomi — лидеры кликов.\par\vspace{4pt}
-\numdot{2}\ Цены с тяжёлым хвостом: медиана 16 тыс.~₽, средняя 31 тыс.~₽ — premium тянет вправо.\par\vspace{4pt}
-\numdot{3}\ Словарь брендов — сильный, но конечный инструмент: нужен слой для редких написаний.}
+\numdot{2}\ Цены с тяжёлым хвостом: медиана 16~тыс.~₽, средняя 31~тыс.~₽.\par\vspace{4pt}
+\numdot{3}\ Словарь брендов — сильный, но конечный: нужен слой для редких написаний.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -211,7 +224,7 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \slidehead{eda · клики}{Клики живут в топе выдачи}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\includegraphics[width=\textwidth]{05_position_distribution.png}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth]{05_position_distribution.png}
 \column{0.47\textwidth}
 \conclusion{Медианная позиция клика — 4. Ошибка разбора запроса почти гарантированно теряет клик.}
 \vspace{6pt}\par
@@ -224,24 +237,64 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \end{frame}
 
 % ============================================================
+% 6b. ГЛАВНЫЙ ИНСАЙТ: БРЕНД НЕ В ТЕКСТЕ
+% ============================================================
+\begin{frame}[t]
+\slidehead{eda · ключевой инсайт}{73\% брендов нет в тексте запроса}
+\begin{columns}[T]
+\column{0.44\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.98\textwidth]{eda_brand_in_query.png}
+\column{0.53\textwidth}
+\conclusion{Только в \textbf{27\%} кликов бренд написан в запросе. В \textbf{73\%} бренд известен лишь у карточки — одним словарём его не достать.}
+\vspace{6pt}\par
+{\smalltext
+\numdot{1}\ Отсюда обязателен слой \textbf{brand-классификатора} по кликам: «айфон 15» $\to$ Apple, хотя слова «Apple» нет.\par\vspace{4pt}
+\numdot{2}\ Клики — не мусор, а обучающий сигнал: majority-бренд запроса даёт метку без ручной разметки.\par\vspace{4pt}
+\numdot{3}\ Ограничение: \textbf{17\%} запросов кликают $\ge$2 бренда — берём majority с весом по позиции.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 6c. ДЛИНА ЗАПРОСОВ И SEQUENCE LABELING
+% ============================================================
+\begin{frame}[t]
+\slidehead{eda · структура запроса}{Запрос короткий, но границы важны}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth]{eda_token_length.png}
+\column{0.47\textwidth}
+\conclusion{Токены p50 / p90 / p99 = \textbf{2 / 4 / 8}. Запрос почти всегда $\le$ 8 слов — CRF летает на CPU под SLA.}
+\vspace{6pt}\par
+{\smalltext
+\numdot{1}\ Weak-разметка даёт $\ge$1 сущность у \textbf{$\sim$80\%} запросов: BRAND $\sim$46\%, CATEGORY $\sim$59\%, ATTR $\sim$7\%.\par\vspace{4pt}
+\numdot{2}\ У \textbf{$\sim$27\%} запросов есть \texttt{I-*} — многословные сущности, нужны именно границы span (BIO).\par\vspace{4pt}
+\numdot{3}\ Где weak нашёл BRAND, согласие с брендом клика \textbf{$\sim$83\%} — общий сигнал для multi-task.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
 % 7. ГИПОТЕЗЫ
 % ============================================================
 \begin{frame}[t]
 \slidehead{eda · проверка гипотез}{Гипотезы: что подтвердилось}
-{\renewcommand{\arraystretch}{1.2}\setlength{\tabcolsep}{5pt}
-\begin{tabular}{|p{6.4cm}|p{2.0cm}|p{4.0cm}|}
+{\renewcommand{\arraystretch}{1.35}\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|L{6.4cm}|C{2.0cm}|C{4.0cm}|}
 \hline
-\thead{Гипотеза} & \thead{Статус} & \thead{Комментарий}\\
+\theadl{Гипотеза} & \thead{Статус} & \thead{Комментарий}\\
 \hline
-\tcell{H1. Запросы — короткие категорийные интенты} & \tacc{Да} & \tcell{топы — чистые категории}\\
+\tcelll{\hnum{H1.} Запросы — короткие категорийные интенты} & \tacc{Да} & \tcellc{топы — чистые категории}\\
 \hline
-\tcell{H2. Клики концентрируются в топе выдачи} & \tacc{Да} & \tcell{медиана позиции = 4}\\
+\tcelll{\hnum{H2.} Клики концентрируются в топе выдачи} & \tacc{Да} & \tcellc{медиана позиции = 4}\\
 \hline
-\tcell{H3. Бренд в запросе $\Rightarrow$ клик того же бренда} & \tcell{В основном} & \tcell{heatmap диагональна}\\
+\tcelll{\hnum{H3.} Бренд в запросе $\Rightarrow$ клик того же бренда} & \tcellc{В основном} & \tcellc{heatmap диагональна}\\
 \hline
-\tcell{H4. Цена сильно влияет на позицию клика} & \tcell{Нет} & \tcell{hexbin: связь слабая}\\
+\tcelll{\hnum{H4.} Цена сильно влияет на позицию клика} & \tcellc{Нет} & \tcellc{hexbin: связь слабая}\\
 \hline
-\tcell{H5. Атрибуты пишут единообразно} & \tcell{Нет} & \tcell{«16гб», «16 gb», «16 ГБ»}\\
+\tcelll{\hnum{H5.} Атрибуты пишут единообразно} & \tcellc{Нет} & \tcellc{«16гб», «16 gb», «16 ГБ»}\\
+\hline
+\tcelll{\hnum{H6.} Бренд обычно написан в запросе} & \tcellc{Нет} & \tcellc{только 27\% — нужен classifier}\\
 \hline
 \end{tabular}}
 \vspace{5pt}\par
@@ -288,16 +341,16 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
     {{\color{mvred}\InterBold\small ГОЛОВА}\par\vspace{3pt}
      {\InterSemi\footnotesize regex + правила + словари}\par\vspace{4pt}
      {\fontsize{8}{10.5}\selectfont\color{mvgray}частые и простые запросы; мгновенно, прозрачно, дёшево}};
-  \node[lay, fill=cardbg] (l2) at (4.75,0)
+  \node[lay, fill=cardbg] (l2) at (5.55,0)
     {{\color{mvred}\InterBold\small СЕРЕДИНА}\par\vspace{3pt}
      {\InterSemi\footnotesize CRF и аналоги}\par\vspace{4pt}
      {\fontsize{8}{10.5}\selectfont\color{mvgray}token-level: BIO и другие схемы, либо переход к span-level разметке}};
-  \node[lay, fill=mvdark] (l3) at (9.5,0)
+  \node[lay, fill=mvdark] (l3) at (11.1,0)
     {{\color{mvred}\InterBold\small ХВОСТ}\par\vspace{3pt}
      {\color{white}\InterSemi\footnotesize трансформеры + LLM}\par\vspace{4pt}
      {\fontsize{8}{10.5}\selectfont\color{white!75!mvdark}edge-cases, которые не решаются правилами и обычной NER-моделью}};
-  \draw[arr] (l1) -- node[above=1pt, font=\fontsize{6.5}{7.5}\selectfont\color{mvgray}, fill=white, inner sep=1.5pt]{низкая увер.} (l2);
-  \draw[arr] (l2) -- node[above=1pt, font=\fontsize{6.5}{7.5}\selectfont\color{mvgray}, fill=white, inner sep=1.5pt]{низкая увер.} (l3);
+  \draw[arr] (l1.east) -- node[above=2.5pt, font=\fontsize{6.5}{7.5}\selectfont\color{mvgray}]{низкая увер.} (l2.west);
+  \draw[arr] (l2.east) -- node[above=2.5pt, font=\fontsize{6.5}{7.5}\selectfont\color{mvgray}]{низкая увер.} (l3.west);
 \end{tikzpicture}
 \end{center}
 \vspace{8pt}\par
@@ -325,9 +378,9 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
   arr/.style={-{Stealth[length=2.2mm]}, line width=0.9pt, mvred}
 ]
   \node[tok] (a) at (0,0) {ноутбук};
-  \node[tok] (b) at (2.2,0) {asus};
-  \node[tok] (c) at (4.0,0) {16};
-  \node[tok] (d) at (5.6,0) {гб};
+  \node[tok] (b) at (1.95,0) {asus};
+  \node[tok] (c) at (3.5,0) {16};
+  \node[tok] (d) at (4.9,0) {гб};
   \draw[arr] (a) -- (b);
   \draw[arr] (b) -- (c);
   \draw[arr] (c) to[bend left=35] node[above, font=\fontsize{7.5}{9}\selectfont\color{mvred}]{$P(\text{гб}\mid 16)$ высокое} (d);
@@ -376,22 +429,54 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \end{frame}
 
 % ============================================================
+% 11b. SMOKE-TEST МЕТРИКИ CRF + СВОДКА МЕТОДОВ
+% ============================================================
+\begin{frame}[t]
+\slidehead{честные метрики · smoke-test}{CRF на weak BIO: где мы сейчас}
+\conclusion{Metrics на silver-метках оптимистичны — это ориентир, а не финальная оценка. Нужен mini-gold 200--500 запросов.}
+\vspace{8pt}\par
+\begin{columns}[T]
+\column{0.42\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Smoke-test на семпле}\par\vspace{5pt}
+\begin{tikzpicture}[
+  st/.style={rounded corners=2pt, fill=cardbg, inner sep=6pt, text width=\dimexpr\textwidth-14pt\relax, font=\smalltext}
+]
+\node[st]{
+\begin{tabular}{@{}ll@{}}
+Token accuracy & \InterBold\color{mvred}0.89\\[3pt]
+Entity micro-F1 & \InterBold\color{mvred}0.85\\[3pt]
+F1 BRAND & \InterBold 0.95\\[3pt]
+F1 CATEGORY & \InterBold 0.78\\[3pt]
+F1 ATTR & \InterBold 0.85\\
+\end{tabular}};
+\end{tikzpicture}
+\column{0.54\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Что это значит}\par\vspace{5pt}
+{\smalltext
+\numdot{1}\ BRAND учится легко (0.95) — словарь почти решает задачу в голове каскада.\par\vspace{4pt}
+\numdot{2}\ CATEGORY слабее (0.78) — формулировки разнообразнее, тут нужен либо трансформер, либо больше weak-данных.\par\vspace{4pt}
+\numdot{3}\ Итог: CRF — рабочая середина каскада, но категорию и хвост дотягиваем следующим слоем.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
 % 12. ПОДВОДНЫЕ КАМНИ
 % ============================================================
 \begin{frame}[t]
 \slidehead{риски · честно}{Подводные камни и что с ними делать}
-{\renewcommand{\arraystretch}{1.35}\setlength{\tabcolsep}{5pt}
-\begin{tabular}{|p{3.5cm}|p{4.4cm}|p{4.5cm}|}
+{\renewcommand{\arraystretch}{1.35}\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|L{3.5cm}|L{4.4cm}|L{4.5cm}|}
 \hline
-\thead{Риск} & \thead{Последствие} & \thead{Меры снижения}\\
+\theadl{Риск} & \theadl{Последствие} & \theadl{Меры снижения}\\
 \hline
-\tcell{«Соответствие» размыто} & \tcell{«dyson» $\to$ пылесос Dyson: 1 или 0?} & \tcell{жёсткий гайд разметки до старта}\\
+\tcelll{\hb{«Соответствие» размыто}} & \tcelll{«dyson» $\to$ пылесос Dyson: 1 или 0?} & \tcelll{жёсткий гайд разметки до старта}\\
 \hline
-\tcell{100 примеров маловато} & \tcell{модель выучит шум выборки} & \tcell{300--700 меток в день + согласие}\\
+\tcelll{\hb{100 примеров маловато}} & \tcelll{модель выучит шум выборки} & \tcelll{300--700 меток в день + согласие}\\
 \hline
-\tcell{Самореференция} & \tcell{ошибки размножаются на своих метках} & \tcell{holdout gold вне авторазметки}\\
+\tcelll{\hb{Самореференция}} & \tcelll{ошибки размножаются на своих метках} & \tcelll{holdout gold вне авторазметки}\\
 \hline
-\tcell{Путаница с NER} & \tcell{это query$\leftrightarrow$SKU, не BIO на словах} & \tcell{отдельные пайплайны и метрики}\\
+\tcelll{\hb{Путаница с NER}} & \tcelll{это query$\leftrightarrow$SKU, не BIO на словах} & \tcelll{отдельные пайплайны и метрики}\\
 \hline
 \end{tabular}}
 \vspace{5pt}\par
