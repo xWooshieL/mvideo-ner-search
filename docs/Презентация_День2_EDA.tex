@@ -90,6 +90,10 @@
 \newcommand{\hnum}[1]{{\InterBold\color{mvdark}#1}}
 \newcommand{\hb}[1]{{\InterSemi\color{mvdark}#1}}
 \newcommand{\tnote}[1]{{\color{mvred}\itshape\fontsize{7}{9}\selectfont #1}}
+% ячейки для слайда «забытая раскладка» (нормальный шрифт, без \texttt)
+\newcommand{\dqhead}[1]{{\InterSemi\color{mvgray}#1}}
+\newcommand{\dqorig}[1]{{\color{mvgray}#1}}
+\newcommand{\dqfix}[1]{{\color{mvred}\footnotesize$\to$\,}{\InterSemi\color{mvdark}#1}}
 
 \setlength{\parskip}{0pt}
 
@@ -399,7 +403,7 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \column{0.45\textwidth}
 \conclusion{\textbf{35\%} уникальных запросов — смесь кириллицы и латиницы. Модель обязана быть устойчива к раскладке.}
 \vspace{5pt}\par
-{\renewcommand{\arraystretch}{1.25}\setlength{\tabcolsep}{5pt}
+{\renewcommand{\arraystretch}{1.05}\setlength{\tabcolsep}{5pt}
 \begin{tabular}{|L{2.3cm}|L{3.9cm}|}
 \hline
 \theadl{Тип} & \theadl{Пример из данных}\\
@@ -422,32 +426,52 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 % ============================================================
 \begin{frame}[t]
 \slidehead{качество данных · забытая раскладка}{Печатали по-русски в EN-раскладке}
-\conclusion{Нашли \textbf{80+} запросов вида \texttt{dfhjxyfz gfytkm} — это «варочная панель», набранное в латинской раскладке. Поиск обязан их авто-исправлять.}
+\conclusion{Нашли \textbf{80+} запросов вида «dfhjxyfz gfytkm» — это «варочная панель», набранное в латинской раскладке. Поиск обязан их авто-исправлять.}
+\vspace{7pt}\par
+{\fontsize{6.6}{8.6}\selectfont\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.28}
+\begin{columns}[T]
+\column{0.49\textwidth}
+\begin{tabular}{@{}L{3.0cm}@{\ }L{3.4cm}@{}}
+\dqhead{Ввёл (EN)} & \dqhead{Хотел найти}\\[2pt]
+\dqorig{lkz djkjc aty gkjqrf gkjqrf} & \dqfix{для волос фен плойка плойка} \\
+\dqorig{pfhzlyst ecnhjqcndf lkz frrevekjnjhjd fdnj} & \dqfix{зарядные устройства для аккумулоторов авто} \\
+\dqorig{dfhjxyfz gfytkm ,tkjt cntrkh} & \dqfix{варочная панель белое стеклр} \\
+\dqorig{dbltjrfvthf lkz gjvtotybz} & \dqfix{видеокамера для помещения} \\
+\dqorig{dcnhfbdftvfz cnbhfkmyfz vfibyf} & \dqfix{встраиваемая стиральная машина} \\
+\dqorig{le[jdjq irfa 'ktrnhbxtcrbq} & \dqfix{духовой шкаф электрический} \\
+\dqorig{pfhzlyjt ecnhjqcndj czjvb} & \dqfix{зарядное устройство сяоми} \\
+\dqorig{rf,tkm lkz rkfdbfnehs} & \dqfix{кабель для клавиатуры} \\
+\dqorig{gsktcjc dthnbrfkmysq ghjdjlyjq} & \dqfix{пылесос вертикальный проводной} \\
+\dqorig{nhbvvth lkz yjcf} & \dqfix{триммер для носа} \\
+\dqorig{'ktrnhbxtcrfz gkbnf akfvf} & \dqfix{электрическая плита флама} \\
+\dqorig{,tujdfz ljhj;rf} & \dqfix{беговая дорожка} \\
+\dqorig{,tcghjdjlyjq gsktcjc} & \dqfix{беспроводной пылесос} \\
+\dqorig{dfhjxyfz gfytkm} & \dqfix{варочная панель} \\
+\end{tabular}
+\column{0.49\textwidth}
+\begin{tabular}{@{}L{3.0cm}@{\ }L{3.4cm}@{}}
+\dqhead{Ввёл (EN)} & \dqhead{Хотел найти}\\[2pt]
+\dqorig{dtynbkznjh yfcnjkmysq} & \dqfix{вентилятор настольный} \\
+\dqorig{dthnbrfkmysq gsktcjc} & \dqfix{вертикальный пылесос} \\
+\dqorig{dcnhfbbdftvsq [jkjlbkmybr} & \dqfix{встраииваемый холодильник} \\
+\dqorig{dcnhjtyyfz gjceljvjqrf} & \dqfix{встроенная посудомойка} \\
+\dqorig{dcnhjtyysq [jkjlbkmybr} & \dqfix{встроенный холодильник} \\
+\dqorig{ufpjdfz gkbnf} & \dqfix{газовая плита} \\
+\dqorig{ufqrjdthn htldthu} & \dqfix{гайковерт редверг} \\
+\dqorig{ukflbkmyfz ljcrf} & \dqfix{гладильная доска} \\
+\dqorig{lhtkm ,eh} & \dqfix{дрель бур} \\
+\dqorig{pfdfhjxysq xfqybr} & \dqfix{заварочный чайник} \\
+\dqorig{pfhzlyjt ecnhjqcndj} & \dqfix{зарядное устройство} \\
+\dqorig{buhjdjt rhtckj} & \dqfix{игровое кресло} \\
+\dqorig{buhjdjq hekm} & \dqfix{игровой руль} \\
+\dqorig{rkfdbfnehf ,tkfz} & \dqfix{клавиатура белая} \\
+\end{tabular}
+\end{columns}}
 \vspace{5pt}\par
-{\fontsize{5.7}{7.4}\selectfont\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{@{}p{0.315\textwidth}p{0.315\textwidth}p{0.315\textwidth}@{}}
-\texttt{lkz djkjc aty gkjqrf gkjqrf}\,{\color{mvred}$\to$}\,\textbf{для волос фен плойка плойка} & \texttt{dcnhfbbdftvsq [jkjlbkmybr}\,{\color{mvred}$\to$}\,\textbf{встраииваемый холодильник} & \texttt{rkfdbfnehf buhjfdz}\,{\color{mvred}$\to$}\,\textbf{клавиатура игроавя} \\[1.3pt]
-\texttt{pfhzlyst ecnhjqcndf lkz frrevekjnjhjd fdnj}\,{\color{mvred}$\to$}\,\textbf{зарядные устройства для аккумулоторов авто} & \texttt{dcnhjtyyfz gjceljvjqrf}\,{\color{mvred}$\to$}\,\textbf{встроенная посудомойка} & \texttt{rjkjyrb rjvgm.nthyst}\,{\color{mvred}$\to$}\,\textbf{колонки компьютерные} \\[1.3pt]
-\texttt{dfhjxyfz gfytkm ,tkjt cntrkh}\,{\color{mvred}$\to$}\,\textbf{варочная панель белое стеклр} & \texttt{dcnhjtyysq [jkjlbkmybr}\,{\color{mvred}$\to$}\,\textbf{встроенный холодильник} & \texttt{rjv,bybhjdfyyfz gkbnf}\,{\color{mvred}$\to$}\,\textbf{комбинированная плита} \\[1.3pt]
-\texttt{dbltjrfvthf lkz gjvtotybz}\,{\color{mvred}$\to$}\,\textbf{видеокамера для помещения} & \texttt{ufpjdfz gkbnf}\,{\color{mvred}$\to$}\,\textbf{газовая плита} & \texttt{rjvgm.nthyst rjkjyrb}\,{\color{mvred}$\to$}\,\textbf{компьютерные колонки} \\[1.3pt]
-\texttt{dcnhfbdftvfz cnbhfkmyfz vfibyf}\,{\color{mvred}$\to$}\,\textbf{встраиваемая стиральная машина} & \texttt{ufqrjdthn htldthu}\,{\color{mvred}$\to$}\,\textbf{гайковерт редверг} & \texttt{rjat pthyjdjq}\,{\color{mvred}$\to$}\,\textbf{кофе зерновой} \\[1.3pt]
-\texttt{le[jdjq irfa 'ktrnhbxtcrbq}\,{\color{mvred}$\to$}\,\textbf{духовой шкаф электрический} & \texttt{ukflbkmyfz ljcrf}\,{\color{mvred}$\to$}\,\textbf{гладильная доска} & \texttt{rhtckj rjvgm.nthyjt}\,{\color{mvred}$\to$}\,\textbf{кресло компьютерное} \\[1.3pt]
-\texttt{pfhzlyjt ecnhjqcndj czjvb}\,{\color{mvred}$\to$}\,\textbf{зарядное устройство сяоми} & \texttt{lhtkm ,eh}\,{\color{mvred}$\to$}\,\textbf{дрель бур} & \texttt{vbrhjdjkyjdrf rfhhthf}\,{\color{mvred}$\to$}\,\textbf{микроволновка каррера} \\[1.3pt]
-\texttt{rf,tkm lkz rkfdbfnehs}\,{\color{mvred}$\to$}\,\textbf{кабель для клавиатуры} & \texttt{pfdfhjxysq xfqybr}\,{\color{mvred}$\to$}\,\textbf{заварочный чайник} & \texttt{vbrhjdjkyjdrf njib,f}\,{\color{mvred}$\to$}\,\textbf{микроволновка тошиба} \\[1.3pt]
-\texttt{gsktcjc dthnbrfkmysq ghjdjlyjq}\,{\color{mvred}$\to$}\,\textbf{пылесос вертикальный проводной} & \texttt{pfhzlyjt ecnhjqcndj}\,{\color{mvred}$\to$}\,\textbf{зарядное устройство} & \texttt{vj,bklmsyq rjylbwbjyth}\,{\color{mvred}$\to$}\,\textbf{мобилдьынй кондиционер} \\[1.3pt]
-\texttt{nhbvvth lkz yjcf}\,{\color{mvred}$\to$}\,\textbf{триммер для носа} & \texttt{buhjdjt rhtckj}\,{\color{mvred}$\to$}\,\textbf{игровое кресло} & \texttt{vjhjpbkmyfz rfvthf}\,{\color{mvred}$\to$}\,\textbf{морозильная камера} \\[1.3pt]
-\texttt{'ktrnhbxtcrfz gkbnf akfvf}\,{\color{mvred}$\to$}\,\textbf{электрическая плита флама} & \texttt{BUHJDJQ HEKM}\,{\color{mvred}$\to$}\,\textbf{игровой руль} & \texttt{VJ.OBQ GSKTCJC}\,{\color{mvred}$\to$}\,\textbf{моющий пылесос} \\[1.3pt]
-\texttt{,TUJDFZ LJHJ;RF}\,{\color{mvred}$\to$}\,\textbf{беговая дорожка} & \texttt{Bosch bfl}\,{\color{mvred}$\to$}\,\textbf{ищыср иад} & \texttt{vsim ,tcghjdjlyfz}\,{\color{mvred}$\to$}\,\textbf{мышь беспроводная} \\[1.3pt]
-\texttt{,tcghjdjlyjq gsktcjc}\,{\color{mvred}$\to$}\,\textbf{беспроводной пылесос} & \texttt{bosch HBG}\,{\color{mvred}$\to$}\,\textbf{ищыср рип} & \texttt{yfgjkmyst xfcs}\,{\color{mvred}$\to$}\,\textbf{напольные часы} \\[1.3pt]
-\texttt{dfhjxyfz gfytkm}\,{\color{mvred}$\to$}\,\textbf{варочная панель} & \texttt{Bosch WDS}\,{\color{mvred}$\to$}\,\textbf{ищыср цвы} & \texttt{yfcnjkmyfz gkbnf}\,{\color{mvred}$\to$}\,\textbf{настольная плита} \\[1.3pt]
-\texttt{dfhjxyfz gjdth[yjcnm}\,{\color{mvred}$\to$}\,\textbf{варочная поверхность} & \texttt{Bosch wgb}\,{\color{mvred}$\to$}\,\textbf{ищыср цпи} & \texttt{jbl xtrem}\,{\color{mvred}$\to$}\,\textbf{оид чекуь} \\[1.3pt]
-\texttt{dtynbkznjh yfcnjkmysq}\,{\color{mvred}$\to$}\,\textbf{вентилятор настольный} & \texttt{Bosch smv}\,{\color{mvred}$\to$}\,\textbf{ищыср ыьм} & \texttt{jngfhbdfntkm kitfort}\,{\color{mvred}$\to$}\,\textbf{отпариватель лшеащке} \\[1.3pt]
-\texttt{dthnbrfkmysq gsktcjc}\,{\color{mvred}$\to$}\,\textbf{вертикальный пылесос} & \texttt{rkfdbfnehf ,tkfz}\,{\color{mvred}$\to$}\,\textbf{клавиатура белая} & \texttt{jngfhbdfntkm hexyjq}\,{\color{mvred}$\to$}\,\textbf{отпариватель ручной} \\[1.3pt]
-\end{tabular}}
-\vspace{3pt}\par
 {\smalltext\color{mvgray} Детект дешёвый — одна таблица QWERTY$\leftrightarrow$ЙЦУКЕН. Ловится в «голове» каскада рядом с regex; без него такой запрос не находит вообще ничего.}
 \slidefoot
 \end{frame}
+
 % ============================================================
 % 7f. КАЧЕСТВО ДАННЫХ — ДУБЛИ И МЕРЫ
 % ============================================================
