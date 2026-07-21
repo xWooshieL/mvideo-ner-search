@@ -310,8 +310,8 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \slidehead{доказательство · H1}{H1: запросы короткие и категорийные}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.98\textwidth]{01_query_length_dist.png}\par\vspace{4pt}
-\centering\includegraphics[width=0.98\textwidth]{02_top_queries.png}
+\vspace{2pt}\centering\includegraphics[width=0.78\textwidth]{01_query_length_dist.png}\par\vspace{4pt}
+\centering\includegraphics[width=0.7\textwidth]{02_top_queries.png}
 \column{0.47\textwidth}
 \conclusion{Медиана длины запроса — \textbf{17 символов} ($\approx$1--3 слова), а в топе — чистые категории без бренда и атрибутов.}
 \vspace{7pt}\par
@@ -330,8 +330,8 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \slidehead{доказательство · H2}{H2: клики концентрируются в топе}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.98\textwidth]{05_position_distribution.png}\par\vspace{4pt}
-\centering\includegraphics[width=0.98\textwidth]{15_position_click_share.png}
+\vspace{2pt}\centering\includegraphics[width=0.8\textwidth]{05_position_distribution.png}\par\vspace{4pt}
+\centering\includegraphics[width=0.7\textwidth]{15_position_click_share.png}
 \column{0.47\textwidth}
 \conclusion{Медиана позиции клика — \textbf{4}, а первые позиции забирают львиную долю: ошибка разбора почти гарантированно теряет клик.}
 \vspace{7pt}\par
@@ -339,6 +339,111 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 \numdot{1}\ Распределение позиций (сверху) резко смещено влево — кликают по верхним строкам выдачи.\par\vspace{5pt}
 \numdot{2}\ Накопленная доля (снизу): $\approx$75\% кликов приходится на первые 16 позиций.\par\vspace{5pt}
 \numdot{3}\ Вывод для нас: точность разбора запроса прямо конвертируется в клик — промах отправляет товар вниз, куда не смотрят.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 7c. КАЧЕСТВО ДАННЫХ — ОБЗОР
+% ============================================================
+\begin{frame}[t]
+\slidehead{качество данных · обзор}{Что нашли, когда прочитали данные руками}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.90\textwidth]{eda_dq_completeness.png}
+\column{0.47\textwidth}
+\conclusion{Датасет собирал человек — в нём есть системные дыры и ошибки. Их надо чистить до обучения, иначе модель учится на мусоре.}
+\vspace{6pt}\par
+{\smalltext
+\numdot{1}\ Только \textbf{72\%} кликов имеют полную карточку (бренд + название + цена).\par\vspace{4pt}
+\numdot{2}\ У \textbf{22\%} карточка вообще не подтянулась — пусты и бренд, и название (join не срослось при сборке).\par\vspace{4pt}
+\numdot{3}\ Формальных \texttt{NaN} нет — дыры спрятаны в пустых строках \texttt{""}, их легко не заметить.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 7d. КАЧЕСТВО ДАННЫХ — ПЕРЕПУТАННЫЕ КОЛОНКИ
+% ============================================================
+\begin{frame}[t]
+\slidehead{качество данных · перепутанные колонки}{Артикул уехал в поле бренда}
+\conclusion{В 66 строках \textbf{бренд — это просто число}. В 98,5\% случаев это артикул из середины названия, попавший не в ту колонку.}
+\vspace{8pt}\par
+{\renewcommand{\arraystretch}{1.4}\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|L{7.4cm}|C{2.3cm}|C{2.5cm}|}
+\hline
+\theadl{Название товара (sku\_name)} & \thead{Поле «бренд»} & \thead{Реальность}\\
+\hline
+\tcelll{Вентилятор напольный \hb{27942} GL 8112} & \tcellc{\hb{27942}} & \tacc{артикул}\\
+\hline
+\tcelll{Камера видеонаблюдения \hb{360} V380 Pro APP} & \tcellc{\hb{360}} & \tacc{артикул}\\
+\hline
+\tcelll{Туфли женские \hb{0} Туфли} & \tcellc{\hb{0}} & \tacc{заглушка}\\
+\hline
+\tcelll{Бритва \hb{4088} Extra Smooth Embrace} & \tcellc{\hb{4088}} & \tacc{артикул}\\
+\hline
+\end{tabular}}
+\vspace{6pt}\par
+{\smalltext\color{mvgray} Правило для нас: числовой \texttt{sku\_brand\_name} — не бренд, а шум. Реальный бренд ищем в тексте названия либо считаем, что его нет.}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 7e. КАЧЕСТВО ДАННЫХ — ТРАНСЛИТ И СМЕСЬ ЯЗЫКОВ
+% ============================================================
+\begin{frame}[t]
+\slidehead{качество данных · транслит}{Транслит, смесь языков и омоглифы}
+\begin{columns}[T]
+\column{0.52\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.98\textwidth]{eda_dq_issues.png}
+\column{0.45\textwidth}
+\conclusion{\textbf{35\%} уникальных запросов — смесь кириллицы и латиницы. Модель обязана быть устойчива к раскладке.}
+\vspace{5pt}\par
+{\renewcommand{\arraystretch}{1.25}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|L{2.3cm}|L{3.9cm}|}
+\hline
+\theadl{Тип} & \theadl{Пример из данных}\\
+\hline
+\tcelll{\hb{Смесь}} & \tcelll{«iPhone 17 про Макс», «bosh лодильник»}\\
+\hline
+\tcelll{\hb{Транслит}} & \tcelll{«noutbuk», «televizor», «Stiralnay»}\\
+\hline
+\tcelll{\hb{Омоглиф}} & \tcelll{«Ресантa» (а — кир.), «Фаzа»}\\
+\hline
+\end{tabular}}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 7f. КАЧЕСТВО ДАННЫХ — ДУБЛИ И МЕРЫ
+% ============================================================
+\begin{frame}[t]
+\slidehead{качество данных · дубли и меры}{Дубли брендов и что мы с этим делаем}
+\begin{columns}[T]
+\column{0.5\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Один бренд — много написаний}\par\vspace{5pt}
+{\renewcommand{\arraystretch}{1.3}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|L{3.0cm}|L{3.4cm}|}
+\hline
+\theadl{Проблема} & \theadl{Пример}\\
+\hline
+\tcelll{Регистр} & \tcelll{APPLE / Apple, honor / HONOR}\\
+\hline
+\tcelll{Перевод} & \tcelll{Stinol / Стинол, KION / КИОН}\\
+\hline
+\tcelll{Дубли строк} & \tcelll{один клик записан по 2--3 раза}\\
+\hline
+\end{tabular}}
+\vspace{5pt}\par
+{\smalltext\color{mvgray} 205 групп брендов различаются лишь регистром/пробелами, $\sim$209 групп — кандидаты на омоглифы.}
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Меры (слой нормализации)}\par\vspace{6pt}
+{\smalltext
+\numdot{1}\ Приводим бренды к канону: регистр, транслит, схлопывание дублей (\textbf{Стинол}=\textbf{Stinol}).\par\vspace{5pt}
+\numdot{2}\ Фильтруем мусор до обучения: пустые карточки и цена $\le$0 — вон или в отдельную метку.\par\vspace{5pt}
+\numdot{3}\ Позиция \texttt{= 0} — это «нет данных», не топ выдачи; не используем как сигнал.\par\vspace{5pt}
+\numdot{4}\ Это прямой аргумент за \textbf{H5}: одним regex единообразие не навести.}
 \end{columns}
 \slidefoot
 \end{frame}
