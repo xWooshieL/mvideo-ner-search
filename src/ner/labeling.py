@@ -118,10 +118,16 @@ class WeakLabeler:
             b = (b or "").strip()
             if len(b) < 2:
                 continue
-            brand_canonical[_normalize(b)] = b
-        # aliases expand brand dictionary
+            key = _normalize(b)
+            # keep first / title-cased form; avoid ALLCAPS duplicates overwriting
+            if key not in brand_canonical or (
+                brand_canonical[key].isupper() and not b.isupper()
+            ):
+                brand_canonical[key] = b
+        # aliases expand brand dictionary (overwrite with canonical brand names)
         for alias, canon in BRAND_ALIASES.items():
             brand_canonical[_normalize(alias)] = canon
+            brand_canonical[_normalize(canon)] = canon
         cat_canonical: Dict[str, str] = {}
         brand_keys = set(brand_canonical.keys())
         for c in list(categories or []) + list(CATEGORY_SEEDS):

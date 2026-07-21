@@ -1,0 +1,286 @@
+{
+  "n": 800,
+  "wall_sec": 7.7057630000053905,
+  "qps": 103.8184018895261,
+  "mean_ms": 9.61575375,
+  "p50_ms": 9.682500000000001,
+  "p95_ms": 16.5397,
+  "p99_ms": 21.722319999999996,
+  "max_ms": 31.416,
+  "under_100ms_share": 1.0,
+  "examples": [
+    {
+      "query": "монитор",
+      "entities": [
+        {
+          "text": "монитор",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            7
+          ]
+        }
+      ],
+      "brand": "Samsung",
+      "category": "монитор",
+      "attributes": {},
+      "latency_ms": 9.745
+    },
+    {
+      "query": "Электрочайник",
+      "entities": [
+        {
+          "text": "Электрочайник",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            13
+          ]
+        }
+      ],
+      "brand": "Gorenje",
+      "category": "электрочайник",
+      "attributes": {},
+      "latency_ms": 11.611
+    },
+    {
+      "query": "Миксер",
+      "entities": [
+        {
+          "text": "Миксер",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            6
+          ]
+        }
+      ],
+      "brand": "Redmond",
+      "category": "миксер",
+      "attributes": {},
+      "latency_ms": 12.35
+    },
+    {
+      "query": "Блендер стационарный",
+      "entities": [
+        {
+          "text": "Блендер стационарный",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            20
+          ]
+        }
+      ],
+      "brand": "Kitfort",
+      "category": "блендер стационарный",
+      "attributes": {},
+      "latency_ms": 11.546
+    },
+    {
+      "query": "Утюг",
+      "entities": [
+        {
+          "text": "Утюг",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            4
+          ]
+        }
+      ],
+      "brand": "Tefal",
+      "category": "утюг",
+      "attributes": {},
+      "latency_ms": 9.424
+    },
+    {
+      "query": "Робот пылесос",
+      "entities": [
+        {
+          "text": "Робот пылесос",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            13
+          ]
+        }
+      ],
+      "brand": "Dreame",
+      "category": "робот пылесос",
+      "attributes": {},
+      "latency_ms": 12.937
+    },
+    {
+      "query": "электрический духовой шкаф размер 595*595*564",
+      "entities": [
+        {
+          "text": "электрический духовой шкаф",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            26
+          ]
+        }
+      ],
+      "brand": "Haier",
+      "category": "электрический духовой шкаф",
+      "attributes": {},
+      "latency_ms": 27.296
+    },
+    {
+      "query": "huawei mate",
+      "entities": [
+        {
+          "text": "huawei",
+          "label": "BRAND",
+          "span": [
+            0,
+            6
+          ]
+        }
+      ],
+      "brand": "HUAWEI",
+      "category": "ноутбук",
+      "attributes": {},
+      "latency_ms": 8.602
+    },
+    {
+      "query": "Система виртуальной реальности VR Meta (Oculus) Quest 3S белый",
+      "entities": [
+        {
+          "text": "Oculus",
+          "label": "BRAND",
+          "span": [
+            40,
+            46
+          ]
+        },
+        {
+          "text": "белый",
+          "label": "ATTR",
+          "span": [
+            57,
+            62
+          ]
+        }
+      ],
+      "brand": "Oculus",
+      "category": "стиральная машина",
+      "attributes": {
+        "color": "белый"
+      },
+      "latency_ms": 27.572
+    },
+    {
+      "query": "Xiaomi Vacuum Cleaner G9 Plus",
+      "entities": [
+        {
+          "text": "Xiaomi",
+          "label": "BRAND",
+          "span": [
+            0,
+            6
+          ]
+        }
+      ],
+      "brand": "Xiaomi",
+      "category": "смартфон",
+      "attributes": {},
+      "latency_ms": 15.065
+    },
+    {
+      "query": "Наушники беспроводные полноразмерные",
+      "entities": [
+        {
+          "text": "Наушники беспроводные",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            21
+          ]
+        }
+      ],
+      "brand": "JBL",
+      "category": "наушники беспроводные",
+      "attributes": {},
+      "latency_ms": 14.017
+    },
+    {
+      "query": "духовой шкаф",
+      "entities": [
+        {
+          "text": "духовой шкаф",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            12
+          ]
+        }
+      ],
+      "brand": "Maunfeld",
+      "category": "духовой шкаф",
+      "attributes": {},
+      "latency_ms": 12.046
+    },
+    {
+      "query": "робот пылесос",
+      "entities": [
+        {
+          "text": "робот пылесос",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            13
+          ]
+        }
+      ],
+      "brand": "Dreame",
+      "category": "робот пылесос",
+      "attributes": {},
+      "latency_ms": 11.318
+    },
+    {
+      "query": "Ноутбук Lenovo",
+      "entities": [
+        {
+          "text": "Ноутбук",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            7
+          ]
+        },
+        {
+          "text": "Lenovo",
+          "label": "BRAND",
+          "span": [
+            8,
+            14
+          ]
+        }
+      ],
+      "brand": "Lenovo",
+      "category": "ноутбук",
+      "attributes": {},
+      "latency_ms": 3.745
+    },
+    {
+      "query": "Ноутбук",
+      "entities": [
+        {
+          "text": "Ноутбук",
+          "label": "CATEGORY",
+          "span": [
+            0,
+            7
+          ]
+        }
+      ],
+      "brand": "ASUS",
+      "category": "ноутбук",
+      "attributes": {},
+      "latency_ms": 10.263
+    }
+  ]
+}

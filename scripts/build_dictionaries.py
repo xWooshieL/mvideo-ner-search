@@ -113,16 +113,18 @@ def main():
     ][: args.top_brands]
     brand_norm = {_normalize(b) for b in brands}
 
-    # Categories: drop entries that are actually brands (e.g. iphone/samsung as query)
+    # Categories: drop entries that are / contain brands (e.g. "samsung s25")
     categories = []
-    for c, n in cat_c.most_common(args.top_categories * 3):
+    for c, n in cat_c.most_common(args.top_categories * 4):
         if n < args.min_category_count or not (2 <= len(c) <= 40):
             continue
         cn = _normalize(c)
         if cn in brand_norm:
             continue
-        # drop pure latin single tokens that look like product lines/brands
         toks = cn.split()
+        if any(t in brand_norm for t in toks):
+            continue
+        # drop pure latin single tokens that look like product lines/brands
         if len(toks) == 1 and re.fullmatch(r"[a-z0-9\-\.]+", toks[0]) and toks[0] not in CATEGORY_SEEDS:
             continue
         categories.append(c)

@@ -7,6 +7,13 @@ import argparse
 import sys
 from pathlib import Path
 
+# Ensure Unicode (e.g. "→", Cyrillic) prints safely on Windows consoles (cp1251).
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+except (AttributeError, ValueError):
+    pass
+
 import matplotlib
 
 matplotlib.use("Agg")
