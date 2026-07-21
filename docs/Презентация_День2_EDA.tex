@@ -21,6 +21,8 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{colortbl}
+\usepackage{hhline}
 
 % ———- палитра М.Видео ———-
 \definecolor{mvred}{HTML}{F20601}
@@ -65,6 +67,15 @@
 % мелкие текстовые стили
 \newcommand{\bodytext}{\fontsize{8.5}{11.5}\selectfont}
 \newcommand{\smalltext}{\fontsize{7.5}{10}\selectfont}
+
+% ---------- таблицы в стиле шаблона: чёрная шапка, светлые линии, красные акценты ----------
+\definecolor{tblline}{HTML}{DDDDDD}
+\arrayrulecolor{tblline}
+\newcommand{\ttext}{\fontsize{7}{9}\selectfont}
+\newcommand{\thead}[1]{\cellcolor{mvdark}{\color{white}\InterSemi\ttext #1}}
+\newcommand{\tacc}[1]{\cellcolor{mvred}{\color{white}\InterSemi\ttext #1}}
+\newcommand{\tcell}[1]{{\ttext\color{mvdark}#1}}
+\newcommand{\tnote}[1]{{\color{mvred}\itshape\fontsize{7}{9}\selectfont #1}}
 
 \setlength{\parskip}{0pt}
 
@@ -217,21 +228,24 @@ brand: Samsung · price: 50 703 ₽ · position: 2}
 % ============================================================
 \begin{frame}[t]
 \slidehead{eda · проверка гипотез}{Гипотезы: что подтвердилось}
-{\smalltext
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{}p{7.3cm} p{2.1cm} p{4.2cm}@{}}
-\toprule
-{\InterSemi Гипотеза} & {\InterSemi Статус} & {\InterSemi Комментарий}\\
-\midrule
-H1. Большинство запросов — короткие категорийные интенты & {\color{okgreen}\InterSemi да} & топы — чистые категории\\
-H2. Клики концентрируются в топе выдачи & {\color{okgreen}\InterSemi да} & медиана позиции = 4\\
-H3. Бренд в запросе $\Rightarrow$ клик по тому же бренду & {\color{okgreen}\InterSemi в основном} & heatmap query$\times$brand диагональна\\
-H4. Цена сильно влияет на позицию клика & {\color{warnorange}\InterSemi нет} & hexbin: связь слабая\\
-H5. Атрибуты в запросах пишут единообразно & {\color{warnorange}\InterSemi нет} & «16гб», «16 gb», «16 ГБ» — зоопарк\\
-\bottomrule
+{\renewcommand{\arraystretch}{1.2}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|p{6.4cm}|p{2.0cm}|p{4.0cm}|}
+\hline
+\thead{Гипотеза} & \thead{Статус} & \thead{Комментарий}\\
+\hline
+\tcell{H1. Запросы — короткие категорийные интенты} & \tacc{Да} & \tcell{топы — чистые категории}\\
+\hline
+\tcell{H2. Клики концентрируются в топе выдачи} & \tacc{Да} & \tcell{медиана позиции = 4}\\
+\hline
+\tcell{H3. Бренд в запросе $\Rightarrow$ клик того же бренда} & \tcell{В основном} & \tcell{heatmap диагональна}\\
+\hline
+\tcell{H4. Цена сильно влияет на позицию клика} & \tcell{Нет} & \tcell{hexbin: связь слабая}\\
+\hline
+\tcell{H5. Атрибуты пишут единообразно} & \tcell{Нет} & \tcell{«16гб», «16 gb», «16 ГБ»}\\
+\hline
 \end{tabular}}
-\vspace{8pt}\par
-\conclusion{H5 — главный аргумент за вероятностный подход: атрибуты нельзя закрыть одним regex.}
+\vspace{5pt}\par
+\tnote{Красное = подтверждено данными. H5 — главный аргумент за вероятностный подход: атрибуты не закрыть одним regex.}
 \slidefoot
 \end{frame}
 
@@ -366,20 +380,22 @@ H5. Атрибуты в запросах пишут единообразно & {
 % ============================================================
 \begin{frame}[t]
 \slidehead{риски · честно}{Подводные камни и что с ними делать}
-{\smalltext
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}p{4.1cm} p{4.6cm} p{4.6cm}@{}}
-\toprule
-{\InterSemi Риск} & {\InterSemi Почему больно} & {\InterSemi Решение}\\
-\midrule
-«Полное соответствие» размыто & «dyson» $\to$ пылесос Dyson — это 1 или 0? & жёсткий гайд разметки с примерами до старта\\
-100 примеров маловато & модель выучит шум выборки & 300--700 меток в день с каждого + проверка согласия\\
-Самореференция & модель учится на своих же метках, ошибки размножаются & holdout gold, который модель никогда не размечала\\
-Путаница с NER & это про query$\leftrightarrow$SKU, не про BIO на словах & отдельные пайплайны, отдельные метрики\\
-\bottomrule
+{\renewcommand{\arraystretch}{1.35}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|p{3.5cm}|p{4.4cm}|p{4.5cm}|}
+\hline
+\thead{Риск} & \thead{Последствие} & \thead{Меры снижения}\\
+\hline
+\tcell{«Соответствие» размыто} & \tcell{«dyson» $\to$ пылесос Dyson: 1 или 0?} & \tcell{жёсткий гайд разметки до старта}\\
+\hline
+\tcell{100 примеров маловато} & \tcell{модель выучит шум выборки} & \tcell{300--700 меток в день + согласие}\\
+\hline
+\tcell{Самореференция} & \tcell{ошибки размножаются на своих метках} & \tcell{holdout gold вне авторазметки}\\
+\hline
+\tcell{Путаница с NER} & \tcell{это query$\leftrightarrow$SKU, не BIO на словах} & \tcell{отдельные пайплайны и метрики}\\
+\hline
 \end{tabular}}
-\vspace{8pt}\par
-\conclusion{Каждому риску — конкретный процесс, а не «будем аккуратнее».}
+\vspace{5pt}\par
+\tnote{Первым делом спрашивают про риски — не прячем их, показываем вместе с мерами снижения.}
 \slidefoot
 \end{frame}
 
