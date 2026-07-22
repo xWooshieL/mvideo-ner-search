@@ -1,0 +1,11 @@
+{
+  "n_queries": 28047,
+  "n_spans_train": 2551,
+  "n_bigrams": 87,
+  "n_units": 188,
+  "n_ambiguous_bigrams": 3,
+  "eval_n_spans": 2551,
+  "unknown_rate": 0.0,
+  "acc_vs_regex_all": 0.9780478243825951,
+  "acc_vs_regex_known": 0.9780478243825951
+}

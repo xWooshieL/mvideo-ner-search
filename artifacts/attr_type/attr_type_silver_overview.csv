@@ -1,0 +1,13 @@
+metric,value
+queries_sampled,38102.0
+queries_with_ATTR,3207.0
+multi_ATTR_queries,381.0
+multi_ATTR_share,0.1188
+silver_rows_raw,3696.0
+silver_rows_aug,1453.0
+n_types,21.0
+share_with_brand,0.5547
+share_with_category,0.7662
+share_with_model,0.27
+share_y_other,0.0522
+share_y_color,0.2711
