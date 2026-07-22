@@ -158,29 +158,103 @@ certutil -user -addstore -f "Root" installer\certs\mvideo_codesign.cer
 
 CMake-файлы обоих приложений кросс-платформенные (`MACOSX_BUNDLE`, `.icns`, пути к данным и к разметке через `QStandardPaths` на маке), но собрать `.app`/`.dmg` можно только **на самом Mac** — Qt для macOS компилируется под конкретную ОС, кросс-компиляция с Windows не поддерживается.
 
-Требования на маке: Xcode Command Line Tools (`xcode-select --install`), CMake, Qt 6.5+ для macOS (Qt Online Installer или `brew install qt`).
+#### 1. Что поставить
+
+```bash
+# компилятор Apple (clang++)
+xcode-select --install
+# если уже стоит, но cmake не видит компилятор:
+sudo xcode-select -s /Library/Developer/CommandLineTools
+clang++ --version
+
+# сборка
+brew install cmake ninja
+
+# Qt (Homebrew) + модули, которые macdeployqt часто ищет
+brew install qt qtsvg qtvirtualkeyboard
+```
+
+Альтернатива Qt: [Online Installer](https://www.qt.io/download-qt-installer) → компонент **macOS** (например `~/Qt/6.8.2/macos`). Для раздачи `.dmg` на другие маки он надёжнее Homebrew.
+
+#### 2. Как найти Qt
+
+```bash
+# Homebrew (рекомендуемый путь для скрипта)
+brew --prefix qt
+# обычно: /opt/homebrew/opt/qt
+
+ls "$(brew --prefix qt)/lib/cmake"
+ls "$(brew --prefix qt)/bin/macdeployqt"
+
+# Qt Online Installer
+ls ~/Qt
+find ~/Qt -maxdepth 3 -type d -name macos 2>/dev/null
+
+# если qmake в PATH
+which qmake
+qmake -query QT_INSTALL_PREFIX
+```
+
+Не указывай путь вида `/opt/homebrew/Cellar/qt/6.11.1` — бери symlink:
+
+```bash
+$(brew --prefix qt)   # → /opt/homebrew/opt/qt
+```
+
+#### 3. Сборка
 
 ```bash
 git clone https://github.com/xWooshieL/mvideo-ner-search.git
 cd mvideo-ner-search
 chmod +x scripts/build-macos.sh
-./scripts/build-macos.sh ~/Qt/6.8.2/macos     # путь к твоей установке Qt для macOS
+
+# чистая пересборка (если уже пробовали и упало)
+rm -rf cpp/mvsearch/build-macos cpp/mvlabel/build-macos dist-macos
+
+# Homebrew
+./scripts/build-macos.sh "$(brew --prefix qt)"
+
+# или Qt Online Installer
+./scripts/build-macos.sh ~/Qt/6.8.2/macos
 ```
 
-Скрипт сам сгенерирует `.icns` из `.iconset` (см. `scripts/make_iconset.py`, если нужно пересобрать иконки из PNG), соберёт оба `.app` через CMake, прогонит `macdeployqt` и упакует в `.dmg` — результат в `dist-macos/`. Ярлыки Никита/Некит/Лиза в приложении разметки работают так же, как на Windows, плюс переключатель аккаунтов внутри приложения.
+Скрипт сам сгенерирует `.icns` из `.iconset` (см. `scripts/make_iconset.py`), соберёт оба `.app` через CMake, прогонит `macdeployqt` (с `-libpath` по всем `/opt/homebrew/opt/qt*/lib`) и упакует в `.dmg` — результат в `dist-macos/`.
 
-**Как запустить готовый `.app`/`.dmg` на маке:**
+```bash
+ls dist-macos
+open dist-macos/*.app
+```
 
-1. Открой `dist-macos/MvSearch.dmg` (или `MvLabel.dmg`), перетащи `.app` в `Applications`.
-2. Приложение **не подписано Apple Developer ID** (это платная программа $99/год) и не нотаризовано — при первом запуске Gatekeeper покажет «файл повреждён» / «нельзя открыть». Это нормально для самостоятельно собранных приложений, лечится один раз:
-   - **Вариант А (GUI):** правый клик по `.app` → «Открыть» → в диалоге подтвердить «Открыть всё равно» (`System Settings → Privacy & Security → Open Anyway`, если диалог не появился).
-   - **Вариант Б (терминал, надёжнее):**
-     ```bash
-     xattr -cr /Applications/MvSearch.app
-     open /Applications/MvSearch.app
-     ```
-3. Дальше приложение открывается обычным двойным кликом, как любое другое.
-4. Данные (словари/каталог для поиска, JSON-файлы запросов для разметки) `macdeployqt`/CMake кладёт внутрь бандла в `MvSearch.app/Contents/Resources/data` — переносить `.app` можно куда угодно, он самодостаточен.
+#### 4. Типичные проблемы
+
+| Симптом | Что делать |
+|---|---|
+| `cmake: command not found` | `brew install cmake` |
+| `unable to find a build program corresponding to "Ninja"` | `brew install ninja` |
+| `CMAKE_CXX_COMPILER not set` | `xcode-select --install`, затем `sudo xcode-select -s /Library/Developer/CommandLineTools` |
+| `Cannot resolve rpath … QtVirtualKeyboard / QtSvg / QtPdf` | Homebrew Qt разбит на keg'и. Поставь `brew install qtsvg qtvirtualkeyboard` и запускай скрипт через `"$(brew --prefix qt)"`. Скрипт сам прокидывает `-libpath`. Для локального запуска часто терпимо; для раздачи лучше Qt Online Installer. |
+| Куча `warning: 'operator""_qs' is deprecated` | Это **не ошибка**. В Qt 6.8+ `_qs` устарел в пользу `_s`. Сборка должна продолжаться. |
+| `macdeployqt` вернул ненулевой код, но `.app` есть | Для локального Mac обычно ок. Проверь `open dist-macos/*.app`. |
+| Краш при запуске: `Code Signature Invalid` / `CODESIGNING Invalid Page` / «файл повреждён» | После `macdeployqt` подпись битая. Скрипт теперь делает ad-hoc `codesign` сам. Вручную: см. ниже. |
+
+#### 5. Как запустить готовый `.app`/`.dmg`
+
+1. Открой `dist-macos/MvSearch.dmg` (или `MvLabel.dmg`), перетащи `.app` в `Applications` (или запускай прямо из `dist-macos/`).
+2. Приложение **не подписано Apple Developer ID** (это платная программа $99/год) и не нотаризовано. На macOS 15 без ad-hoc подписи часто сразу краш:
+   `EXC_BAD_ACCESS (SIGKILL (Code Signature Invalid))` / `Termination Reason: CODESIGNING, Code 2 Invalid Page`.
+3. Лечение (один раз на копию `.app`):
+   ```bash
+   # путь подставь свой
+   APP="dist-macos/MvLabel.app"   # или MvSearch.app / /Applications/MvLabel.app
+
+   xattr -cr "$APP"
+   codesign --force --deep --sign - "$APP"
+   open "$APP"
+   ```
+   - `xattr -cr` снимает quarantine (флаг «скачано из интернета»).
+   - `codesign --sign -` — ad-hoc подпись всей пачки (бинарь + Qt frameworks внутри бандла).
+4. GUI-вариант, если краша нет, а только диалог Gatekeeper: правый клик → «Открыть» → «Открыть всё равно» (`System Settings → Privacy & Security → Open Anyway`).
+5. Данные (словари/каталог для поиска, JSON запросов для разметки) лежат в `*.app/Contents/Resources/data` — переносить `.app` можно целиком.
 
 Python-пайплайн:
 
