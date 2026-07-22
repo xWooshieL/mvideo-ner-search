@@ -1,11 +1,10 @@
 {
-  "n_model_phrases": 2945,
-  "demo_g_pro_x_se": [
-    {
-      "text": "g pro x se",
-      "start_tok": 1,
-      "end_tok": 5,
-      "label": "MODEL"
-    }
-  ]
+  "n_queries": 12000,
+  "share_model_span": 0.17925,
+  "share_protected_or_titlecase": 0.0445,
+  "share_glued_unit_fixable": 0.10791666666666666,
+  "n_brand_tail_all_O": 2975,
+  "n_tail_improved_with_MODEL": 727,
+  "tail_improve_rate": 0.24436974789915966,
+  "n_model_phrases_dict": 6130
 }
