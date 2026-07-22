@@ -662,6 +662,67 @@ F1 ATTR & \InterBold 0.85\\
 \end{frame}
 
 % ============================================================
+% 11b-1. КАК СЧИТАЛАСЬ МЕТРИКА
+% ============================================================
+\begin{frame}[t]
+\slidehead{метрики · как считали}{Две метрики: по токенам и по сущностям}
+\conclusion{Token accuracy мягкая — считает каждое слово. Entity-F1 строгая — сущность засчитана, только если совпали и границы, и тип. F1 честнее для NER.}
+\vspace{7pt}\par
+\begin{columns}[T]
+\column{0.5\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Token accuracy}\par\vspace{4pt}
+{\smalltext Доля токенов с верным BIO-тегом:\par}
+\vspace{3pt}
+{\footnotesize $\text{acc}=\dfrac{\#\,\text{верных тегов}}{\#\,\text{всех токенов}}$}
+\par\vspace{7pt}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Entity-level F1 (span-match)}\par\vspace{4pt}
+{\smalltext Сущность = точное совпадение (тип, начало, конец). Считаем TP / FP / FN по спанам:\par}
+\vspace{1pt}
+{\footnotesize $P=\dfrac{TP}{TP+FP},\quad R=\dfrac{TP}{TP+FN}$\par\vspace{3pt}
+$F_1=\dfrac{2PR}{P+R}$}
+\column{0.48\textwidth}
+\begin{tikzpicture}
+\node[fill=cardbg, rounded corners=3pt, inner sep=8pt, text width=\dimexpr\textwidth-16pt\relax]{
+{\InterSemi\fontsize{8}{10}\selectfont Пример: «ноутбук asus 16 гб»}\par\vspace{5pt}
+{\fontsize{7.5}{10.5}\selectfont\color{mvdark}
+эталон: \textbf{ноутбук}/CAT · \textbf{asus}/BRAND · \textbf{16 гб}/ATTR\par\vspace{3pt}
+CRF: \textbf{ноутбук}/CAT · \textbf{asus}/BRAND · \textbf{16}/ATTR\par\vspace{5pt}
+{\color{okgreen}TP=2} (CAT, BRAND), {\color{warnorange}FN=1} (ATTR-span не совпал: «16» $\neq$ «16 гб»)\par\vspace{4pt}
+$P=1.0,\ R=0.67,\ F_1=0.8$}};
+\end{tikzpicture}
+\par\vspace{4pt}
+{\smalltext\color{mvgray} micro-F1 — суммируем TP/FP/FN по всем классам; macro — среднее F1 по классам.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 11b-2. КАК ПОЛУЧИЛИ РЕЗУЛЬТАТЫ
+% ============================================================
+\begin{frame}[t]
+\slidehead{метрики · как получили}{Откуда взялись 0.89 / 0.85}
+\conclusion{Обучили CRF на 80\% слабо-размеченных запросов, проверили на отложенных 20\%. Это оценка «CRF vs правила», а не vs истина — поэтому цифры оптимистичны.}
+\par
+\begin{columns}[T]
+\column{0.52\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Пайплайн замера}\par\vspace{6pt}
+{\smalltext
+\numdot{1}\ Слабая разметка ставит BIO-теги правилами + словарями (это «серебро»).\par\vspace{4pt}
+\numdot{2}\ Берём запросы с $\ge$1 сущностью, делим \textbf{80/20} (train\_test\_split, seed=42).\par\vspace{4pt}
+\numdot{3}\ CRF (\texttt{sklearn-crfsuite}, L-BFGS, 80 итераций) учится на 80\%.\par\vspace{4pt}
+\numdot{4}\ Предсказываем теги на 20\% и сравниваем со слабыми метками того же теста.}
+\column{0.46\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Почему такие числа}\par\vspace{6pt}
+{\smalltext
+\numdot{1}\ \textbf{BRAND 0.95} — бренды из словаря, CRF легко повторяет чёткий паттерн.\par\vspace{4pt}
+\numdot{2}\ \textbf{CATEGORY 0.78} — категории разнообразнее и длиннее, границы span-а плывут.\par\vspace{4pt}
+\numdot{3}\ \textbf{ATTR 0.85} — числовые атрибуты ловятся regex-ом стабильно.\par\vspace{4pt}
+\numdot{4}\ \textbf{Оговорка:} тест — те же авто-метки, что и train $\Rightarrow$ измеряем «повторил ли CRF правила», верхняя граница. Честная оценка — только на ручном gold.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
 % 11c. ОБНОВЛЕНИЕ РАЗМЕТКИ: ЛЕММАТИЗАЦИЯ
 % ============================================================
 \begin{frame}[t]
