@@ -99,6 +99,5 @@ query → WeakLabeler.label_query → BIO
 
 ## 7. Связь с clf
 
-Обучение классификаторов — **следующий** ноутбук на этом parquet.  
-Старый отчёт [`attr_type_classifier.md`](./attr_type_classifier.md) — прошлый прогон
-на локальных словарях; переобучать после принятия этого silver.
+Обучение: [`03_attr_type_classifier.ipynb`](./03_attr_type_classifier.ipynb) → отчёт [`attr_type_classifier.md`](./attr_type_classifier.md).  
+Модель: `models/attr_type_clf.joblib`.

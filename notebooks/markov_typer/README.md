@@ -7,8 +7,9 @@ Baseline Markov: [`src/ner/markov_typer.py`](../../src/ner/markov_typer.py).
 | Файл | |
 |---|---|
 | [`01_markov_eda.ipynb`](./01_markov_eda.ipynb) | смысл Markov, agreement с regex |
-| [`02_attr_type_silver.ipynb`](./02_attr_type_silver.ipynb) | **silver + EDA** на WeakLabeler (схема, маски) |
-| [`attr_type_silver.md`](./attr_type_silver.md) | договорённости по датасету |
-| [`attr_type_classifier.md`](./attr_type_classifier.md) | отчёт clf (старый прогон; переобучать после нового silver) |
+| [`02_attr_type_silver.ipynb`](./02_attr_type_silver.ipynb) | silver + EDA на WeakLabeler |
+| [`attr_type_silver.md`](./attr_type_silver.md) | схема датасета / маски |
+| [`03_attr_type_classifier.ipynb`](./03_attr_type_classifier.ipynb) | **4 TF-IDF clf + Markov**, метрики |
+| [`attr_type_classifier.md`](./attr_type_classifier.md) | отчёт по моделям |
 
-Дизайн: одна строка = один ATTR-span; n-grams типа — только `span_text`; чужие ATTR маскируем.
+Дизайн clf: n-grams только на `span_text`; brand/category/masked query — отдельно.
