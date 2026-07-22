@@ -98,28 +98,28 @@
 \newcommand{\wplain}[1]{\tikz[baseline=-0.55ex]{\node[rounded corners=2pt, fill=cardbg, inner xsep=4pt, inner ysep=2.2pt, font=\fontsize{7.8}{9}\selectfont, text=mvdark]{#1};}}
 \newcommand{\biotag}[2]{\tikz[baseline=-0.55ex]{\node[rounded corners=1.5pt, fill=#1, inner xsep=2.5pt, inner ysep=1pt, font=\fontsize{6.5}{7.5}\selectfont\color{white}]{#2};}}
 
-% ———- жирный шеврон, как в шаблоне М.Тех (стрелка-галка, компактный) ———-
+% ———- шеврон-галка (маленький) ———-
 \newcommand{\chevron}{%
-  \raisebox{-0.35ex}{\begin{tikzpicture}
-    \draw[mvred, line width=2pt, line cap=round, line join=round]
-      (0,0.22) -- (0.11,0.11) -- (0,0);
+  \raisebox{-0.15ex}{\begin{tikzpicture}
+    \draw[mvred, line width=1.3pt, line cap=round, line join=round]
+      (0,0.13) -- (0.065,0.065) -- (0,0);
   \end{tikzpicture}}}
 % шаг пайплайна: #1 fill, #2 text color, #3 текст
 \newcommand{\pipestep}[3]{%
   \begin{tikzpicture}[baseline=(b.center)]
-    \node[fill=#1, rounded corners=3pt, minimum height=1.0cm, text width=1.85cm,
-          align=center, inner sep=3pt, font=\InterSemi\fontsize{7.5}{9}\selectfont, text=#2] (b) {#3};
+    \node[fill=#1, rounded corners=3pt, minimum height=0.92cm, text width=1.78cm,
+          align=center, inner sep=2.5pt, font=\InterSemi\fontsize{6.8}{8.2}\selectfont, text=#2] (b) {#3};
   \end{tikzpicture}}
 \newcommand{\pipestepc}[3]{%
   \begin{tikzpicture}[baseline=(b.center)]
-    \node[fill=#1, rounded corners=3pt, minimum height=0.95cm, text width=1.62cm,
-          align=center, inner sep=3pt, font=\InterSemi\fontsize{7}{8.5}\selectfont, text=#2] (b) {#3};
+    \node[fill=#1, rounded corners=3pt, minimum height=0.9cm, text width=1.58cm,
+          align=center, inner sep=2.5pt, font=\InterSemi\fontsize{6.5}{8}\selectfont, text=#2] (b) {#3};
   \end{tikzpicture}}
 % узкий шаг (6 блоков в ряд)
 \newcommand{\pipestepq}[3]{%
   \begin{tikzpicture}[baseline=(b.center)]
-    \node[fill=#1, rounded corners=3pt, minimum height=0.82cm, text width=1.42cm,
-          align=center, inner sep=2.5pt, font=\InterSemi\fontsize{6.6}{8}\selectfont, text=#2] (b) {#3};
+    \node[fill=#1, rounded corners=3pt, minimum height=0.78cm, text width=1.4cm,
+          align=center, inner sep=2pt, font=\InterSemi\fontsize{6.2}{7.6}\selectfont, text=#2] (b) {#3};
   \end{tikzpicture}}
 % карточка с иконкой
 \newcommand{\iconcard}[3]{%
@@ -180,14 +180,14 @@
 \begin{frame}[t]
 \slidehead{глубокий eda · данные}{С чем работаем: масштаб и длины}
 \begin{columns}[T]
-\column{0.5\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.98\textwidth,height=4.5cm,keepaspectratio]{01_query_length.png}
-\column{0.47\textwidth}
+\column{0.44\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth,height=5.9cm,keepaspectratio]{01_query_length.png}
+\column{0.53\textwidth}
 \conclusion{Запросы очень короткие: половина — 2 токена, 99\% укладываются в 7. Это задача понимания запроса, а не разбора длинного документа.}
-\vspace{6pt}\par
+\vspace{5pt}\par
 {\smalltext
-\numdot{1}\ 30{,}99 млн кликов, 1{,}18 млн карточек. В семпле 200 тысяч строк — 49 тысяч уникальных запросов и 3{,}1 тысячи брендов.\par\vspace{4pt}
-\numdot{2}\ Длина в токенах: медиана 2, у 90\% — до 4, у 99\% — до 7. В символах: 17 и 31.\par\vspace{4pt}
+\numdot{1}\ 30{,}99 млн кликов, 1{,}18 млн карточек. В семпле 200 тысяч строк — 49 тысяч уникальных запросов и 3{,}1 тысячи брендов.\par\vspace{3pt}
+\numdot{2}\ Длина в токенах: медиана 2, у 90\% — до 4, у 99\% — до 7. В символах: 17 и 31.\par\vspace{3pt}
 \numdot{3}\ Медианная цена клика — 16 165 ₽, пропусков в ключевых полях нет.}
 \end{columns}
 \slidefoot
@@ -199,15 +199,15 @@
 \begin{frame}[t]
 \slidehead{глубокий eda · бренды}{73\% брендов нет в тексте запроса}
 \begin{columns}[T]
-\column{0.5\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.98\textwidth,height=4.5cm,keepaspectratio]{04_brand_in_query_vs_click.png}
-\column{0.47\textwidth}
+\column{0.44\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth,height=5.9cm,keepaspectratio]{04_brand_in_query_vs_click.png}
+\column{0.53\textwidth}
 \pinknote{ГЛАВНОЕ ЧИСЛО}{Лишь в 27\% кликов бренд написан в самом запросе. В остальных 73\% бренд известен только из кликнутой карточки — словарём его не достать.}
-\vspace{6pt}\par
+\vspace{5pt}\par
 {\smalltext
-\numdot{1}\ Пользователь пишет «айфон 15» — слова «Apple» нет, но купить он хочет именно Apple. Поэтому нужен классификатор бренда по всему запросу.\par\vspace{4pt}
-\numdot{2}\ 17\% запросов кликают по двум и более брендам — берём самый частый бренд с весом по позиции клика.\par\vspace{4pt}
-\numdot{3}\ Там, где словарь нашёл бренд в тексте, он совпадает с брендом клика в 79{,}5\% случаев — сигналы согласованы, можно учить общую модель.}
+\numdot{1}\ Пользователь пишет «айфон 15» — слова «Apple» нет, но купить он хочет именно Apple. Поэтому нужен классификатор бренда по всему запросу.\par\vspace{3pt}
+\numdot{2}\ 17\% запросов кликают по двум и более брендам — берём самый частый бренд с весом по позиции клика.\par\vspace{3pt}
+\numdot{3}\ Словарь и клики согласованы: где бренд есть в тексте, он совпадает с кликом в 79{,}5\% случаев.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -219,14 +219,14 @@
 \slidehead{глубокий eda · разметка}{Слабая разметка: покрытие и границы}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.98\textwidth,height=4.5cm,keepaspectratio]{03_bio_class_distribution.png}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth,height=4.2cm,keepaspectratio]{03_bio_class_distribution.png}
 \column{0.47\textwidth}
 \graynote{КАК ЧИТАТЬ}{Слабая разметка — это автоматические теги от словарей и правил. Она бесплатная, но шумная: на ней учим, а проверяем на ручной.}
-\vspace{6pt}\par
+\vspace{5pt}\par
 {\smalltext
-\numdot{1}\ Хотя бы одну сущность получают 79{,}8\% запросов: бренд — у 46\%, категория — у 59\%, атрибуты — только у 7\%.\par\vspace{4pt}
-\numdot{2}\ У 27\% запросов есть продолжение сущности (теги I) — значит нужны именно границы спанов, а не классификация всего запроса.\par\vspace{4pt}
-\numdot{3}\ Регулярки по атрибутам покрывают всего 3\% запросов — атрибуты одним правилом не закрыть, нужен типизатор поверх найденного спана.}
+\numdot{1}\ Хотя бы одну сущность получают 79{,}8\% запросов: бренд — у 46\%, категория — у 59\%, атрибуты — у 7\%.\par\vspace{3pt}
+\numdot{2}\ У 27\% запросов есть теги I — нужны именно границы спанов, а не классификация всего запроса.\par\vspace{3pt}
+\numdot{3}\ Регулярки атрибутов покрывают лишь 3\% запросов — нужен типизатор поверх найденного спана.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -275,18 +275,18 @@
 \begin{frame}[t]
 \slidehead{предобработка · пример}{Живой пример: запрос до и после}
 \graynote{ИСХОДНЫЙ ЗАПРОС}{«Наушники Logitech G-Pro X SE 128гб» — так пишет реальный пользователь: дефисы, склейки, смесь языков.}
-\vspace{7pt}\par
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 1 · расклейка и сепараторы}\par\vspace{4pt}
+\vspace{5pt}\par
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 1 · расклейка и сепараторы}\par\vspace{3pt}
 {\fontsize{9}{13}\selectfont
-\wplain{наушники} \ \wplain{logitech} \ \wplain{g} \ \wplain{pro} \ \wplain{x} \ \wplain{se} \ \wplain{128} \ \wplain{гб}}\par\vspace{2pt}
+\wplain{наушники} \ \wplain{logitech} \ \wplain{g} \ \wplain{pro} \ \wplain{x} \ \wplain{se} \ \wplain{128} \ \wplain{гб}}\par\vspace{1pt}
 {\smalltext\color{mvgray} «G-Pro» распался в «g pro», «128гб» — в «128 гб». Теперь словари смогут найти каждую часть.}
-\par\vspace{10pt}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 2 · разметка со словарями и подсказками}\par\vspace{4pt}
+\par\vspace{7pt}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 2 · разметка со словарями и подсказками}\par\vspace{3pt}
 {\fontsize{9}{13}\selectfont
-\wtag{mvred}{наушники · КАТЕГОРИЯ} \ \wtag{mvdark}{logitech · БРЕНД} \ \wtag{okgreen}{g pro x se · МОДЕЛЬ} \ \wtag{warnorange}{128 гб · АТРИБУТ}}\par\vspace{2pt}
+\wtag{mvred}{наушники · КАТЕГОРИЯ} \ \wtag{mvdark}{logitech · БРЕНД} \ \wtag{okgreen}{g pro x se · МОДЕЛЬ} \ \wtag{warnorange}{128 гб · АТРИБУТ}}\par\vspace{1pt}
 {\smalltext\color{mvgray} «g pro x se» поймал словарь моделей (собрали его майнингом — следующие слайды), «128 гб» — регулярка памяти.}
-\par\vspace{10pt}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 3 · готовые факты}\par\vspace{4pt}
+\par\vspace{7pt}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 3 · готовые факты}\par\vspace{3pt}
 {\smalltext бренд = Logitech · категория = наушники · модель = g pro x se · память = 128 ГБ. Именно эти факты дальше идут в поиск и ранжирование.}
 \slidefoot
 \end{frame}
@@ -298,15 +298,15 @@
 \slidehead{предобработка · измерение}{Что даёт предобработка на семпле}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.98\textwidth,height=4.4cm,keepaspectratio]{02_preprocess_effect.png}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth,height=4.2cm,keepaspectratio]{02_preprocess_effect.png}
 \column{0.47\textwidth}
 \graynote{КАК МЕРИЛИ}{Взяли 12 000 уникальных запросов и прогнали через пайплайн дважды: со словарём моделей и без него.}
-\vspace{6pt}\par
+\vspace{5pt}\par
 {\smalltext
-\numdot{1}\ 18\% запросов получают спан модели — примерно каждый пятый.\par\vspace{4pt}
-\numdot{2}\ 11\% содержат склейку вида «128гб», которую чинит расклейка.\par\vspace{4pt}
-\numdot{3}\ 24\% полностью пустых хвостов после бренда получают тег модели после наложения подсказок.\par\vspace{4pt}
-\numdot{4}\ Защита брендов и заглавных букв срабатывает у 4{,}5\% — редко, но именно она спасает «Красный Октябрь» от превращения в цвет.}
+\numdot{1}\ 18\% запросов получают спан модели — примерно каждый пятый.\par\vspace{3pt}
+\numdot{2}\ 11\% содержат склейку вида «128гб», которую чинит расклейка.\par\vspace{3pt}
+\numdot{3}\ 24\% пустых хвостов после бренда получают тег модели после подсказок.\par\vspace{3pt}
+\numdot{4}\ Защита брендов срабатывает у 4{,}5\% — редко, но спасает «Красный Октябрь» от превращения в цвет.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -317,15 +317,15 @@
 \begin{frame}[t]
 \slidehead{тег model · проблема}{Хвост после бренда теряется}
 \begin{columns}[T]
-\column{0.54\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.98\textwidth,height=4.3cm,keepaspectratio]{model_tag/01_missing_model_problem.png}
-\column{0.43\textwidth}
+\column{0.44\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth,height=5.9cm,keepaspectratio]{model_tag/01_missing_model_problem.png}
+\column{0.53\textwidth}
 \pinknote{ПРОБЛЕМА}{После бренда часто идёт название линейки — «dyson v15», «galaxy s24». При слабой разметке эти слова остаются без тега, и CRF не может их выучить.}
-\vspace{6pt}\par
+\vspace{5pt}\par
 {\smalltext
-\numdot{1}\ Из 15 тысяч запросов бренд есть у 7046. Почти у половины из них (46\%) после бренда остался неразмеченный латинский хвост.\par\vspace{4pt}
-\numdot{2}\ Типичная длина хвоста — два токена: «zenbook a16», «ipad air».\par\vspace{4pt}
-\numdot{3}\ Это не атрибут — нет числа с единицей измерения. Нужен отдельный тег MODEL и словарь линеек.}
+\numdot{1}\ Из 15 тысяч запросов бренд есть у 7046. Почти у половины (46\%) после бренда остался неразмеченный латинский хвост.\par\vspace{3pt}
+\numdot{2}\ Типичная длина хвоста — два токена: «zenbook a16», «ipad air».\par\vspace{3pt}
+\numdot{3}\ Это не атрибут — нет числа с единицей. Нужен отдельный тег MODEL и словарь линеек.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -364,17 +364,17 @@
 \begin{frame}[t]
 \slidehead{тег model · майнинг}{Майнинг словаря: пример «g pro»}
 \graynote{ИДЕЯ}{Названия кликнутых карточек уже содержат модели. Находим в названии бренд — и всё, что идёт после него, считаем кандидатом в модели.}
-\vspace{8pt}\par
+\vspace{5pt}\par
 \begin{columns}[T]
-\column{0.55\textwidth}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Название карточки $\to$ кандидаты}\par\vspace{5pt}
-{\fontsize{8.5}{12}\selectfont
-\wplain{Наушники} \ \wtag{mvdark}{Logitech} \ \wtag{okgreen}{G} \ \wtag{okgreen}{PRO} \ \wtag{okgreen}{X} \ \wtag{okgreen}{SE} \ \wplain{Black}}\par\vspace{6pt}
-{\smalltext После бренда снимаем от одного до четырёх коротких токенов и получаем цепочку кандидатов:}\par\vspace{4pt}
-{\renewcommand{\arraystretch}{1.2}\setlength{\tabcolsep}{6pt}
-\begin{tabular}{|L{2.5cm}|C{2.6cm}|}
+\column{0.52\textwidth}
+{\InterSemi\fontsize{8}{10}\selectfont Название карточки $\to$ кандидаты}\par\vspace{4pt}
+{\fontsize{7.6}{11}\selectfont
+\wplain{Наушники} \ \wtag{mvdark}{Logitech} \ \wtag{okgreen}{G} \ \wtag{okgreen}{PRO} \ \wtag{okgreen}{X} \ \wtag{okgreen}{SE} \ \wplain{Black}}\par\vspace{4pt}
+{\smalltext После бренда снимаем 1–4 коротких токена и получаем цепочку кандидатов:}\par\vspace{3pt}
+{\renewcommand{\arraystretch}{1.1}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|L{2.3cm}|C{2.3cm}|}
 \hline
-\theadl{Кандидат} & \thead{Сколько раз встретился}\\
+\theadl{Кандидат} & \thead{Встретился раз}\\
 \hline
 \tcelll{g} & \tcellc{213}\\
 \hline
@@ -387,12 +387,12 @@
 \tcelll{g pro x se black} & \tcellc{2 — отсекли}\\
 \hline
 \end{tabular}}
-\column{0.42\textwidth}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Почему порог — 6 раз}\par\vspace{5pt}
+\column{0.45\textwidth}
+{\InterSemi\fontsize{8}{10}\selectfont Почему порог — 6 раз}\par\vspace{4pt}
 {\smalltext
-\numdot{1}\ Фраза попадает в словарь, только если встретилась в названиях карточек \textbf{минимум 6 раз}. «g pro» видели 87 раз — берём. «g pro x se black» — два раза, это случайный хвост с цветом, отсекаем.\par\vspace{4pt}
-\numdot{2}\ Порог ниже (2) — словарь раздувается до 7215 фраз и тащит мусор. Порог выше (20) — остаётся 335 фраз и теряются редкие линейки.\par\vspace{4pt}
-\numdot{3}\ Шесть — золотая середина: 1512 фраз, покрываем 22\% потерянных хвостов, мусора почти нет (проверили — словарь чист на 96{,}6\%).}
+\numdot{1}\ Фраза попадает в словарь, если встретилась \textbf{минимум 6 раз}. «g pro» видели 87 раз — берём. «g pro x se black» — два раза, случайный хвост, отсекаем.\par\vspace{3pt}
+\numdot{2}\ Порог 2 — словарь раздувается до 7215 фраз и тащит мусор. Порог 20 — остаётся 335 фраз, теряются редкие линейки.\par\vspace{3pt}
+\numdot{3}\ Шесть — золотая середина: 1512 фраз, 22\% хвостов покрыто, словарь чист на 96{,}6\%.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -512,10 +512,12 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
   \node[enc] (t) at (0,1.15) {Текст запроса\\{\fontsize{6.5}{8}\selectfont словари · регулярки}};
   \node[enc] (k) at (0,-1.15) {Клики\\{\fontsize{6.5}{8}\selectfont какой товар выбрали}};
   \node[fus] (f) at (4.1,0) {Слабая\\разметка};
-  \draw[ln] (t.east) -- (f.west|-t.east);
-  \draw[ln] (k.east) -- (f.west|-k.east);
+  \draw[ln] (t.east) -- (f.west);
+  \draw[ln] (k.east) -- (f.west);
 \end{tikzpicture}
 \end{center}
+\par\vspace{4pt}
+{\smalltext\color{mvgray} Пример: в «айфон 15 про» словарь бренда молчит, но клики говорят — Apple. А «128 гб» видит только регулярка.}
 \column{0.47\textwidth}
 {\renewcommand{\arraystretch}{1.25}\setlength{\tabcolsep}{6pt}
 \begin{tabular}{|L{2.4cm}|L{3.6cm}|}
@@ -533,8 +535,6 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 \tcelll{Атрибуты} & \tcelll{регулярки по тексту}\\
 \hline
 \end{tabular}}
-\par\vspace{6pt}
-{\smalltext\color{mvgray} Пример: в запросе «айфон 15 про» словарь бренда молчит, но клики говорят — Apple. А «128 гб» видит только регулярка.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -548,15 +548,15 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 \vspace{7pt}\par
 \begin{center}
 \begin{tikzpicture}[node distance=0pt]
-  \node (a) {\pipestep{mvred}{white}{ЗАПРОС\\\fontsize{6}{7}\selectfont «ноутбук asus 16 гб»}};
-  \node[right=2pt of a] (c1) {\chevron};
-  \node[right=2pt of c1] (b) {\pipestep{cardbg}{mvdark}{ПРАВИЛА\\\fontsize{6}{7}\selectfont словари · регулярки · модели}};
-  \node[right=2pt of b] (c2) {\chevron};
-  \node[right=2pt of c2] (d) {\pipestep{cardbg}{mvdark}{CRF\\\fontsize{6}{7}\selectfont разметка последовательности}};
-  \node[right=2pt of d] (c3) {\chevron};
-  \node[right=2pt of c3] (e) {\pipestep{cardbg}{mvdark}{КЛАССИФИКАТОР\\\fontsize{6}{7}\selectfont бренд, если не написан}};
-  \node[right=2pt of e] (c4) {\chevron};
-  \node[right=2pt of c4] (f) {\pipestep{mvdark}{white}{ТИПИЗАТОР\\\fontsize{6}{7}\selectfont марковская цепь}};
+  \node (a) {\pipestep{mvred}{white}{ЗАПРОС\\\fontsize{5.6}{6.6}\selectfont «ноутбук asus 16 гб»}};
+  \node[right=1pt of a] (c1) {\chevron};
+  \node[right=1pt of c1] (b) {\pipestep{cardbg}{mvdark}{ПРАВИЛА\\\fontsize{5.6}{6.6}\selectfont словари, регулярки}};
+  \node[right=1pt of b] (c2) {\chevron};
+  \node[right=1pt of c2] (d) {\pipestep{cardbg}{mvdark}{CRF\\\fontsize{5.6}{6.6}\selectfont разметка токенов}};
+  \node[right=1pt of d] (c3) {\chevron};
+  \node[right=1pt of c3] (e) {\pipestep{cardbg}{mvdark}{КЛАССИФ.\\\fontsize{5.6}{6.6}\selectfont скрытый бренд}};
+  \node[right=1pt of e] (c4) {\chevron};
+  \node[right=1pt of c4] (f) {\pipestep{mvdark}{white}{ТИПИЗАТОР\\\fontsize{5.6}{6.6}\selectfont марковская цепь}};
 \end{tikzpicture}
 \end{center}
 \vspace{7pt}\par
@@ -581,16 +581,16 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 \begin{center}
 \begin{tikzpicture}[node distance=0pt]
   \node (p1) {\pipestepq{cardbg}{mvdark}{Запрос}};
-  \node[right=2pt of p1] (a1) {\chevron};
-  \node[right=2pt of a1] (p2) {\pipestepq{cardbg}{mvdark}{Пред-\\обработка}};
-  \node[right=2pt of p2] (a2) {\chevron};
-  \node[right=2pt of a2] (p3) {\pipestepq{mvred}{white}{Извлечение\\фактов}};
-  \node[right=2pt of p3] (a3) {\chevron};
-  \node[right=2pt of a3] (p4) {\pipestepq{cardbg}{mvdark}{Нормали-\\зация}};
-  \node[right=2pt of p4] (a4) {\chevron};
-  \node[right=2pt of a4] (p5) {\pipestepq{cardbg}{mvdark}{Каталог}};
-  \node[right=2pt of p5] (a5) {\chevron};
-  \node[right=2pt of a5] (p6) {\pipestepq{cardbg}{mvdark}{Ранжиро-\\вание}};
+  \node[right=1pt of p1] (a1) {\chevron};
+  \node[right=1pt of a1] (p2) {\pipestepq{cardbg}{mvdark}{Пред-\\обработка}};
+  \node[right=1pt of p2] (a2) {\chevron};
+  \node[right=1pt of a2] (p3) {\pipestepq{mvred}{white}{Извлечение\\фактов}};
+  \node[right=1pt of p3] (a3) {\chevron};
+  \node[right=1pt of a3] (p4) {\pipestepq{cardbg}{mvdark}{Нормали-\\зация}};
+  \node[right=1pt of p4] (a4) {\chevron};
+  \node[right=1pt of a4] (p5) {\pipestepq{cardbg}{mvdark}{Каталог}};
+  \node[right=1pt of p5] (a5) {\chevron};
+  \node[right=1pt of a5] (p6) {\pipestepq{cardbg}{mvdark}{Ранжиро-\\вание}};
 \end{tikzpicture}
 \end{center}
 \vspace{5pt}\par
@@ -681,21 +681,46 @@ F1 атрибуты & \InterBold 0{,}85\\
 \begin{frame}[t]
 \slidehead{mvp · марковские цепи}{Тип атрибута: «16 гб» — это память}
 \begin{columns}[T]
-\column{0.5\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.98\textwidth,height=4.4cm,keepaspectratio]{markov/03_markov_transitions.png}
 \column{0.47\textwidth}
-\graynote{КАК РАБОТАЕТ}{CRF находит спан атрибута, а марковская цепь по паре соседних токенов говорит его тип: после «256» почти всегда идёт «гб» — значит это память.}
-\vspace{6pt}\par
-{\fontsize{8}{12}\selectfont
-\wtag{warnorange}{16 гб} \ \chevron\ \wplain{память}\qquad
-\wtag{warnorange}{55 дюймов} \ \chevron\ \wplain{диагональ}\par\vspace{3pt}
-\wtag{warnorange}{2 кг} \ \chevron\ \wplain{вес}\qquad
-\wtag{warnorange}{wi-fi} \ \chevron\ \wplain{связь}}
-\par\vspace{6pt}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth,height=4.1cm,keepaspectratio]{markov/03_markov_transitions.png}
+\par\vspace{4pt}
+{\fontsize{7.6}{11}\selectfont
+\wtag{warnorange}{16 гб} \chevron\ \wplain{память}\quad
+\wtag{warnorange}{55 дюймов} \chevron\ \wplain{диагональ}\par\vspace{2pt}
+\wtag{warnorange}{2 кг} \chevron\ \wplain{вес}\quad
+\wtag{warnorange}{wi-fi} \chevron\ \wplain{связь}}
+\column{0.5\textwidth}
+\graynote{ЭТО БЕЙЗЛАЙН}{Цепь ничего не «понимает» — она запоминает частоты пар токенов. Дальше по плану — переход к RNN (следующий слайд).}
+\vspace{5pt}\par
 {\smalltext
-\numdot{1}\ Это таблица частот, выученная из данных, — никакой нейросети. Ответ за доли миллисекунды.\par\vspace{4pt}
-\numdot{2}\ Точность против правил-учителя — 0{,}62; в 36\% случаев цепь честно говорит «не знаю», но почти никогда не путает типы между собой.\par\vspace{4pt}
-\numdot{3}\ Готовый обученный модуль лежит в репозитории: обучение на слабой разметке одной командой.}
+\numdot{1}\ {\InterSemi Откуда метки, если разметки нет?} От регулярок-учителей. Регулярка «число + гб» сама знает, что это память, — прогоняем её по 60 тысячам запросов и каждой паре токенов записываем тип, который назначила регулярка.\par\vspace{3pt}
+\numdot{2}\ {\InterSemi Что запоминает цепь.} Таблицу частот: пара «<число>|гб» встретилась 154 раза, и все 154 раза регулярка сказала «память». На инференсе цепь просто смотрит пару соседних токенов в спане.\par\vspace{3pt}
+\numdot{3}\ {\InterSemi Зачем, если есть регулярка?} Цепь обобщает шире: срабатывает и на паре, которую регулярка целиком не поймала (опечатки, перестановки), и отвечает за доли миллисекунды.\par\vspace{3pt}
+\numdot{4}\ Точность против правил-учителя — 0{,}62; в 36\% случаев цепь честно говорит «не знаю», но типы между собой почти не путает.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 21b. ПОЧЕМУ ЦЕПЬ — БЕЙЗЛАЙН, И ПЕРЕХОД К RNN
+% ============================================================
+\begin{frame}[t]
+\slidehead{mvp · план развития}{Цепь — бейзлайн. Дальше — RNN}
+\pinknote{ЧЕСТНО О ПРЕДЕЛЕ}{Цепь видит только пару соседних токенов внутри спана. Контекст до спана («телевизор» или «ноутбук» перед «55») ей недоступен в принципе — это ограничение метода, а не реализации.}
+\vspace{6pt}\par
+\begin{columns}[T]
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Что не может цепь}\par\vspace{4pt}
+{\smalltext
+\numdot{1}\ «5» без единицы измерения: пара «<число>|конец» встречается в десяти типах — цепь отвечает «не знаю».\par\vspace{3pt}
+\numdot{2}\ Контекст категории: «55» после «телевизор» — почти наверняка диагональ, но цепь слова «телевизор» не видит.\par\vspace{3pt}
+\numdot{3}\ Новые единицы и опечатки: «гиг», «джиби» — если пары не было в обучении, ответа нет.}
+\column{0.49\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Почему RNN это закроет}\par\vspace{4pt}
+{\smalltext
+\numdot{1}\ Рекуррентная сеть читает запрос целиком слева направо и несёт контекст: к моменту «55» она уже «помнит» слово «телевизор».\par\vspace{3pt}
+\numdot{2}\ Символьные эмбеддинги переживают опечатки: «гиг» и «гб» окажутся рядом в пространстве признаков.\par\vspace{3pt}
+\numdot{3}\ План: учим лёгкую BiLSTM на той же слабой разметке; RNN зовём только там, где цепь сказала «не знаю» (36\%), — так держим латентность.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -707,13 +732,13 @@ F1 атрибуты & \InterBold 0{,}85\\
 \slidehead{mvp · границы метода}{Где цепь бессильна: голое число}
 \begin{columns}[T]
 \column{0.5\textwidth}
-\vspace{2pt}\centering\includegraphics[width=0.98\textwidth,height=4.4cm,keepaspectratio]{markov/05_number_ambiguity.png}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth,height=4.2cm,keepaspectratio]{markov/05_number_ambiguity.png}
 \column{0.47\textwidth}
 \pinknote{ПРЕДЕЛ}{Число без единицы измерения многозначно: «5» встречается в десяти разных типах атрибутов. Пара токенов тут не помогает — нужен контекст категории.}
-\vspace{6pt}\par
+\vspace{5pt}\par
 {\smalltext
-\numdot{1}\ Нашли 27 «числовых омонимов»: «5» и «12» бывают десятью разными атрибутами, «1» — восемью.\par\vspace{4pt}
-\numdot{2}\ План усложнения по лестнице: правила $\to$ цепь $\to$ лёгкий классификатор с учётом категории $\to$ нейросеть только для омонимов.\par\vspace{4pt}
+\numdot{1}\ Нашли 27 «числовых омонимов»: «5» и «12» бывают десятью разными атрибутами, «1» — восемью.\par\vspace{3pt}
+\numdot{2}\ Лестница усложнения: правила, затем цепь, затем лёгкий классификатор с учётом категории, затем RNN — только для омонимов.\par\vspace{3pt}
 \numdot{3}\ Берём самый дешёвый слой, который держит время ответа, — и усложняем только там, где он ошибается.}
 \end{columns}
 \slidefoot
@@ -728,13 +753,13 @@ F1 атрибуты & \InterBold 0{,}85\\
 \vspace{7pt}\par
 \begin{center}
 \begin{tikzpicture}[node distance=0pt]
-  \node (m1) {\pipestep{cardbg}{mvdark}{Ручная разметка\\\fontsize{6}{7}\selectfont 100+ пар}};
-  \node[right=2pt of m1] (mc1) {\chevron};
-  \node[right=2pt of mc1] (m2) {\pipestep{mvred}{white}{Обучаем модель\\\fontsize{6}{7}\selectfont бустинг}};
-  \node[right=2pt of m2] (mc2) {\chevron};
-  \node[right=2pt of mc2] (m3) {\pipestep{cardbg}{mvdark}{Модель метит\\\fontsize{6}{7}\selectfont миллионы пар: 1 / 0}};
-  \node[right=2pt of m3] (mc3) {\chevron};
-  \node[right=2pt of mc3] (m4) {\pipestep{cardbg}{mvdark}{Где 1 — берём\\\fontsize{6}{7}\selectfont карточку в выдачу}};
+  \node (m1) {\pipestep{cardbg}{mvdark}{Ручная разметка\\\fontsize{5.6}{6.6}\selectfont 100+ пар}};
+  \node[right=1pt of m1] (mc1) {\chevron};
+  \node[right=1pt of mc1] (m2) {\pipestep{mvred}{white}{Обучаем модель\\\fontsize{5.6}{6.6}\selectfont бустинг}};
+  \node[right=1pt of m2] (mc2) {\chevron};
+  \node[right=1pt of mc2] (m3) {\pipestep{cardbg}{mvdark}{Модель метит\\\fontsize{5.6}{6.6}\selectfont миллионы пар: 1 / 0}};
+  \node[right=1pt of m3] (mc3) {\chevron};
+  \node[right=1pt of mc3] (m4) {\pipestep{cardbg}{mvdark}{Где 1 — берём\\\fontsize{5.6}{6.6}\selectfont карточку в выдачу}};
 \end{tikzpicture}
 \end{center}
 \vspace{8pt}\par
@@ -760,27 +785,29 @@ F1 атрибуты & \InterBold 0{,}85\\
 \pinknote{ПРИНЦИП}{Разметку проектируем, а не «докупаем объёмом»: размечаем в первую очередь то, на чём модель ошибается или сомневается.}
 \vspace{7pt}\par
 \begin{columns}[T]
-\column{0.42\textwidth}
+\column{0.4\textwidth}
+\vspace{10pt}
 \begin{center}
 \begin{tikzpicture}[
-  bx/.style={rounded corners=3pt, minimum height=0.85cm, text width=2.0cm, align=center, font=\InterSemi\fontsize{8}{9.5}\selectfont},
-  ar/.style={-{Stealth[length=2.4mm]}, line width=1.3pt, mvred}
+  bx/.style={rounded corners=3pt, minimum height=0.8cm, minimum width=1.9cm, align=center, font=\InterSemi\fontsize{7.5}{9}\selectfont},
+  ar/.style={-{Stealth[length=2mm]}, line width=1.1pt, mvred}
 ]
-  \node[bx, fill=mvdark, text=white] (model) at (0,1.3) {Модель};
-  \node[bx, fill=mvred, text=white] (unc) at (2.3,0) {Сомнения};
-  \node[bx, fill=mvdark, text=white] (lab) at (0,-1.3) {Разметка};
-  \node[bx, fill=mvred, text=white] (ret) at (-2.3,0) {Дообучение};
-  \draw[ar] (model.south east) to[bend left=25] (unc.north);
-  \draw[ar] (unc.south) to[bend left=25] (lab.north east);
-  \draw[ar] (lab.north west) to[bend left=25] (ret.south);
-  \draw[ar] (ret.north) to[bend left=25] (model.south west);
+  \def\R{1.55}
+  \node[bx, fill=mvdark, text=white] (model) at (90:\R) {Модель};
+  \node[bx, fill=mvred, text=white] (unc) at (0:\R+0.55) {Сомнения};
+  \node[bx, fill=mvdark, text=white] (lab) at (270:\R) {Разметка};
+  \node[bx, fill=mvred, text=white] (ret) at (180:\R+0.55) {Дообучение};
+  \draw[ar] (55:\R+0.35) arc (55:35:\R+0.35);
+  \draw[ar] (325:\R+0.35) arc (325:305:\R+0.35);
+  \draw[ar] (235:\R+0.35) arc (235:215:\R+0.35);
+  \draw[ar] (145:\R+0.35) arc (145:125:\R+0.35);
 \end{tikzpicture}
 \end{center}
-\column{0.55\textwidth}
+\column{0.57\textwidth}
 {\smalltext
-\numdot{1}\ {\InterSemi Активное обучение.} Размечаем то, в чём модель не уверена, — каждая метка приносит максимум пользы.\par\vspace{4pt}
-\numdot{2}\ {\InterSemi Слабая разметка.} Правила и словари дают дешёвые метки — миллионы примеров без человека.\par\vspace{4pt}
-\numdot{3}\ {\InterSemi Помощь разметчику.} Приложение показывает готовые подсказки — человек правит, а не размечает с нуля.\par\vspace{4pt}
+\numdot{1}\ {\InterSemi Активное обучение.} Размечаем то, в чём модель не уверена, — каждая метка приносит максимум пользы.\par\vspace{3pt}
+\numdot{2}\ {\InterSemi Слабая разметка.} Правила и словари дают дешёвые метки — миллионы примеров без человека.\par\vspace{3pt}
+\numdot{3}\ {\InterSemi Помощь разметчику.} Приложение показывает готовые подсказки — человек правит, а не размечает с нуля.\par\vspace{3pt}
 \numdot{4}\ {\InterSemi Золотые наборы.} Эталон для честной оценки и контроля дрейфа. Первая волна — 3$\times$1500 запросов на троих.}
 \end{columns}
 \slidefoot
@@ -790,17 +817,17 @@ F1 атрибуты & \InterBold 0{,}85\\
 % 25. ПРИЛОЖЕНИЕ РАЗМЕТКИ — ТРЁХЭТАПНЫЙ МАСТЕР
 % ============================================================
 \begin{frame}[t]
-\slidehead{приложение · разметка}{Приложение разметки: мастер из трёх этапов}
-\graynote{КАК УСТРОЕНО}{Запрос разбит на блоки по центру, фон заблюрен. Этап 1: клавиши B/I/O, метка появляется над блоком, Backspace снимает и шагает назад. Enter — подтверждение этапа.}
-\vspace{6pt}\par
+\slidehead{приложение · разметка}{Приложение разметки на C++/Qt: мастер из трёх этапов}
+\graynote{КАК УСТРОЕНО}{Нативное приложение на C++ и Qt/QML. Запрос разбит на блоки по центру, фон с историей заблюрен. Этап 1: клавиши B/I/O, метка появляется над блоком, Backspace снимает и шагает назад, Enter — подтверждение этапа.}
+\vspace{5pt}\par
 \begin{columns}[T]
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{apps/labeling_stage1_bio.png}\par\vspace{2pt}
+\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_label_stage1.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Этап 1 — разметка B/I/O: активный блок в красной рамке, метки над блоками}
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{apps/labeling_stage2_types.png}\par\vspace{2pt}
+\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_label_stage2.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Этап 2 — тип сущности: у каждого типа описание, когда его ставить}
 \end{columns}
 \slidefoot
@@ -811,16 +838,16 @@ F1 атрибуты & \InterBold 0{,}85\\
 % ============================================================
 \begin{frame}[t]
 \slidehead{приложение · разметка}{Подтипы атрибутов и режим 1/0}
-\graynote{ТРИ СБОРКИ}{Для Никиты, Некита и Лизы — по 1500 непересекающихся запросов. Если у атрибута выбрано «другое» — подтип вводится вручную. Пустая карточка в режиме 1/0 получает 0 автоматически.}
-\vspace{6pt}\par
+\graynote{ОДИН УСТАНОВЩИК НА ТРОИХ}{Ярлыки Никита / Некит / Лиза — по 1500 непересекающихся запросов. Если у атрибута выбрано «другое» — подтип вводится вручную. Пустая карточка в режиме 1/0 получает 0 автоматически.}
+\vspace{5pt}\par
 \begin{columns}[T]
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{apps/labeling_stage3_subtypes.png}\par\vspace{2pt}
+\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_label_stage3.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Этап 3 — подтип атрибута: у каждого описание и перевод; «другое» — ручной ввод}
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{apps/labeling_match.png}\par\vspace{2pt}
+\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_label_match.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Режим 1/0 с гайдом: когда ставить 1, когда 0; история и прогресс}
 \end{columns}
 \slidefoot
@@ -830,18 +857,40 @@ F1 атрибуты & \InterBold 0{,}85\\
 % 26. MVP-ПРИЛОЖЕНИЕ — СКРИНШОТЫ
 % ============================================================
 \begin{frame}[t]
-\slidehead{приложение · умный поиск}{Готово: MVP умного поиска}
-\pinknote{КИЛЛЕР-ФИЧА}{Ранжирование каталога опирается только на извлечённые факты — бренд, категорию, модель и атрибуты, — а не на сырой текст запроса.}
-\vspace{8pt}\par
+\slidehead{приложение · умный поиск}{MVP умного поиска на C++/Qt}
+\pinknote{КИЛЛЕР-ФИЧА}{Ранжирование каталога опирается только на извлечённые факты — бренд, категорию, модель и атрибуты, — а не на сырой текст запроса. Движок на C++ отвечает за 1–2 миллисекунды.}
+\vspace{5pt}\par
 \begin{columns}[T]
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{apps/mvp_search.png}\par\vspace{3pt}
-{\smalltext\color{mvgray} Факты чипами + товары, отранжированные по фактам, с объяснением счёта}
+\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_mvp_search.png}\par\vspace{2pt}
+{\smalltext\color{mvgray} Факты чипами + товары, отранжированные по фактам, с полосой релевантности}
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{apps/mvp_json.png}\par\vspace{3pt}
-{\smalltext\color{mvgray} По клику раскрывается JSON и статистика слоёв каскада; таймер — в шапке}
+\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_mvp_json.png}\par\vspace{2pt}
+{\smalltext\color{mvgray} По клику раскрывается JSON с сущностями; таймер извлечения — в шапке}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 26b. MVP — СТАТИСТИКА И УСТАНОВЩИКИ
+% ============================================================
+\begin{frame}[t]
+\slidehead{приложение · поставка}{Статистика движка и установщики}
+\graynote{КАК РАЗДАЁМ}{Оба приложения — нативный C++/Qt, собираются CMake и пакуются в установщики Inno Setup с брендингом М.Видео: по 17 МБ вместо 500 МБ у прежней Python-сборки.}
+\vspace{5pt}\par
+\begin{columns}[T]
+\column{0.49\textwidth}
+\centering
+\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_mvp_stats.png}\par\vspace{2pt}
+{\smalltext\color{mvgray} Страница статистики: словари, каталог, метрики качества и устройство каскада}
+\column{0.49\textwidth}
+{\smalltext
+\numdot{1}\ {\InterSemi Умный поиск.} Один установщик MVideo\_SmartSearch\_Setup: движок, словари и каталог внутри.\par\vspace{4pt}
+\numdot{2}\ {\InterSemi Разметка.} Один установщик MVideo\_Labeling\_Setup на всю команду: три ярлыка — Никита, Некит, Лиза — каждый открывает свой набор из 1500 запросов.\par\vspace{4pt}
+\numdot{3}\ {\InterSemi Настройки.} В обоих приложениях есть страница настроек; в поиске — переключатель тёмной темы.\par\vspace{4pt}
+\numdot{4}\ Разметка сохраняется в JSONL рядом с приложением, папка открывается одной кнопкой.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -895,6 +944,7 @@ F1 атрибуты & \InterBold 0{,}85\\
 \end{frame}
 
 \end{document}
+
 
 
 
