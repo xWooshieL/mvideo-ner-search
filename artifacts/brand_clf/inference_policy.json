@@ -1,0 +1,25 @@
+{
+  "cascade": [
+    "1. If NER/dicts/alias yields BRAND → use it; do NOT call clf",
+    "2. If category-only → brand=null (NO_BRAND); do NOT call clf",
+    "3. Else if brand-evidence (alias or modelish) → call clf",
+    "4. Else → brand=null; do NOT call clf"
+  ],
+  "thresholds": {
+    "TAU_ACCEPT": 0.42,
+    "TAU_MARGIN": 0.08,
+    "TAU_NO_BRAND": 0.35,
+    "TAU_UNKNOWN": 0.3,
+    "REQUIRE_BRAND_EVIDENCE": true
+  },
+  "special_labels": {
+    "NO_BRAND": "no brand implied; output brand=null",
+    "UNKNOWN": "OOD / ambiguous; output brand=null + optional retrieval"
+  },
+  "accept_rules": [
+    "pred in brands and P>=TAU_ACCEPT and margin>=TAU_MARGIN → accept",
+    "pred==NO_BRAND and P>=TAU_NO_BRAND → brand=null",
+    "pred==UNKNOWN and P>=TAU_UNKNOWN → brand=null (ood)",
+    "else → reject brand=null"
+  ]
+}

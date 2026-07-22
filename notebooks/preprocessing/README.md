@@ -12,12 +12,17 @@ r = pp("Наушники Logitech G-Pro X SE 128гб")
 print(r.text_norm, r.model_spans, r.protected_spans)
 ```
 
-Ноутбук: [`01_data_preprocessing.ipynb`](./01_data_preprocessing.ipynb) — построение пайплайна.  
-Обзор качества / готовность к gold: [`02_preprocessed_data_overview.ipynb`](./02_preprocessed_data_overview.ipynb).
+Ноутбуки:
+- [`01_data_preprocessing.ipynb`](./01_data_preprocessing.ipynb) — построение пайплайна  
+- [`02_preprocessed_data_overview.ipynb`](./02_preprocessed_data_overview.ipynb) — качество / готовность к gold NER  
+- [`03_brand_data_preprocessing.ipynb`](./03_brand_data_preprocessing.ipynb) — EDA + **silver** для brand-clf (`NO_BRAND` / `UNKNOWN` + inference policy)  
+- [`silver_clf_readme.md`](./silver_clf_readme.md) — договорённости, OOD, confidence, подводные камни
 
 Артефакты:
 - `artifacts/model_phrases.txt` — линейки/модели (`g pro x se`, …)
 - `artifacts/protected_brands.txt` — бренды с «ложным» цветом (`красный октябрь`)
+- `artifacts/brand_clf/silver_brand_{train,val,all}.parquet` — silver query→brand (+ specials)
+- `artifacts/brand_clf/inference_policy.json` — cascade и пороги τ для clf
 
 ---
 

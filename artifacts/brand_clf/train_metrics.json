@@ -1,0 +1,343 @@
+{
+  "best_model": "sgd_char",
+  "n_train": 22846,
+  "n_val": 5710,
+  "n_classes": 67,
+  "thresholds": {
+    "TAU_ACCEPT": 0.42,
+    "TAU_MARGIN": 0.08,
+    "TAU_NO_BRAND": 0.35,
+    "TAU_UNKNOWN": 0.3,
+    "REQUIRE_BRAND_EVIDENCE": true
+  },
+  "summary": [
+    {
+      "model": "sgd_char",
+      "raw_accuracy": 0.9436077057793345,
+      "raw_f1_macro": 0.9505720828901706,
+      "raw_f1_micro": 0.9436077057793345,
+      "raw_f1_weighted": 0.9430452449901036,
+      "rej_accuracy": 0.9437828371278458,
+      "rej_f1_macro": 0.9488029716871897,
+      "rej_f1_micro": 0.9437828371278458,
+      "f1_NO_BRAND": 0.8753671842215694,
+      "f1_UNKNOWN": 0.8556244464127547,
+      "false_brand_cat": 0.0935374149659864
+    },
+    {
+      "model": "logreg_wordchar",
+      "raw_accuracy": 0.9441330998248687,
+      "raw_f1_macro": 0.9495205651347436,
+      "raw_f1_micro": 0.9441330998248687,
+      "raw_f1_weighted": 0.943774462926748,
+      "rej_accuracy": 0.936077057793345,
+      "rej_f1_macro": 0.93079082784468,
+      "rej_f1_micro": 0.936077057793345,
+      "f1_NO_BRAND": 0.8783894823336073,
+      "f1_UNKNOWN": 0.8563876651982378,
+      "false_brand_cat": 0.06887755102040816
+    },
+    {
+      "model": "logreg_char_bal",
+      "raw_accuracy": 0.9213660245183888,
+      "raw_f1_macro": 0.9358954874735164,
+      "raw_f1_micro": 0.9213660245183888,
+      "raw_f1_weighted": 0.9194261176042321,
+      "rej_accuracy": 0.8600700525394046,
+      "rej_f1_macro": 0.9253737240241223,
+      "rej_f1_micro": 0.8600700525394046,
+      "f1_NO_BRAND": 0.8061082832022212,
+      "f1_UNKNOWN": 0.8013245033112583,
+      "false_brand_cat": 0.16666666666666666
+    },
+    {
+      "model": "logreg_char",
+      "raw_accuracy": 0.9276707530647986,
+      "raw_f1_macro": 0.9103190988482811,
+      "raw_f1_micro": 0.9276707530647986,
+      "raw_f1_weighted": 0.9272270934276079,
+      "rej_accuracy": 0.9140105078809106,
+      "rej_f1_macro": 0.8656057989882429,
+      "rej_f1_micro": 0.9140105078809106,
+      "f1_NO_BRAND": 0.8482897384305835,
+      "f1_UNKNOWN": 0.8278905560458959,
+      "false_brand_cat": 0.07908163265306123
+    }
+  ],
+  "best_raw": {
+    "accuracy": 0.9436077057793345,
+    "f1_macro": 0.9505720828901706,
+    "f1_micro": 0.9436077057793345,
+    "f1_weighted": 0.9430452449901036
+  },
+  "best_reject": {
+    "accuracy": 0.9437828371278458,
+    "f1_macro": 0.9488029716871897,
+    "f1_micro": 0.9437828371278458,
+    "f1_weighted": 0.9433548292023026
+  },
+  "best_subset_raw": {
+    "n_category_only_val": 1176,
+    "false_brand_rate_category_only": 0.0935374149659864,
+    "f1_NO_BRAND": 0.8753671842215694,
+    "f1_UNKNOWN": 0.8556244464127547,
+    "support_NO_BRAND": 1176,
+    "support_UNKNOWN": 614
+  },
+  "best_subset_reject": {
+    "n_category_only_val": 1176,
+    "false_brand_rate_category_only": 0.07653061224489796,
+    "f1_NO_BRAND": 0.8774246801485761,
+    "f1_UNKNOWN": 0.8563829787234043,
+    "support_NO_BRAND": 1176,
+    "support_UNKNOWN": 614
+  },
+  "worst_classes": [
+    {
+      "class": "PlayStation",
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1": 0.6666666666666666,
+      "support": 4,
+      "is_special": false
+    },
+    {
+      "class": "Centek",
+      "precision": 0.8333333333333334,
+      "recall": 0.8333333333333334,
+      "f1": 0.8333333333333334,
+      "support": 12,
+      "is_special": false
+    },
+    {
+      "class": "UNKNOWN",
+      "precision": 0.9378640776699029,
+      "recall": 0.7866449511400652,
+      "f1": 0.8556244464127547,
+      "support": 614,
+      "is_special": true
+    },
+    {
+      "class": "Electrolux",
+      "precision": 0.8181818181818182,
+      "recall": 0.9,
+      "f1": 0.8571428571428571,
+      "support": 20,
+      "is_special": false
+    },
+    {
+      "class": "NO_BRAND",
+      "precision": 0.8641259320629661,
+      "recall": 0.8869047619047619,
+      "f1": 0.8753671842215694,
+      "support": 1176,
+      "is_special": true
+    },
+    {
+      "class": "Krona",
+      "precision": 0.8571428571428571,
+      "recall": 0.9230769230769231,
+      "f1": 0.8888888888888888,
+      "support": 13,
+      "is_special": false
+    },
+    {
+      "class": "Beko",
+      "precision": 0.868421052631579,
+      "recall": 0.9166666666666666,
+      "f1": 0.8918918918918919,
+      "support": 36,
+      "is_special": false
+    },
+    {
+      "class": "Hi",
+      "precision": 1.0,
+      "recall": 0.8095238095238095,
+      "f1": 0.8947368421052632,
+      "support": 21,
+      "is_special": false
+    },
+    {
+      "class": "Candy",
+      "precision": 0.8571428571428571,
+      "recall": 0.9375,
+      "f1": 0.8955223880597015,
+      "support": 32,
+      "is_special": false
+    },
+    {
+      "class": "Gefest",
+      "precision": 0.88,
+      "recall": 0.9166666666666666,
+      "f1": 0.8979591836734694,
+      "support": 24,
+      "is_special": false
+    },
+    {
+      "class": "Philips",
+      "precision": 0.9069767441860465,
+      "recall": 0.9069767441860465,
+      "f1": 0.9069767441860465,
+      "support": 43,
+      "is_special": false
+    },
+    {
+      "class": "DeLonghi",
+      "precision": 0.8571428571428571,
+      "recall": 0.967741935483871,
+      "f1": 0.9090909090909091,
+      "support": 31,
+      "is_special": false
+    },
+    {
+      "class": "Bosch",
+      "precision": 0.85,
+      "recall": 0.9807692307692307,
+      "f1": 0.9107142857142857,
+      "support": 52,
+      "is_special": false
+    },
+    {
+      "class": "Gorenje",
+      "precision": 0.86,
+      "recall": 0.9772727272727273,
+      "f1": 0.9148936170212766,
+      "support": 88,
+      "is_special": false
+    },
+    {
+      "class": "Kuppersberg",
+      "precision": 0.8717948717948718,
+      "recall": 0.9714285714285714,
+      "f1": 0.918918918918919,
+      "support": 35,
+      "is_special": false
+    }
+  ],
+  "best_classes": [
+    {
+      "class": "BQ",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 6,
+      "is_special": false
+    },
+    {
+      "class": "ASUS",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 77,
+      "is_special": false
+    },
+    {
+      "class": "HUAWEI",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 255,
+      "is_special": false
+    },
+    {
+      "class": "Infinix",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 23,
+      "is_special": false
+    },
+    {
+      "class": "Grundig",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 7,
+      "is_special": false
+    },
+    {
+      "class": "HONOR",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 141,
+      "is_special": false
+    },
+    {
+      "class": "MSI",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 32,
+      "is_special": false
+    },
+    {
+      "class": "Kitfort",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 40,
+      "is_special": false
+    },
+    {
+      "class": "Oasis",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 4,
+      "is_special": false
+    },
+    {
+      "class": "Pantum",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10,
+      "is_special": false
+    },
+    {
+      "class": "Rapid",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 5,
+      "is_special": false
+    },
+    {
+      "class": "Rowenta",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 15,
+      "is_special": false
+    },
+    {
+      "class": "Scarlett",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 4,
+      "is_special": false
+    },
+    {
+      "class": "Ballu",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 13,
+      "is_special": false
+    },
+    {
+      "class": "ATLANT",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 10,
+      "is_special": false
+    }
+  ],
+  "silver_stats_ref": {
+    "no_brand_share": 0.20513536142897013,
+    "unknown_share": 0.10713787329053866
+  }
+}

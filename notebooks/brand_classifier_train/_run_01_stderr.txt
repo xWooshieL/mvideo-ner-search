@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "D:\Projects-26-06-2026\mvideo-ner-search\notebooks\brand_classifier_train\_run_01.py", line 467, in <module>
+    main()
+  File "D:\Projects-26-06-2026\mvideo-ner-search\notebooks\brand_classifier_train\_run_01.py", line 460, in main
+    write_report(md_path, metrics_out, summary, best_tbl)
+  File "D:\Projects-26-06-2026\mvideo-ner-search\notebooks\brand_classifier_train\_run_01.py", line 232, in write_report
+    f"| {getattr(r, 'class')} | {r.precision:.3f} | {r.recall:.3f} | {r.f1:.3f} | {r.support} |"
+         ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Pandas' object has no attribute 'class'
