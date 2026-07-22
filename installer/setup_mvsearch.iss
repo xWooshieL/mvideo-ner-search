@@ -78,10 +78,36 @@ begin
   Result := True;
 end;
 
+var
+  UninstallDeleteSettings: Boolean;
+
+function RegQueryBoolValue(const SubKey, Name: String): Boolean;
+var
+  Value: String;
+begin
+  Result := False;
+  if RegQueryStringValue(HKEY_CURRENT_USER, SubKey, Name, Value) then
+    Result := (Value = '1') or (CompareText(Value, 'true') = 0);
+end;
+
 function InitializeUninstall(): Boolean;
 begin
+  UninstallDeleteSettings := RegQueryBoolValue('Software\MVideo\UninstallMvSearch', 'DeleteSettings');
   KillAppProcess();
   Result := True;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if CurUninstallStep = usPostUninstall then
+  begin
+    { настройки приложение хранит в реестре (QSettings), не в файлах — стираем ключ по запросу }
+    if UninstallDeleteSettings and RegKeyExists(HKEY_CURRENT_USER, 'Software\MVideo\MvSearch') then
+      RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\MVideo\MvSearch');
+
+    if RegKeyExists(HKEY_CURRENT_USER, 'Software\MVideo\UninstallMvSearch') then
+      RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\MVideo\UninstallMvSearch');
+  end;
 end;
 
 procedure InitializeWizard();

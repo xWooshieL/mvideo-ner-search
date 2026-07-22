@@ -12,9 +12,13 @@
 #   ./scripts/build-macos.sh [путь_к_Qt/lib/cmake]
 #
 # Если Qt поставлен через Qt Online Installer, путь обычно:
-#   ~/Qt/6.8.2/macos/lib/cmake
-# Если через brew:
-#   $(brew --prefix qt)/lib/cmake
+#   ~/Qt/6.8.2/macos
+# Если через brew (рекомендуемый вызов):
+#   ./scripts/build-macos.sh "$(brew --prefix qt)"
+#
+# Замечание: Homebrew Qt разбит на qtbase/qtdeclarative/qtsvg/... —
+# macdeployqt иногда ругается на VirtualKeyboard/Svg. Для локального запуска
+# это обычно терпимо; для раздачи .dmg лучше Qt Online Installer.
 
 set -euo pipefail
 
@@ -33,9 +37,43 @@ fi
 
 MACDEPLOYQT="$QT_PREFIX/bin/macdeployqt"
 if [ ! -x "$MACDEPLOYQT" ]; then
+    # Homebrew иногда кладёт macdeployqt в qtbase, а не в meta-пакет qt
+    for cand in \
+        "$QT_PREFIX/bin/macdeployqt" \
+        "$(brew --prefix qtbase 2>/dev/null)/bin/macdeployqt" \
+        "$(brew --prefix qt 2>/dev/null)/bin/macdeployqt"
+    do
+        if [ -n "$cand" ] && [ -x "$cand" ]; then
+            MACDEPLOYQT="$cand"
+            break
+        fi
+    done
+fi
+if [ ! -x "$MACDEPLOYQT" ]; then
     echo "!! macdeployqt не найден в $QT_PREFIX/bin"
     exit 1
 fi
+
+# Homebrew Qt разбит на keg'и (qtbase/qtdeclarative/qtsvg/...).
+# macdeployqt сам их не видит — собираем -libpath для всех модулей.
+collect_brew_libpaths() {
+    local -a paths=()
+    local brew_prefix=""
+    if command -v brew >/dev/null 2>&1; then
+        brew_prefix="$(brew --prefix 2>/dev/null || true)"
+    fi
+    if [ -n "$brew_prefix" ]; then
+        paths+=("$brew_prefix/lib")
+        local d
+        for d in "$brew_prefix"/opt/qt*/lib; do
+            [ -d "$d" ] && paths+=("$d")
+        done
+    fi
+    # префикс, который передали вручную / Cellar
+    [ -d "$QT_PREFIX/lib" ] && paths+=("$QT_PREFIX/lib")
+    # уникализируем
+    printf '%s\n' "${paths[@]}" | awk 'NF && !seen[$0]++'
+}
 
 # .icns из подготовленных .iconset (генерируются scripts/make_iconset.py на любой ОС)
 make_icns() {
@@ -56,13 +94,18 @@ build_app() {
     make_icns "$src_dir"
 
     echo "==> Конфигурирую $name"
+    # Homebrew: CMAKE_PREFIX_PATH должен включать lib/cmake (или сам prefix)
+    local cmake_prefix="$QT_PREFIX"
+    if [ -d "$QT_PREFIX/lib/cmake" ]; then
+        cmake_prefix="$QT_PREFIX"
+    fi
     cmake -S "$src_dir" -B "$build_dir" \
         -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_PREFIX_PATH="$QT_PREFIX/lib/cmake" \
+        -DCMAKE_PREFIX_PATH="$cmake_prefix" \
         >/dev/null || cmake -S "$src_dir" -B "$build_dir" \
         -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_PREFIX_PATH="$QT_PREFIX/lib/cmake"
+        -DCMAKE_PREFIX_PATH="$cmake_prefix"
 
     echo "==> Собираю $name (Release)"
     cmake --build "$build_dir" --config Release -j"$(sysctl -n hw.ncpu)"
@@ -75,12 +118,37 @@ build_app() {
     fi
 
     echo "==> macdeployqt: $bundle"
-    "$MACDEPLOYQT" "$bundle" -qmldir="$src_dir/qml"
+    local -a deploy_args=("$bundle" "-qmldir=$src_dir/qml")
+    local lib
+    while IFS= read -r lib; do
+        [ -n "$lib" ] && deploy_args+=("-libpath=$lib")
+    done < <(collect_brew_libpaths)
+    echo "    libpaths: $(collect_brew_libpaths | tr '\n' ' ')"
+    # Homebrew Qt тянет лишние QML-плагины (VirtualKeyboard и т.п.) — не валимся на их rpath,
+    # если сам .app уже собран. Для переноса на другой Mac лучше Qt Online Installer.
+    set +e
+    "$MACDEPLOYQT" "${deploy_args[@]}"
+    local deploy_rc=$?
+    set -e
+    if [ "$deploy_rc" -ne 0 ]; then
+        echo "!! macdeployqt вернул код $deploy_rc (часто из-за Homebrew split-пакетов)."
+        echo "   Если .app запускается локально — ок. Для раздачи лучше Qt из Online Installer."
+        echo "   Дополнительно можно поставить: brew install qtsvg qtvirtualkeyboard"
+    fi
+
+    # macdeployqt ломает подпись → на macOS 15 краш: Code Signature Invalid / Invalid Page.
+    # Ad-hoc codesign (-) + снятие quarantine чинят запуск на своей машине.
+    echo "==> codesign (ad-hoc) + xattr: $bundle"
+    xattr -cr "$bundle" 2>/dev/null || true
+    codesign --force --deep --sign - "$bundle"
 
     mkdir -p "$DIST_DIR"
     rm -rf "$DIST_DIR/$(basename "$bundle")"
     cp -R "$bundle" "$DIST_DIR/"
-    echo "==> Готово: $DIST_DIR/$(basename "$bundle")"
+    local dist_app="$DIST_DIR/$(basename "$bundle")"
+    xattr -cr "$dist_app" 2>/dev/null || true
+    codesign --force --deep --sign - "$dist_app"
+    echo "==> Готово: $dist_app"
 }
 
 build_app mvsearch

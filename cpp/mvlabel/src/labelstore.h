@@ -54,6 +54,11 @@ public:
     // env-переменные для демо и скриншотов
     Q_INVOKABLE QString envValue(const QString &name) const;
 
+    // удаление приложения из настроек — как в ГК МОС: помечаем, что стереть, потом
+    // запускаем деинсталлятор Inno Setup и закрываемся
+    Q_INVOKABLE void prepareForUninstall(bool deleteLabels, bool deleteSettings);
+    Q_INVOKABLE void launchUninstaller();
+
     Q_INVOKABLE QVariantList bioHistory(int limit = 200) const;
     Q_INVOKABLE QVariantList matchHistory(int limit = 200) const;
 

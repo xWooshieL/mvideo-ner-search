@@ -5,9 +5,13 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include <QFile>
+#include <QGuiApplication>
 #include <QJsonDocument>
+#include <QProcess>
 #include <QSet>
+#include <QSettings>
 #include <QTextStream>
+#include <QTimer>
 #include <algorithm>
 #include <cmath>
 
@@ -457,4 +461,41 @@ QString SearchEngine::envQuery() const
 QString SearchEngine::envShootPath() const
 {
     return qEnvironmentVariable("MV_SHOOT");
+}
+
+void SearchEngine::prepareForUninstall(bool deleteSettings)
+{
+    if (deleteSettings) {
+        QSettings settings(QStringLiteral("MVideo"), QStringLiteral("MvSearch"));
+        settings.clear();
+        settings.sync();
+    }
+
+    /* строки "1"/"0" — деинсталлятор читает RegQueryStringValue, не DWORD */
+    QSettings uninstallFlags(QStringLiteral("MVideo"), QStringLiteral("UninstallMvSearch"));
+    uninstallFlags.setValue(
+        QStringLiteral("DeleteSettings"),
+        deleteSettings ? QStringLiteral("1") : QStringLiteral("0"));
+    uninstallFlags.sync();
+}
+
+void SearchEngine::launchUninstaller()
+{
+    const QString appDir = QCoreApplication::applicationDirPath();
+    const QFileInfoList candidates = QDir(appDir).entryInfoList(
+        QStringList{QStringLiteral("unins*.exe")}, QDir::Files, QDir::Name);
+
+    if (candidates.isEmpty())
+        return;
+
+    QFileInfo best = candidates.first();
+    for (const QFileInfo &candidate : candidates) {
+        if (candidate.fileName().compare(best.fileName(), Qt::CaseInsensitive) > 0)
+            best = candidate;
+    }
+
+    if (!QProcess::startDetached(best.absoluteFilePath(), {QStringLiteral("/SILENT")}))
+        return;
+
+    QTimer::singleShot(200, qApp, &QCoreApplication::quit);
 }

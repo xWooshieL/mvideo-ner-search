@@ -588,21 +588,47 @@ def entities_to_structured(
 
 
 def _guess_attr_type(text: str) -> str:
+<<<<<<< HEAD
     """Тип ATTR-span: COLORS → color, иначе первый матч ATTR_PATTERNS, иначе other.
 
     Имена типов совпадают с группами в ATTR_PATTERNS (memory_storage, size, …).
     """
+=======
+>>>>>>> d5a17b6a80ab1343385d9e0272deb8cbec6a72ec
     t = text.lower().replace("ё", "е").strip()
-    if not t:
-        return "other"
 
     # цвет может прийти словоформой («белую») — сверяем и по лемме
     if t in COLORS or " ".join(lemmatize_text(t)) in COLORS:
         return "color"
 
-    for pattern, name in ATTR_PATTERNS:
-        if pattern.search(t):
-            return name
+    if re.search(r"\d+\s*(gb|гб|гиг|mb|мб)", t):
+        return "memory"
+    if re.search(r"\d+\s*(tb|тб|терабайт)", t):
+        return "storage"
+    if re.search(r"\d+\s*(кг|kg|г|g|грамм)", t):
+        return "weight"
+    if re.search(r"\d+\s*(л|l|литр|мл|ml)", t):
+        return "volume"
+    if re.search(r"\d+\s*(мм|mm|см|cm|м|m|дюйм|inch|\")", t):
+        return "size"
+    if re.search(r"[xх×*]", t):
+        return "dimensions"
+    if re.search(r"\d+\s*(вт|w|ватт|квт|kw)", t):
+        return "power"
+    if re.search(r"\d+\s*(в|v|вольт)", t):
+        return "voltage"
+    if re.search(r"\d+\s*(а|a|ампер)", t):
+        return "current"
+    if re.search(r"\d+\s*(гц|hz|кгц|khz|мгц|mhz)", t):
+        return "frequency"
+    if re.search(r"\d+\s*(дб|db)", t):
+        return "noise_level"
+    if re.search(r"\d+\s*(ом|ohm)", t):
+        return "impedance"
+    if re.search(r"(4k|8k|2k|1080p|720p|1440p|uhd|fhd|hd)", t):
+        return "resolution"
+    if re.search(r"(wi-?fi|bluetooth|bt|nfc|5g|4g|lte|3g|gps|usb|hdmi|vga)", t):
+        return "connectivity"
     return "other"
 
 

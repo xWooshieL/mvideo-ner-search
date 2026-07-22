@@ -80,10 +80,52 @@ begin
   Result := True;
 end;
 
+var
+  UninstallDeleteLabels: Boolean;
+  UninstallDeleteSettings: Boolean;
+
+function RegQueryBoolValue(const SubKey, Name: String): Boolean;
+var
+  Value: String;
+begin
+  Result := False;
+  if RegQueryStringValue(HKEY_CURRENT_USER, SubKey, Name, Value) then
+    Result := (Value = '1') or (CompareText(Value, 'true') = 0);
+end;
+
 function InitializeUninstall(): Boolean;
 begin
+  UninstallDeleteLabels := RegQueryBoolValue('Software\MVideo\UninstallMvLabel', 'DeleteLabels');
+  UninstallDeleteSettings := RegQueryBoolValue('Software\MVideo\UninstallMvLabel', 'DeleteSettings');
   KillAppProcess();
   Result := True;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  LabelsPath: String;
+begin
+  if CurUninstallStep = usPostUninstall then
+  begin
+    if UninstallDeleteLabels then
+    begin
+      LabelsPath := ExpandConstant('{app}\labels');
+      if DirExists(LabelsPath) then
+        DelTree(LabelsPath, True, True, True);
+    end;
+
+    if UninstallDeleteSettings then
+    begin
+      { mvlabel.ini живёт рядом с exe (выбор аннотатора), плюс запасной ключ реестра }
+      if FileExists(ExpandConstant('{app}\mvlabel.ini')) then
+        DeleteFile(ExpandConstant('{app}\mvlabel.ini'));
+      if RegKeyExists(HKEY_CURRENT_USER, 'Software\MVideo\MvLabel') then
+        RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\MVideo\MvLabel');
+    end;
+
+    if RegKeyExists(HKEY_CURRENT_USER, 'Software\MVideo\UninstallMvLabel') then
+      RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\MVideo\UninstallMvLabel');
+  end;
 end;
 
 procedure InitializeWizard();

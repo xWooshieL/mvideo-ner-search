@@ -79,7 +79,7 @@ Item {
                 SideBarItem {
                     Layout.fillWidth: true
                     label: qsTr("Поиск")
-                    icon: "\uE721"
+                    icon: Theme.iconSearch
                     active: currentPage === 0
                     onClicked: currentPage = 0
                 }
@@ -87,7 +87,7 @@ Item {
                 SideBarItem {
                     Layout.fillWidth: true
                     label: qsTr("Статистика")
-                    icon: "\uE9D9"
+                    icon: Theme.iconStats
                     active: currentPage === 1
                     onClicked: currentPage = 1
                 }
@@ -95,7 +95,7 @@ Item {
                 SideBarItem {
                     Layout.fillWidth: true
                     label: qsTr("Настройки")
-                    icon: "\uE713"
+                    icon: Theme.iconSettings
                     active: currentPage === 2
                     onClicked: currentPage = 2
                 }

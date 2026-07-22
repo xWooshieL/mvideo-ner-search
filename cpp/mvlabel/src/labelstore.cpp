@@ -6,10 +6,13 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QFile>
+#include <QGuiApplication>
 #include <QJsonDocument>
+#include <QProcess>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTextStream>
+#include <QTimer>
 #include <QUrl>
 
 LabelStore::LabelStore(QObject *parent)
@@ -240,4 +243,51 @@ QVariantList LabelStore::matchHistory(int limit) const
         out.append(it.value().toVariantMap());
     }
     return out;
+}
+
+void LabelStore::prepareForUninstall(bool deleteLabels, bool deleteSettings)
+{
+    if (deleteLabels) {
+        QDir labels(labelsDir());
+        if (labels.exists())
+            labels.removeRecursively();
+    }
+
+    if (deleteSettings) {
+        QFile::remove(iniPath());
+        QSettings settings(QStringLiteral("MVideo"), QStringLiteral("MvLabel"));
+        settings.clear();
+        settings.sync();
+    }
+
+    /* строки "1"/"0" — деинсталлятор читает RegQueryStringValue, не DWORD */
+    QSettings uninstallFlags(QStringLiteral("MVideo"), QStringLiteral("UninstallMvLabel"));
+    uninstallFlags.setValue(
+        QStringLiteral("DeleteLabels"),
+        deleteLabels ? QStringLiteral("1") : QStringLiteral("0"));
+    uninstallFlags.setValue(
+        QStringLiteral("DeleteSettings"),
+        deleteSettings ? QStringLiteral("1") : QStringLiteral("0"));
+    uninstallFlags.sync();
+}
+
+void LabelStore::launchUninstaller()
+{
+    const QString appDir = QCoreApplication::applicationDirPath();
+    const QFileInfoList candidates = QDir(appDir).entryInfoList(
+        QStringList{QStringLiteral("unins*.exe")}, QDir::Files, QDir::Name);
+
+    if (candidates.isEmpty())
+        return;
+
+    QFileInfo best = candidates.first();
+    for (const QFileInfo &candidate : candidates) {
+        if (candidate.fileName().compare(best.fileName(), Qt::CaseInsensitive) > 0)
+            best = candidate;
+    }
+
+    if (!QProcess::startDetached(best.absoluteFilePath(), {QStringLiteral("/SILENT")}))
+        return;
+
+    QTimer::singleShot(200, qApp, &QCoreApplication::quit);
 }
