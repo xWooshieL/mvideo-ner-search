@@ -1,151 +1,155 @@
-# М.Видео — Интеллектуальный поиск (NER)
+<div align="center">
+
+# 🔴 М.Видео · Интеллектуальный поиск
+
+### Извлечение фактов из поисковых запросов за < 100 мс
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
 [![NLP](https://img.shields.io/badge/NLP-NER-E31E24.svg)](#)
+[![CRF](https://img.shields.io/badge/Model-CRF%20%2B%20Markov-1C1C1E.svg)](#)
 [![Latency](https://img.shields.io/badge/SLA-%3C100ms-success.svg)](#)
+[![Apps](https://img.shields.io/badge/Desktop-PyQt6-41CD52.svg)](#)
 
-Решение кейса буткемпа: **извлечение сущностей из поисковых запросов** e-commerce (бренд, категория, характеристики) и выдача структурированного JSON **быстрее 100 мс**.
+Запрос → структурированные факты (**бренд · категория · модель · атрибуты**) → умная выдача.
 
-**Репозиторий:** https://github.com/xWooshieL/mvideo-ner-search  
-**Админ-коллаборатор:** [Nizier193](https://github.com/Nizier193)
+</div>
 
 ---
 
-## Задача
+## 💡 Что это
 
-Поисковая система М.Видео должна понимать, *что* ищет пользователь: категорию товара, бренд и атрибуты. Точность разбора запроса напрямую влияет на релевантность выдачи и конверсию.
+Пользователь пишет «ноутбук asus zenbook 16 гб серый» — система за миллисекунды понимает,
+*что* он хочет, и отдаёт факты, по которым можно искать и ранжировать:
 
 ```json
 {
-  "query": "ноутбук asus 16 гб",
-  "entities": [
-    {"text": "ноутбук", "label": "CATEGORY", "span": [0, 7], "source": "dict"},
-    {"text": "asus", "label": "BRAND", "span": [8, 12], "source": "dict"},
-    {"text": "16", "label": "ATTR", "span": [13, 15], "source": "dict"},
-    {"text": "гб", "label": "ATTR", "span": [16, 18], "source": "crf"}
-  ],
+  "query": "ноутбук asus zenbook 16 гб серый",
   "brand": "ASUS",
   "category": "ноутбук",
-  "attributes": {"16": "ATTR", "гб": "ATTR"},
-  "latency_ms": 2.4
+  "entities": [
+    {"text": "ноутбук",  "label": "CATEGORY"},
+    {"text": "asus",     "label": "BRAND"},
+    {"text": "zenbook",  "label": "MODEL"},
+    {"text": "16 гб",    "label": "ATTR"}
+  ],
+  "attributes": {"memory": "16 гб", "color": "серый"},
+  "latency_ms": 14.2
 }
 ```
 
----
-
-## Данные (локально, не в git)
-
-| Файл | Размер | Содержание |
-|------|--------|------------|
-| `файлы/query_clicks.parquet` | ~621 MB | **30.99M** кликов: запрос → SKU, бренд, цена, позиция |
-| `файлы/sku_desc.parquet` | ~336 MB | **1.18M** карточек: `sku_id`, `title`, `description` |
-| `файлы/skus.pkl` | ~1.46 GB | YML-каталог (`yml_catalog → shop`) |
-
-Ключевые поля кликов: `query_text`, `sku_brand_name`, `sku_name`, `sku_price`, `sku_position`, `sku_subject_id`.
-
----
-
-## Архитектура решения
+## 🏗️ Архитектура: гибридный каскад
 
 ```
-Запрос → токенизация
-       → словарь брендов / категорий (exact + fuzzy)
-       → CRF NER (BIO: BRAND / CATEGORY / ATTR)
-       → merge + канонизация бренда
-       → JSON (< 100 мс)
+запрос ❯ ПРАВИЛА (словари · регулярки · модели) ❯ CRF ❯ КЛАССИФИКАТОР БРЕНДА ❯ МАРКОВСКИЙ ТИПИЗАТОР
+                                                                                        │
+                                              merge + нормализация → факты JSON  < 100 мс
 ```
 
-Дополнительно: baseline **TF-IDF (char n-grams) + LogisticRegression** для предсказания бренда по запросу.
+| Слой | Что закрывает | Как учится |
+|---|---|---|
+| **Правила и словари** | явные бренды, «16 гб», линейки моделей | словари из каталога + майнинг |
+| **CRF** | морфология, порядок слов, границы спанов | слабая (silver) BIO-разметка |
+| **Классификатор бренда** | бренд не написан в тексте (73% кликов!) | клики: запрос → частый бренд |
+| **Марковский типизатор** | тип атрибута: «16 гб» → память | частоты биграмм из silver |
 
----
-
-## Структура репозитория
+## 📦 Что в репозитории
 
 ```
-мвидео/
-├── notebooks/          # 12 Jupyter-ноутбуков (EDA → NER → сервис)
-├── figures/            # 20+ PNG визуализаций анализа
-├── src/
-│   ├── data_utils.py
-│   ├── ner/            # labeling, CRF, metrics, extractor
-│   └── service/app.py  # FastAPI
-├── scripts/run_pipeline.py
-├── artifacts/          # словари, metrics.json
-├── models/             # crf_ner.pkl, brand_tfidf_logreg.joblib
-├── docs/               # LaTeX-документация
-└── requirements.txt
+src/
+├── ner/                  # ядро NER
+│   ├── labeling.py       #   слабая разметка: словари + 28 регулярок + Natasha-леммы
+│   ├── model_crf.py      #   CRF sequence labeling
+│   ├── markov_typer.py   #   марковский типизатор атрибутов (bigram lookup)
+│   └── features.py       #   фичи токенов для CRF
+├── preprocessing/        # единый препроцессинг (расклейка, сепараторы, MODEL-спаны)
+└── service/              # extractor + FastAPI-сервис
+
+apps/
+├── mvp/                  # 🖥️ «Умный поиск» — desktop-приложение (PyQt6)
+└── labeling/             # 🏷️ приложение разметки для команды (BIO + match 1/0)
+
+notebooks/                # EDA: базовый, complex (методы, марков, клики, MODEL), preprocessing
+docs/                     # презентации Дней 1–3 (LaTeX, стиль М.Видео)
+figures/                  # 30+ графиков EDA + скриншоты приложений
 ```
 
----
+## 🖥️ Приложения
 
-## Быстрый старт
+### Умный поиск (MVP)
+
+Готовый exe — в [Releases](../../releases). Анимированный вход, поиск с чипами фактов,
+раскрывающийся JSON со статистикой каскада и **RecSys по фактам**: карточки каталога
+ранжируются только по извлечённым фактам (бренд, категория, модель, атрибуты), а не по сырому тексту.
+
+### Разметка для команды
+
+Три персональные сборки — Никита, Некит, Лиза — по **1500 непересекающихся запросов** у каждого:
+
+- **BIO-режим**: клавиши `B` / `I` / `O`, категории `1–5` (BRAND, MODEL, CATEGORY, ATTR, GENRE), подтипы атрибутов, история с правкой, автосохранение в JSONL;
+- **Match-режим**: пара «запрос ↔ карточка», метки `1` / `0`, отдельный файл;
+- анимированный прогресс-бар, кнопка «открыть папку с разметкой».
+
+## 🚀 Быстрый старт
 
 ```bash
+git clone https://github.com/xWooshieL/mvideo-ner-search.git
+cd mvideo-ner-search
 pip install -r requirements.txt
 
-# Полный пайплайн: EDA-графики + словари + baseline + CRF + бенчмарк
-python scripts/run_pipeline.py
+# извлечение фактов из Python
+python -c "
+from src.service.extractor import QueryEntityExtractor
+ex = QueryEntityExtractor.from_artifacts()
+print(ex.extract('пылесос dyson v15'))
+"
 
-# API + красивый demo UI (поиск + отладка JSON/BIO)
-uvicorn src.service.app:app --reload --port 8000
-# Открой http://localhost:8000
-# POST /extract         {"query": "пылесос dyson"}
-# POST /extract/debug   + BIO словарь/CRF для отладки
+# обучить марковский типизатор на silver
+python -m src.ner.markov_typer
+
+# запустить MVP локально
+python apps/mvp/mvp_app.py
+
+# приложение разметки (вариант: nikita / nekit / liza)
+python apps/labeling/labeling_app.py nikita
 ```
 
-UI лежит в `web/` — подсветка сущностей, карточки фактов, latency vs SLA, история запросов, копирование JSON.
+## 📊 Метрики (быстрый тест на silver)
 
-Ноутбуки: `notebooks/01_…` → `12_…` (все вычисления продублированы / запускаются из `.ipynb`).
+> Числа — проверка «повторила ли модель правила», поэтому оптимистичны.
+> Честная оценка будет на ручной золотой разметке (собираем приложением).
 
----
+| Метрика | Значение |
+|---|---:|
+| Точность по токенам (CRF) | **0.91** |
+| F1 по сущностям | **0.875** |
+| F1 бренды / категории / атрибуты | 0.95 / 0.82 / 0.85 |
+| Классификатор бренда (точность, топ-40) | **0.80** |
+| Марковский типизатор (точность против правил) | 0.62 (unknown 36%) |
+| Медианная задержка каскада | **< 20 мс** |
 
-## Метрики (факт)
+## 🔬 Данные
 
-Из [`artifacts/metrics.json`](artifacts/metrics.json):
+| Файл | Объём | Содержимое |
+|---|---|---|
+| `query_clicks.parquet` | 31 млн строк | запрос → кликнутый SKU, бренд, цена, позиция |
+| `sku_desc.parquet` | 1.18 млн карточек | заголовки и описания товаров |
+| `skus.pkl` | ~1.6 ГБ | YML-каталог |
 
-| Блок | Метрика | Значение |
-|------|---------|----------|
-| CRF NER | Token Accuracy | **0.967** |
-| CRF NER | Entity micro-F1 | **0.948** |
-| NER · BRAND | F1 | **0.979** |
-| NER · CATEGORY | F1 | **0.914** |
-| NER · ATTR | F1 | **0.986** |
-| Brand TF-IDF+LogReg | Accuracy / F1-macro | **0.721** / **0.675** |
-| Category TF-IDF+LogReg | Accuracy / F1-macro | **0.988** / **0.989** |
-| Latency | p50 / p95 / max | **14 / 34 / 96 мс** (SLA &lt; 100 мс ✅) |
+Ключевые находки EDA: p50 длины запроса — **2 токена**; **73%** кликов не содержат бренда
+в тексте; слабая разметка покрывает **80%** запросов; у 46% запросов с брендом
+после него идёт неразмеченный «хвост модели» — решено майнингом словаря линеек (1512 фраз, порог 6).
 
----
+## 👥 Команда
 
-## Визуализации
-
-**29 PNG** в `figures/` — длины запросов, топ брендов, heatmaps, confusion matrix, learning curve NER, t-SNE, latency, wordcloud и др.
-
-![metrics](figures/18_metrics_summary.png)
-![top queries](figures/02_top_queries.png)
-![similarity](figures/07_tfidf_similarity_heatmap.png)
-
----
-
-## Документация
-
-- LaTeX: [`docs/Документация_МВидео_NER.tex`](docs/Документация_МВидео_NER.tex) (стиль как у документации Музклуба ЦУ)
-- Сборка: `cd docs && pdflatex Документация_МВидео_NER.tex`
+| | |
+|---|---|
+| Новицкий Никита | [@n.novitskiy](https://github.com/xWooshieL) |
+| Борисов Никита | [@n.borisov](https://github.com/Nizier193) |
+| Засухина Елизавета | @e.zasukhina |
+| Олейников Александр | @a.oleynikov |
 
 ---
 
-## Программа буткемпа
-
-| День | Фокус |
-|------|--------|
-| 01 | Погружение и планирование |
-| 02 | Исследование (EDA) |
-| 03 | Прототипирование (модель) |
-| 04 | Доработка и упаковка (MVP + презентация) |
-| 05 | Защита и ретроспектива |
-
----
-
-## Команда
-
-- Репозиторий: [@xWooshieL](https://github.com/xWooshieL)
-- Admin: [@Nizier193](https://github.com/Nizier193)
+<div align="center">
+Буткемп М.Видео · NLP / Search · 2026
+</div>
