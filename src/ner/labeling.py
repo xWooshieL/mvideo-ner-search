@@ -5,12 +5,19 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-# pymorphy2 не работает на Python 3.11+ (удалён inspect.getargspec) — берём pymorphy3 как fallback
+# pymorphy2 не работает на Python 3.11+ (удалён inspect.getargspec)
 try:
-    import pymorphy2 as _pymorphy
-    _pymorphy.MorphAnalyzer()  # проверка, что реально работает
-except Exception:
     import pymorphy3 as _pymorphy
+except Exception:
+    try:
+        import pymorphy2 as _pymorphy
+
+        _pymorphy.MorphAnalyzer()  # проверка, что реально работает
+    except Exception as e:  # noqa: BLE001
+        raise ImportError(
+            "Нужен pymorphy3 (или рабочий pymorphy2 на Python <3.11). "
+            "pip install pymorphy3"
+        ) from e
 
 # Базовый паттерн для чисел (добавлена поддержка отрицательных чисел)
 NUM = r"(?:(?:от\s*)?-?\d+(?:[.,/]\d+)?\s*(?:-|до|—)\s*)?-?\d+(?:[.,/]\d+)?"
@@ -268,27 +275,111 @@ class WeakLabeler:
                     first = False
 
 
-def bio_to_entities(sent: List[Tuple[str, str]], query: str = "") -> List[Dict]:
-    """Конвертирует BIO-разметку в словарь сущностей."""
-    ents = []
-    current_ent = None
-    current_text = []
+def bio_to_entities(
+    tokens_tags: Sequence[Tuple[str, str]],
+    query: str | None = "",
+) -> List[Dict]:
+    """Конвертирует BIO в список сущностей; при query добавляет char-span."""
+    query = query or ""
+    entities: List[Dict] = []
+    i = 0
+    tok_spans = tokenize(query) if query else [(t, 0, 0) for t, _ in tokens_tags]
+    norm_query = (
+        re.sub(r"(\d+)([А-Яа-яA-Za-z]{1,4})\b", r"\1 \2", query) if query else None
+    )
 
-    for i, (tok, tag) in enumerate(sent):
+    while i < len(tokens_tags):
+        _tok, tag = tokens_tags[i]
         if tag.startswith("B-"):
-            if current_ent:
-                ents.append({"text": " ".join(current_text), "label": current_ent})
-            current_ent = tag[2:]
-            current_text = [tok]
-        elif tag.startswith("I-") and current_ent == tag[2:]:
-            current_text.append(tok)
+            label = tag[2:]
+            j = i + 1
+            while j < len(tokens_tags) and tokens_tags[j][1] == f"I-{label}":
+                j += 1
+            text = " ".join(tokens_tags[k][0] for k in range(i, j))
+            ent: Dict = {"text": text, "label": label}
+            if norm_query is not None and j - 1 < len(tok_spans):
+                a, b = tok_spans[i][1], tok_spans[j - 1][2]
+                ent["span"] = [a, b]
+                ent["text"] = norm_query[a:b].strip()
+            entities.append(ent)
+            i = j
         else:
-            if current_ent:
-                ents.append({"text": " ".join(current_text), "label": current_ent})
-            current_ent = None
-            current_text = []
+            i += 1
+    return entities
 
-    if current_ent:
-        ents.append({"text": " ".join(current_text), "label": current_ent})
 
-    return ents
+def entities_to_structured(
+    entities: List[Dict], labeler: Optional["WeakLabeler"] = None
+) -> Dict:
+    """Сворачивает сущности в поля под 7 супер-словарей + typed ATTR."""
+    del labeler  # canonical maps убраны; оставляем сырой текст span
+    brand = None
+    product_type = None
+    model = None
+    color = None
+    material = None
+    purpose = None
+    feature = None
+    attributes: Dict[str, List[str]] = {}
+
+    for ent in entities:
+        label = ent["label"]
+        text = ent["text"]
+        if label == "BRAND" and brand is None:
+            brand = text
+        elif label in {"PRODUCT_TYPE", "CATEGORY"} and product_type is None:
+            product_type = text
+        elif label == "MODEL" and model is None:
+            model = text
+        elif label == "COLOR" and color is None:
+            color = text
+        elif label == "MATERIAL" and material is None:
+            material = text
+        elif label == "PURPOSE" and purpose is None:
+            purpose = text
+        elif label == "FEATURE" and feature is None:
+            feature = text
+        elif label == "ATTR":
+            attr_type = _guess_attr_type(text)
+            attributes.setdefault(attr_type, []).append(text)
+
+    return {
+        "brand": brand,
+        "product_type": product_type,
+        "category": product_type,  # alias для старого кода/silver
+        "model": model,
+        "color": color,
+        "material": material,
+        "purpose": purpose,
+        "feature": feature,
+        "attributes": {
+            k: v[0] if len(v) == 1 else v for k, v in attributes.items()
+        },
+    }
+
+
+def _guess_attr_type(text: str) -> str:
+    """Тип ATTR-span: COLOR_BASICS → color, иначе первый матч ATTR_PATTERNS, иначе other.
+
+    Цвета в BIO обычно уже B-COLOR; проверка basics — для хвостов/совместимости.
+    Имена типов = группы в ATTR_PATTERNS.
+    """
+    t = text.lower().replace("ё", "е").strip()
+    if not t:
+        return "other"
+
+    lemma = " ".join(lemmatize_text(t))
+    if t in COLOR_BASICS or lemma in COLOR_BASICS:
+        return "color"
+
+    for pattern, name in ATTR_PATTERNS:
+        if pattern.search(t):
+            return name
+    return "other"
+
+
+def _load_lines(path: Path | str) -> List[str]:
+    p = Path(path)
+    if not p.exists():
+        return []
+    return [ln.strip() for ln in p.read_text(encoding="utf-8").splitlines() if ln.strip()]
