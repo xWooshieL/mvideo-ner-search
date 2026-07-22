@@ -1,4 +1,4 @@
-"""Weak supervision: BIO labeling for search queries from brand/category dictionaries."""
+"""Weak supervision: BIO labeling for search queries (Natasha lemmatization + dictionaries/MODEL)."""
 
 from __future__ import annotations
 
@@ -7,9 +7,22 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-# Базовый паттерн для захвата чисел и диапазонов.
-# Что он ловит: "15", "1.5", "1500-1800", "от 1.5 до 2", "до 500"
-# Объяснение: опционально ищет (от X до/тире), затем берет итоговое число Y.
+# ИМПОРТ NATASHA ДЛЯ ЛЕММАТИЗАЦИИ
+from natasha import (
+    Doc,
+    MorphVocab,
+    NewsEmbedding,
+    NewsMorphTagger,
+    Segmenter,
+)
+
+segmenter = Segmenter()
+morph_vocab = MorphVocab()
+# морфологический теггер нужен, чтобы token.lemmatize() имел pos/feats
+_emb = NewsEmbedding()
+morph_tagger = NewsMorphTagger(_emb)
+
+
 NUM = r"(?:(?:от\s*)?\d+(?:[.,/]\d+)?\s*(?:-|до|—)\s*)?\d+(?:[.,/]\d+)?"
 
 ATTR_PATTERNS: List[Tuple[re.Pattern, str]] = [
@@ -209,37 +222,59 @@ CATEGORY_SEEDS = {
 }
 
 
-def tokenize(text: str) -> List[Tuple[str, int, int]]:
-    """Продвинутая токенизация с учетом специфики e-commerce (разделение слипшихся чисел и единиц)."""
+def _split_glued(text: str) -> str:
+    """Расклеивает число и короткую единицу: «16гб» -> «16 гб»."""
+    return re.sub(r"(\d+)([А-Яа-яA-Za-z]{1,4})\b", r"\1 \2", text)
+
+
+def lemmatize_text(text: str) -> List[str]:
+    """Приводит русские слова к начальной форме с помощью Natasha."""
     if not text:
         return []
 
-    # Шаг 1 (Улучшение): Автоматически разделяем слипшиеся цифры и буквы (например, "128гб" -> "128 гб", "220в" -> "220 в")
-    # Это гарантирует, что наши регулярки атрибутов поймают их на ура.
-    normalized_text = re.sub(r"(\d+)([А-Яа-яA-Za-z]{1,4})\b", r"\1 \2", text)
+    text = _split_glued(text)
 
+    doc = Doc(text)
+    doc.segment(segmenter)
+    doc.tag_morph(morph_tagger)
+
+    lemmas = []
+    for token in doc.tokens:
+        if re.search(r"[а-яё]", token.text, re.I):
+            token.lemmatize(morph_vocab)
+            lemma = (token.lemma or token.text).lower().replace("ё", "е")
+        else:
+            lemma = token.text.lower()
+        lemmas.append(lemma)
+
+    return lemmas
+
+
+def tokenize(text: str) -> List[Tuple[str, int, int]]:
+    """Токенизация со сдвигами символов.
+
+    ВАЖНО: спаны считаются относительно НОРМАЛИЗОВАННОГО текста
+    (после _split_glued). Регэкспы атрибутов должны гоняться по тому же
+    нормализованному тексту, иначе спаны разъедутся.
+    """
+    if not text:
+        return []
+    normalized_text = _split_glued(text)
     tokens: List[Tuple[str, int, int]] = []
-    # Шаг 2: Надежный паттерн для поиска слов, чисел и сохранностью оригинальных позиций (сдвиги могут чуть измениться,
-    # но для BIO-разметки текста это критично только при строгом совпадении спэнов).
-    # Используем более классический и надежный сплит по словам и знакам.
-    for m in re.finditer(r"[A-Za-zА-Яа-яЁё0-9]+(?:[.\-/][A-Za-zА-Яа-яЁё0-9]+)*|[^\s]", normalized_text):
+    for m in re.finditer(
+        r"[A-Za-zА-Яа-яЁё0-9]+(?:[.\-/][A-Za-zА-Яа-яЁё0-9]+)*|[^\s]",
+        normalized_text,
+    ):
         tokens.append((m.group(0), m.start(), m.end()))
-
     return tokens
 
 
 def _normalize(s: str) -> str:
     if not s:
         return ""
-    # 1. Приводим к нижнему регистру, меняем ё на е, убираем пробелы по краям
     s = s.strip().lower().replace("ё", "е")
-    # 2. Убираем лишние знаки препинания, оставляя буквы, цифры, пробелы, дефисы и точки
-    # (дефисы и точки важны для моделей вроде "wi-fi" или "13.3")
     s = re.sub(r"[^\w\s\-\.]", " ", s)
-
-    # 3. Сжимаем любые последовательности пробелов (включая табуляции и переносы) в один пробел
-    s = re.sub(r"\s+", " ", s)
-    return s.strip()
+    return re.sub(r"\s+", " ", s).strip()
 
 @dataclass
 class WeakLabeler:
@@ -305,7 +340,7 @@ class WeakLabeler:
             brand_canonical[_normalize(alias)] = canon
             brand_canonical[_normalize(canon)] = canon
 
-        # 2. Обработка категорий
+        # 2. Обработка категорий (ключи — леммы Natasha + fallback _normalize)
         cat_canonical: Dict[str, str] = {}
         brand_keys = set(brand_canonical.keys())
         for c in list(categories or []) + list(CATEGORY_SEEDS):
@@ -315,7 +350,9 @@ class WeakLabeler:
             cn = _normalize(c)
             if cn in brand_keys or cn in BRAND_ALIASES:
                 continue
-            cat_canonical[cn] = c
+            lemmatized_cat = " ".join(lemmatize_text(c)) or cn
+            cat_canonical[lemmatized_cat] = c
+            cat_canonical.setdefault(cn, c)
 
         # 3. НОВОЕ: Обработка жанров (например, боевик, драма, ужасы из JSON)
         genre_canonical: Dict[str, str] = {}
@@ -386,32 +423,39 @@ class WeakLabeler:
         self._model_phrases = model_phrases
 
     def label_query(self, query: str) -> List[Tuple[str, str]]:
-        """Return list of (token, BIO-tag)."""
+        """Лемматизирует через Natasha для матчинга словарей, возвращает исходные токены + BIO."""
         tokens = tokenize(query)
         if not tokens:
             return []
         tags = ["O"] * len(tokens)
-        lower_toks = [_normalize(t[0]) for t in tokens]
 
-        # 1) Brands (longest match)
+        # 1. Лемматизация всего предложения через Natasha
+        lemmatized_tokens = lemmatize_text(query)
+        # Синхронизация длин токенов при необходимости
+        if len(lemmatized_tokens) != len(tokens):
+            lower_toks = [_normalize(t[0]) for t in tokens]
+        else:
+            lower_toks = lemmatized_tokens
+
+        # 2) Brands
         self._apply_phrases(lower_toks, tags, self._brand_phrases, "BRAND")
-        # 2) MODEL / product line (после бренда, только на O)
+        # 3) MODEL / product line
         self._apply_phrases(lower_toks, tags, self._model_phrases, "MODEL")
-        # 3) Categories
+        # 4) Categories (леммы: «холодильниками» → «холодильник»)
         self._apply_phrases(lower_toks, tags, self._category_phrases, "CATEGORY")
-        # 4) Genres (например, "боевик")
+        # 5) Genres
         self._apply_phrases(lower_toks, tags, self._genre_phrases, "GENRE")
-        # 5) Persons (актеры, режиссеры вроде "Лиам Нисон")
+        # 6) Persons
         self._apply_phrases(lower_toks, tags, self._person_phrases, "PERSON")
 
-        # 6) Colors as ATTR
+        # 7) Colors as ATTR (лемма «красную» → «красный»)
         for i, lt in enumerate(lower_toks):
             if tags[i] != "O":
                 continue
             if lt in self.colors or lt.replace("ё", "е") in self.colors:
                 tags[i] = "B-ATTR"
-        # 7) Regex attributes on original query → map to tokens
-        self._apply_attr_patterns(query, tokens, tags)
+        # 8) Regex attributes — по тому же тексту, что и tokenize
+        self._apply_attr_patterns(_split_glued(query), tokens, tags)
 
         return [(tokens[i][0], tags[i]) for i in range(len(tokens))]
 
@@ -473,30 +517,29 @@ def bio_to_entities(
     tokens_tags: Sequence[Tuple[str, str]],
     query: Optional[str] = None,
 ) -> List[Dict]:
-    """Распаковщик BIO-цепочек. смотрит на поток BIO-тегов и склеивает слова обратно в осмысленные сущности по тегам B- и I-"""
+    """Сворачивает BIO-последовательность в список сущностей с char-спанами."""
     entities: List[Dict] = []
     i = 0
-    # rebuild spans if query provided
-    if query is not None:
-        tok_spans = tokenize(query)
-    else:
-        tok_spans = [(t, 0, 0) for t, _ in tokens_tags]
+    # спаны и вырезка текста — в координатах нормализованного текста
+    norm_query = _split_glued(query) if query is not None else None
+    tok_spans = tokenize(query) if query is not None else [
+        (t, 0, 0) for t, _ in tokens_tags
+    ]
 
     while i < len(tokens_tags):
-        tok, tag = tokens_tags[i]
+        _tok, tag = tokens_tags[i]
         if tag.startswith("B-"):
             label = tag[2:]
             j = i + 1
             while j < len(tokens_tags) and tokens_tags[j][1] == f"I-{label}":
                 j += 1
             text = " ".join(tokens_tags[k][0] for k in range(i, j))
-            span_start = tok_spans[i][1] if query is not None else None
-            span_end = tok_spans[j - 1][2] if query is not None else None
             ent: Dict = {"text": text, "label": label}
-            if span_start is not None:
-                # Prefer exact substring from query
+            if norm_query is not None and j - 1 < len(tok_spans):
+                span_start = tok_spans[i][1]
+                span_end = tok_spans[j - 1][2]
                 ent["span"] = [span_start, span_end]
-                ent["text"] = query[span_start:span_end]
+                ent["text"] = norm_query[span_start:span_end].strip()
             entities.append(ent)
             i = j
         else:
@@ -504,8 +547,10 @@ def bio_to_entities(
     return entities
 
 
-def entities_to_structured(entities: List[Dict], labeler: Optional[WeakLabeler] = None) -> Dict:
-    """Превращает список найденных сущностей в итоговый JSON-пакет для ответа пользователю или аналитики, раскладывая всё по полочкам (бренд, категория, атрибуты)"""
+def entities_to_structured(
+    entities: List[Dict], labeler: Optional["WeakLabeler"] = None
+) -> Dict:
+    """Сворачивает сущности в поля brand / category / model / attributes."""
     brand = None
     category = None
     model = None
@@ -518,7 +563,14 @@ def entities_to_structured(entities: List[Dict], labeler: Optional[WeakLabeler] 
             brand = labeler.brand_canonical.get(key, text) if labeler else text
         elif label == "CATEGORY" and category is None:
             key = _normalize(text)
-            category = labeler.category_canonical.get(key, text) if labeler else text
+            if labeler:
+                lemma_key = " ".join(lemmatize_text(text))
+                category = labeler.category_canonical.get(
+                    lemma_key,
+                    labeler.category_canonical.get(key, text),
+                )
+            else:
+                category = text
         elif label == "MODEL" and model is None:
             key = _normalize(text)
             model = labeler.model_canonical.get(key, text) if labeler else text
@@ -529,58 +581,47 @@ def entities_to_structured(entities: List[Dict], labeler: Optional[WeakLabeler] 
         "brand": brand,
         "category": category,
         "model": model,
-        "attributes": {k: v[0] if len(v) == 1 else v for k, v in attributes.items()},
+        "attributes": {
+            k: v[0] if len(v) == 1 else v for k, v in attributes.items()
+        },
     }
 
 
 def _guess_attr_type(text: str) -> str:
     t = text.lower().replace("ё", "е").strip()
 
-    if re.search(r"\d+\s*(gb|гб|гиг)", t):
-        return "memory"
-
-    if re.search(r"\d+\s*(tb|тб|терабайт)", t):
-        return "storage"
-
-    if re.search(r"\d+\s*(кг|kg|г|g|грамм)", t):
-        return "weight"
-
-    if re.search(r"\d+\s*(л|l|литр|мл|ml)", t):
-        return "volume"
-
-    if re.search(r"\d+\s*(мм|mm|см|cm|м|m|дюйм|inch|\")", t):
-        return "size"
-
-    if re.search(r"[xх×*]", t):
-        return "dimensions"
-
-    if re.search(r"\d+\s*(вт|w|ватт|квт|kw)", t):
-        return "power"
-
-    if re.search(r"\d+\s*(в|v|вольт)", t):
-        return "voltage"
-
-    if re.search(r"\d+\s*(а|a|ампер)", t):
-        return "current"
-
-    if re.search(r"\d+\s*(гц|hz|кгц|khz|мгц|mhz)", t):
-        return "frequency"
-
-    if re.search(r"\d+\s*(дб|db)", t):
-        return "noise_level"
-
-    if re.search(r"\d+\s*(ом|ohm)", t):
-        return "impedance"
-
-    if t in COLORS:
+    # цвет может прийти словоформой («белую») — сверяем и по лемме
+    if t in COLORS or " ".join(lemmatize_text(t)) in COLORS:
         return "color"
 
-    if re.search(
-        r"(4k|8k|2k|1080p|720p|1440p|uhd|fhd|hd|wi-?fi|bluetooth|nfc|5g|4g)",
-        t
-    ):
-        return "tech"
-
+    if re.search(r"\d+\s*(gb|гб|гиг|mb|мб)", t):
+        return "memory"
+    if re.search(r"\d+\s*(tb|тб|терабайт)", t):
+        return "storage"
+    if re.search(r"\d+\s*(кг|kg|г|g|грамм)", t):
+        return "weight"
+    if re.search(r"\d+\s*(л|l|литр|мл|ml)", t):
+        return "volume"
+    if re.search(r"\d+\s*(мм|mm|см|cm|м|m|дюйм|inch|\")", t):
+        return "size"
+    if re.search(r"[xх×*]", t):
+        return "dimensions"
+    if re.search(r"\d+\s*(вт|w|ватт|квт|kw)", t):
+        return "power"
+    if re.search(r"\d+\s*(в|v|вольт)", t):
+        return "voltage"
+    if re.search(r"\d+\s*(а|a|ампер)", t):
+        return "current"
+    if re.search(r"\d+\s*(гц|hz|кгц|khz|мгц|mhz)", t):
+        return "frequency"
+    if re.search(r"\d+\s*(дб|db)", t):
+        return "noise_level"
+    if re.search(r"\d+\s*(ом|ohm)", t):
+        return "impedance"
+    if re.search(r"(4k|8k|2k|1080p|720p|1440p|uhd|fhd|hd)", t):
+        return "resolution"
+    if re.search(r"(wi-?fi|bluetooth|bt|nfc|5g|4g|lte|3g|gps|usb|hdmi|vga)", t):
+        return "connectivity"
     return "other"
 
 
