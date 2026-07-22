@@ -588,13 +588,10 @@ def entities_to_structured(
 
 
 def _guess_attr_type(text: str) -> str:
-<<<<<<< HEAD
     """Тип ATTR-span: COLORS → color, иначе первый матч ATTR_PATTERNS, иначе other.
 
     Имена типов совпадают с группами в ATTR_PATTERNS (memory_storage, size, …).
     """
-=======
->>>>>>> d5a17b6a80ab1343385d9e0272deb8cbec6a72ec
     t = text.lower().replace("ё", "е").strip()
 
     # цвет может прийти словоформой («белую») — сверяем и по лемме
