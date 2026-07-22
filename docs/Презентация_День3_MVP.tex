@@ -78,7 +78,7 @@
 \newcommand{\slidefoot}{\end{minipage}}
 
 \newcommand{\bodytext}{\fontsize{8.5}{11.5}\selectfont}
-\newcommand{\smalltext}{\fontsize{7.5}{10}\selectfont}
+\newcommand{\smalltext}{\fontsize{7}{9.2}\selectfont}
 
 % таблицы
 \definecolor{tblline}{HTML}{DDDDDD}
@@ -98,27 +98,27 @@
 \newcommand{\wplain}[1]{\tikz[baseline=-0.55ex]{\node[rounded corners=2pt, fill=cardbg, inner xsep=4pt, inner ysep=2.2pt, font=\fontsize{7.8}{9}\selectfont, text=mvdark]{#1};}}
 \newcommand{\biotag}[2]{\tikz[baseline=-0.55ex]{\node[rounded corners=1.5pt, fill=#1, inner xsep=2.5pt, inner ysep=1pt, font=\fontsize{6.5}{7.5}\selectfont\color{white}]{#2};}}
 
-% ———- жирный шеврон, как в шаблоне М.Тех (стрелка-галка) ———-
+% ———- жирный шеврон, как в шаблоне М.Тех (стрелка-галка, компактный) ———-
 \newcommand{\chevron}{%
-  \raisebox{-0.55ex}{\begin{tikzpicture}
-    \draw[mvred, line width=2.6pt, line cap=round, line join=round]
-      (0,0.30) -- (0.15,0.15) -- (0,0);
+  \raisebox{-0.35ex}{\begin{tikzpicture}
+    \draw[mvred, line width=2pt, line cap=round, line join=round]
+      (0,0.22) -- (0.11,0.11) -- (0,0);
   \end{tikzpicture}}}
 % шаг пайплайна: #1 fill, #2 text color, #3 текст
 \newcommand{\pipestep}[3]{%
   \begin{tikzpicture}[baseline=(b.center)]
-    \node[fill=#1, rounded corners=3pt, minimum height=1.15cm, text width=1.85cm,
+    \node[fill=#1, rounded corners=3pt, minimum height=1.0cm, text width=1.85cm,
           align=center, inner sep=3pt, font=\InterSemi\fontsize{7.5}{9}\selectfont, text=#2] (b) {#3};
   \end{tikzpicture}}
 \newcommand{\pipestepc}[3]{%
   \begin{tikzpicture}[baseline=(b.center)]
-    \node[fill=#1, rounded corners=3pt, minimum height=1.1cm, text width=1.62cm,
+    \node[fill=#1, rounded corners=3pt, minimum height=0.95cm, text width=1.62cm,
           align=center, inner sep=3pt, font=\InterSemi\fontsize{7}{8.5}\selectfont, text=#2] (b) {#3};
   \end{tikzpicture}}
 % узкий шаг (6 блоков в ряд)
 \newcommand{\pipestepq}[3]{%
   \begin{tikzpicture}[baseline=(b.center)]
-    \node[fill=#1, rounded corners=3pt, minimum height=0.88cm, text width=1.42cm,
+    \node[fill=#1, rounded corners=3pt, minimum height=0.82cm, text width=1.42cm,
           align=center, inner sep=2.5pt, font=\InterSemi\fontsize{6.6}{8}\selectfont, text=#2] (b) {#3};
   \end{tikzpicture}}
 % карточка с иконкой
@@ -162,7 +162,7 @@
 \begin{frame}[t]
 \slidehead{день 03 · итоги}{Что собрали ко Дню 3}
 \pinknote{КОРОТКО}{За день прошли путь от анализа данных до работающего продукта: единая предобработка, новый тег MODEL, каскад из трёх обученных моделей и два настольных приложения.}
-\vspace{22pt}\par
+\vspace{8pt}\par
 \begin{center}
 \begin{tikzpicture}[node distance=12pt]
   \node (o1) {\iconcard{ic_tools.png}{Предобработка}{чистка, расклейка склеек, словарь моделей на 6130 фраз}};
@@ -188,7 +188,7 @@
 {\smalltext
 \numdot{1}\ 30{,}99 млн кликов, 1{,}18 млн карточек. В семпле 200 тысяч строк — 49 тысяч уникальных запросов и 3{,}1 тысячи брендов.\par\vspace{4pt}
 \numdot{2}\ Длина в токенах: медиана 2, у 90\% — до 4, у 99\% — до 7. В символах: 17 и 31.\par\vspace{4pt}
-\numdot{3}\ Медианная цена клика — 16 165 ₽, пропусков в ключевых полях нет. Короткие запросы — значит CRF успеет отработать с запасом по времени.}
+\numdot{3}\ Медианная цена клика — 16 165 ₽, пропусков в ключевых полях нет.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -275,7 +275,7 @@
 \begin{frame}[t]
 \slidehead{предобработка · пример}{Живой пример: запрос до и после}
 \graynote{ИСХОДНЫЙ ЗАПРОС}{«Наушники Logitech G-Pro X SE 128гб» — так пишет реальный пользователь: дефисы, склейки, смесь языков.}
-\vspace{10pt}\par
+\vspace{7pt}\par
 {\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 1 · расклейка и сепараторы}\par\vspace{4pt}
 {\fontsize{9}{13}\selectfont
 \wplain{наушники} \ \wplain{logitech} \ \wplain{g} \ \wplain{pro} \ \wplain{x} \ \wplain{se} \ \wplain{128} \ \wplain{гб}}\par\vspace{2pt}
@@ -353,7 +353,7 @@
 \wtag{mvdark}{asus} \ \wtag{okgreen}{zenbook a16 · МОДЕЛЬ}\par\vspace{4pt}
 \wtag{mvdark}{apple} \ \wtag{okgreen}{ipad air · МОДЕЛЬ}}
 \end{columns}
-\vspace{10pt}\par
+\vspace{7pt}\par
 \pinknote{ЧТО ИЗМЕНИЛОСЬ}{Хвост после бренда перестал быть «мусором» — теперь это полноценный факт «модель», по которому можно искать и ранжировать.}
 \slidefoot
 \end{frame}
@@ -500,7 +500,7 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 \begin{frame}[t]
 \slidehead{разметка · источники}{Два сигнала сливаются в одну разметку}
 \pinknote{ИДЕЯ}{Текст запроса и поведение пользователей — независимые источники правды. Их слияние даёт разметку, которой не было ни в одном из них по отдельности.}
-\vspace{14pt}\par
+\vspace{8pt}\par
 \begin{columns}[T]
 \column{0.5\textwidth}
 \begin{center}
@@ -545,21 +545,21 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 \begin{frame}[t]
 \slidehead{mvp · архитектура}{Гибридный каскад: что уже собрано}
 \pinknote{КАК УСТРОЕНО}{Каждый слой закрывает слабость предыдущего: правила — мгновенные, CRF понимает морфологию, классификатор достаёт скрытый бренд, цепь определяет тип атрибута. На выходе — факты за десятки миллисекунд.}
-\vspace{20pt}\par
+\vspace{7pt}\par
 \begin{center}
 \begin{tikzpicture}[node distance=0pt]
   \node (a) {\pipestep{mvred}{white}{ЗАПРОС\\\fontsize{6}{7}\selectfont «ноутбук asus 16 гб»}};
-  \node[right=3pt of a] (c1) {\chevron};
-  \node[right=3pt of c1] (b) {\pipestep{cardbg}{mvdark}{ПРАВИЛА\\\fontsize{6}{7}\selectfont словари · регулярки · модели}};
-  \node[right=3pt of b] (c2) {\chevron};
-  \node[right=3pt of c2] (d) {\pipestep{cardbg}{mvdark}{CRF\\\fontsize{6}{7}\selectfont разметка последовательности}};
-  \node[right=3pt of d] (c3) {\chevron};
-  \node[right=3pt of c3] (e) {\pipestep{cardbg}{mvdark}{КЛАССИФИКАТОР\\\fontsize{6}{7}\selectfont бренд, если не написан}};
-  \node[right=3pt of e] (c4) {\chevron};
-  \node[right=3pt of c4] (f) {\pipestep{mvdark}{white}{ТИПИЗАТОР\\\fontsize{6}{7}\selectfont марковская цепь}};
+  \node[right=2pt of a] (c1) {\chevron};
+  \node[right=2pt of c1] (b) {\pipestep{cardbg}{mvdark}{ПРАВИЛА\\\fontsize{6}{7}\selectfont словари · регулярки · модели}};
+  \node[right=2pt of b] (c2) {\chevron};
+  \node[right=2pt of c2] (d) {\pipestep{cardbg}{mvdark}{CRF\\\fontsize{6}{7}\selectfont разметка последовательности}};
+  \node[right=2pt of d] (c3) {\chevron};
+  \node[right=2pt of c3] (e) {\pipestep{cardbg}{mvdark}{КЛАССИФИКАТОР\\\fontsize{6}{7}\selectfont бренд, если не написан}};
+  \node[right=2pt of e] (c4) {\chevron};
+  \node[right=2pt of c4] (f) {\pipestep{mvdark}{white}{ТИПИЗАТОР\\\fontsize{6}{7}\selectfont марковская цепь}};
 \end{tikzpicture}
 \end{center}
-\vspace{20pt}\par
+\vspace{7pt}\par
 \begin{center}
 \begin{tikzpicture}
   \node[fill=pinkband, rounded corners=3pt, inner xsep=10pt, inner ysep=6pt,
@@ -581,16 +581,16 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 \begin{center}
 \begin{tikzpicture}[node distance=0pt]
   \node (p1) {\pipestepq{cardbg}{mvdark}{Запрос}};
-  \node[right=2.5pt of p1] (a1) {\chevron};
-  \node[right=2.5pt of a1] (p2) {\pipestepq{cardbg}{mvdark}{Пред-\\обработка}};
-  \node[right=2.5pt of p2] (a2) {\chevron};
-  \node[right=2.5pt of a2] (p3) {\pipestepq{mvred}{white}{Извлечение\\фактов}};
-  \node[right=2.5pt of p3] (a3) {\chevron};
-  \node[right=2.5pt of a3] (p4) {\pipestepq{cardbg}{mvdark}{Нормали-\\зация}};
-  \node[right=2.5pt of p4] (a4) {\chevron};
-  \node[right=2.5pt of a4] (p5) {\pipestepq{cardbg}{mvdark}{Каталог}};
-  \node[right=2.5pt of p5] (a5) {\chevron};
-  \node[right=2.5pt of a5] (p6) {\pipestepq{cardbg}{mvdark}{Ранжиро-\\вание}};
+  \node[right=2pt of p1] (a1) {\chevron};
+  \node[right=2pt of a1] (p2) {\pipestepq{cardbg}{mvdark}{Пред-\\обработка}};
+  \node[right=2pt of p2] (a2) {\chevron};
+  \node[right=2pt of a2] (p3) {\pipestepq{mvred}{white}{Извлечение\\фактов}};
+  \node[right=2pt of p3] (a3) {\chevron};
+  \node[right=2pt of a3] (p4) {\pipestepq{cardbg}{mvdark}{Нормали-\\зация}};
+  \node[right=2pt of p4] (a4) {\chevron};
+  \node[right=2pt of a4] (p5) {\pipestepq{cardbg}{mvdark}{Каталог}};
+  \node[right=2pt of p5] (a5) {\chevron};
+  \node[right=2pt of a5] (p6) {\pipestepq{cardbg}{mvdark}{Ранжиро-\\вание}};
 \end{tikzpicture}
 \end{center}
 \vspace{5pt}\par
@@ -725,19 +725,19 @@ F1 атрибуты & \InterBold 0{,}85\\
 \begin{frame}[t]
 \slidehead{разметка · соответствие 1/0}{Чистим шумные клики моделью}
 \graynote{ЗАЧЕМ}{Клик — шумный сигнал: пользователь искал айфон, а кликнул чехол. Такие пары портят обучение. Убираем их бинарной моделью «соответствует или нет».}
-\vspace{10pt}\par
+\vspace{7pt}\par
 \begin{center}
 \begin{tikzpicture}[node distance=0pt]
   \node (m1) {\pipestep{cardbg}{mvdark}{Ручная разметка\\\fontsize{6}{7}\selectfont 100+ пар}};
-  \node[right=3pt of m1] (mc1) {\chevron};
-  \node[right=3pt of mc1] (m2) {\pipestep{mvred}{white}{Обучаем модель\\\fontsize{6}{7}\selectfont бустинг}};
-  \node[right=3pt of m2] (mc2) {\chevron};
-  \node[right=3pt of mc2] (m3) {\pipestep{cardbg}{mvdark}{Модель метит\\\fontsize{6}{7}\selectfont миллионы пар: 1 / 0}};
-  \node[right=3pt of m3] (mc3) {\chevron};
-  \node[right=3pt of mc3] (m4) {\pipestep{cardbg}{mvdark}{Где 1 — берём\\\fontsize{6}{7}\selectfont карточку в выдачу}};
+  \node[right=2pt of m1] (mc1) {\chevron};
+  \node[right=2pt of mc1] (m2) {\pipestep{mvred}{white}{Обучаем модель\\\fontsize{6}{7}\selectfont бустинг}};
+  \node[right=2pt of m2] (mc2) {\chevron};
+  \node[right=2pt of mc2] (m3) {\pipestep{cardbg}{mvdark}{Модель метит\\\fontsize{6}{7}\selectfont миллионы пар: 1 / 0}};
+  \node[right=2pt of m3] (mc3) {\chevron};
+  \node[right=2pt of mc3] (m4) {\pipestep{cardbg}{mvdark}{Где 1 — берём\\\fontsize{6}{7}\selectfont карточку в выдачу}};
 \end{tikzpicture}
 \end{center}
-\vspace{12pt}\par
+\vspace{8pt}\par
 \begin{columns}[T]
 \column{0.5\textwidth}
 {\InterSemi\fontsize{8.5}{10.5}\selectfont Пример пары}\par\vspace{5pt}
@@ -758,7 +758,7 @@ F1 атрибуты & \InterBold 0{,}85\\
 \begin{frame}[t]
 \slidehead{разметка · стратегия}{Данные и стратегия разметки}
 \pinknote{ПРИНЦИП}{Разметку проектируем, а не «докупаем объёмом»: размечаем в первую очередь то, на чём модель ошибается или сомневается.}
-\vspace{10pt}\par
+\vspace{7pt}\par
 \begin{columns}[T]
 \column{0.42\textwidth}
 \begin{center}
@@ -787,21 +787,41 @@ F1 атрибуты & \InterBold 0{,}85\\
 \end{frame}
 
 % ============================================================
-% 25. ПРИЛОЖЕНИЕ РАЗМЕТКИ — СКРИНШОТЫ
+% 25. ПРИЛОЖЕНИЕ РАЗМЕТКИ — ТРЁХЭТАПНЫЙ МАСТЕР
 % ============================================================
 \begin{frame}[t]
-\slidehead{приложение · разметка}{Готово: приложение для разметки команды}
-\graynote{ТРИ СБОРКИ}{Для Никиты, Некита и Лизы — по 1500 уникальных запросов, наборы не пересекаются. Клавиши B, I, O + выбор категории, история с правкой, прогресс и автосохранение в файл.}
-\vspace{8pt}\par
+\slidehead{приложение · разметка}{Приложение разметки: мастер из трёх этапов}
+\graynote{КАК УСТРОЕНО}{Запрос разбит на блоки по центру, фон заблюрен. Этап 1: клавиши B/I/O, метка появляется над блоком, Backspace снимает и шагает назад. Enter — подтверждение этапа.}
+\vspace{6pt}\par
 \begin{columns}[T]
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{apps/labeling_bio.png}\par\vspace{3pt}
-{\smalltext\color{mvgray} Режим BIO: токены-кнопки, категории 1–5, подтип атрибута}
+\includegraphics[width=\textwidth]{apps/labeling_stage1_bio.png}\par\vspace{2pt}
+{\smalltext\color{mvgray} Этап 1 — разметка B/I/O: активный блок в красной рамке, метки над блоками}
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth]{apps/labeling_match.png}\par\vspace{3pt}
-{\smalltext\color{mvgray} Режим 1/0: запрос против карточки, две кнопки, отдельный файл}
+\includegraphics[width=\textwidth]{apps/labeling_stage2_types.png}\par\vspace{2pt}
+{\smalltext\color{mvgray} Этап 2 — тип сущности: у каждого типа описание, когда его ставить}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 25b. ПРИЛОЖЕНИЕ РАЗМЕТКИ — ПОДТИПЫ И 1/0
+% ============================================================
+\begin{frame}[t]
+\slidehead{приложение · разметка}{Подтипы атрибутов и режим 1/0}
+\graynote{ТРИ СБОРКИ}{Для Никиты, Некита и Лизы — по 1500 непересекающихся запросов. Если у атрибута выбрано «другое» — подтип вводится вручную. Пустая карточка в режиме 1/0 получает 0 автоматически.}
+\vspace{6pt}\par
+\begin{columns}[T]
+\column{0.49\textwidth}
+\centering
+\includegraphics[width=\textwidth]{apps/labeling_stage3_subtypes.png}\par\vspace{2pt}
+{\smalltext\color{mvgray} Этап 3 — подтип атрибута: у каждого описание и перевод; «другое» — ручной ввод}
+\column{0.49\textwidth}
+\centering
+\includegraphics[width=\textwidth]{apps/labeling_match.png}\par\vspace{2pt}
+{\smalltext\color{mvgray} Режим 1/0 с гайдом: когда ставить 1, когда 0; история и прогресс}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -845,7 +865,7 @@ F1 атрибуты & \InterBold 0{,}85\\
 \numdot{5}\ Собранную золотую разметку — в честную оценку каскада.\par\vspace{5pt}
 \numdot{6}\ Умный поиск: реранжирование с описанием карточки, больше статистики в интерфейсе.}
 \end{columns}
-\vspace{10pt}\par
+\vspace{7pt}\par
 \pinknote{ЦЕЛЬ К ЗАЩИТЕ}{Рабочий каскад с покрытием сложных случаев и честные метрики на ручной золотой разметке, а не самопроверка словаря.}
 \slidefoot
 \end{frame}
@@ -875,4 +895,6 @@ F1 атрибуты & \InterBold 0{,}85\\
 \end{frame}
 
 \end{document}
+
+
 

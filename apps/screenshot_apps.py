@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Скриншоты обоих приложений для презентации (без ручного запуска)."""
+"""Скриншоты приложений для презентации (новый трёхэтапный мастер)."""
 from __future__ import annotations
 
 import sys
@@ -19,74 +19,67 @@ from PyQt6.QtCore import QTimer
 app = QApplication(sys.argv)
 app.setStyle("Fusion")
 
-shots = []
-
 
 def grab(widget, name):
     pm = widget.grab()
     pm.save(str(OUT / name))
-    print("saved", name, pm.width(), "x", pm.height())
+    print("saved", name)
 
 
 def main():
     import os
     os.environ["MV_ANNOTATOR"] = "nikita"
 
-    # ---------- приложение разметки
     import labeling_app
     lw = labeling_app.MainWindow("nikita")
-    lw.resize(1060, 780)
+    lw.resize(1120, 800)
     lw.show()
     app.processEvents()
 
-    def shot_labeling():
-        # BIO: разметить пример для красоты скрина
+    def shots():
         bio = lw.bio
-        if bio.chips:
-            # покажем пример разметки: первый токен B-CATEGORY и т.п.
-            demo = ["B-CATEGORY", "B-BRAND", "B-MODEL", "B-ATTR", "I-ATTR"]
-            for i, chip in enumerate(bio.chips[:5]):
-                tag = demo[i % len(demo)]
-                chip.tag, chip.cat = tag.split("-", 1)
-                chip.refresh()
+        # этап 1: частично размечено
+        demo_bio = ["B", "I", "O", "B", "I"]
+        for i, blk in enumerate(bio.blocks):
+            if i < len(bio.blocks) - 1:
+                blk.bio = demo_bio[i % len(demo_bio)]
+                blk.refresh()
+        bio.cursor = min(len(bio.blocks) - 1, 2)
+        bio._sync_stage()
         app.processEvents()
-        grab(lw, "labeling_bio.png")
+        grab(lw, "labeling_stage1_bio.png")
+
+        # этап 2: типы (все блоки размечены, показываем выбор типа)
+        demo_cat = ["CATEGORY", "ATTR", "BRAND", "MODEL", "ATTR"]
+        for i, blk in enumerate(bio.blocks):
+            blk.bio = demo_bio[i % len(demo_bio)] if i < len(demo_bio) else "O"
+            if blk.bio in ("B", "I"):
+                blk.cat = demo_cat[i % len(demo_cat)]
+            blk.refresh()
+        bio.stage = bio.ST_TYPE
+        bio.cursor = 0
+        bio._sync_stage()
+        app.processEvents()
+        grab(lw, "labeling_stage2_types.png")
+
+        # этап 3: подтипы ATTR
+        bio.attr_ids = [i for i, b in enumerate(bio.blocks) if b.cat == "ATTR"]
+        if bio.attr_ids:
+            bio.stage = bio.ST_SUBTYPE
+            bio.cursor = 0
+            bio.sub_choice = 0
+            bio._sync_stage()
+            app.processEvents()
+            grab(lw, "labeling_stage3_subtypes.png")
+
+        # match-режим
         lw.switch(1)
         app.processEvents()
         grab(lw, "labeling_match.png")
         lw.close()
-        start_mvp()
+        app.quit()
 
-    QTimer.singleShot(600, shot_labeling)
-
-    def start_mvp():
-        import mvp_app
-        mw = mvp_app.MainWindow()
-        mw.resize(1120, 800)
-        mw.show()
-        app.processEvents()
-
-        def splash_shot():
-            grab(mw, "mvp_splash.png")
-            mw.show_main()
-            app.processEvents()
-            mw.search.input.setText("ноутбук asus zenbook 16 гб серый")
-            mw.search.run_search()
-            app.processEvents()
-
-            def search_shot():
-                grab(mw, "mvp_search.png")
-                # открыть JSON
-                mw.search.json_view.setVisible(True)
-                app.processEvents()
-                grab(mw, "mvp_json.png")
-                mw.close()
-                app.quit()
-
-            QTimer.singleShot(900, search_shot)
-
-        QTimer.singleShot(2600, splash_shot)  # после пружинки
-
+    QTimer.singleShot(700, shots)
     sys.exit(app.exec())
 
 
