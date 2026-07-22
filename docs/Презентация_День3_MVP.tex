@@ -629,16 +629,16 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 % ============================================================
 \begin{frame}[t]
 \slidehead{mvp · классификатор бренда}{Silver для бренда: 67 классов, не только бренды}
-\pinknote{КЛЮЧЕВАЯ ИДЕЯ}{Классификатор — запасной слой, когда словарь не нашёл бренд. Он не должен отвечать на каждый запрос: на «холодильник» нельзя тыкать в частый клик-бренд. Поэтому в классы добавили NO\_BRAND и UNKNOWN.}
-\vspace{5pt}\par
+\pinknote{КЛЮЧЕВАЯ ИДЕЯ}{Классификатор — запасной слой, когда словарь не нашёл бренд: на «холодильник» нельзя тыкать в частый клик-бренд. Поэтому в классы добавили NO\_BRAND и UNKNOWN.}
+\vspace{3pt}\par
 \begin{columns}[T]
 \column{0.47\textwidth}
-\centering\includegraphics[width=0.96\textwidth,height=5.6cm,keepaspectratio]{brand_clf/mv_02_silver_composition.png}
+\centering\includegraphics[width=0.96\textwidth,height=5.0cm,keepaspectratio]{brand_clf/mv_02_silver_composition.png}
 \column{0.5\textwidth}
 {\smalltext
-\numdot{1}\ Из 63 тысяч агрегированных запросов в silver попали 28 664: у остальных нет надёжного сигнала — их честно выбросили, а не разметили наугад.\par\vspace{3pt}
-\numdot{2}\ Уверенность метки — из кликов: клик выше в выдаче весит больше (вес 1/(1+позиция)), майор-бренд должен набрать не меньше 55\% веса.\par\vspace{3pt}
-\numdot{3}\ NO\_BRAND — запрос-категория без бренда («холодильник»). UNKNOWN — бренд есть, но вне топ-65 («стинол», «darina»): модель учится отказываться, а не угадывать похожий.\par\vspace{3pt}
+\numdot{1}\ Из 63 тысяч агрегированных запросов в silver попали 28 664: у остальных нет надёжного сигнала — их честно выбросили.\par\vspace{2pt}
+\numdot{2}\ Уверенность метки — из кликов: клик выше в выдаче весит больше, майор-бренд должен набрать не меньше 55\% веса.\par\vspace{2pt}
+\numdot{3}\ NO\_BRAND — запрос-категория без бренда. UNKNOWN — бренд есть, но вне топ-65 («стинол», «darina»): модель учится отказываться, а не угадывать похожий.\par\vspace{2pt}
 \numdot{4}\ Разбиение: 22 846 на обучение, 5 710 на валидацию.}
 \end{columns}
 \slidefoot
@@ -649,11 +649,11 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 % ============================================================
 \begin{frame}[t]
 \slidehead{mvp · классификатор бренда}{Четыре модели: что и как обучали}
-\graynote{ПОСТАНОВКА}{Мультикласс запрос $\to$ бренд на silver. Все четыре — линейные модели на TF-IDF: отвечают за миллисекунды, что критично для SLA. Разница — в признаках и балансировке.}
-\vspace{4pt}\par
-{\renewcommand{\arraystretch}{1.05}\setlength{\tabcolsep}{4pt}
-\fontsize{7}{9}\selectfont
-\begin{tabular}{|L{2.7cm}|L{4.3cm}|L{4.3cm}|}
+\graynote{ПОСТАНОВКА}{Мультикласс запрос $\to$ бренд на silver. Все четыре — линейные модели на TF-IDF: отвечают за миллисекунды, критично для SLA. Разница — в признаках и балансировке.}
+\vspace{3pt}\par
+{\renewcommand{\arraystretch}{0.95}\setlength{\tabcolsep}{4pt}
+\fontsize{6.6}{8.2}\selectfont
+\begin{tabular}{|L{2.6cm}|L{4.2cm}|L{4.2cm}|}
 \hline
 \theadl{Модель} & \theadl{Признаки} & \theadl{Особенность}\\
 \hline
@@ -666,10 +666,10 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 \tcelll{LogReg с балансом} & \tcelll{символьные n-граммы} & \tcelll{веса классов — хуже на редких брендах}\\
 \hline
 \end{tabular}}
-\par\vspace{4pt}
+\par\vspace{3pt}
 {\smalltext
 \numdot{1}\ Символьные кусочки по 2–4 буквы делают «айфон», «afon» и «iphone» похожими — опечатки не страшны.\par\vspace{2pt}
-\numdot{2}\ Обучение с весами по уверенности клика: сомнительные метки влияют меньше. Все четыре модели сохранены, сравнение — на одной валидации.}
+\numdot{2}\ Веса по уверенности клика: сомнительные метки влияют меньше. Все модели сохранены, сравнение — на одной валидации.}
 \slidefoot
 \end{frame}
 

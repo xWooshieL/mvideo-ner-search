@@ -66,6 +66,7 @@ private:
     void load();
     QString dataDir() const;
     QString labelsDir() const;
+    QString iniPath() const;
     void flushBio();
     void flushMatch();
 

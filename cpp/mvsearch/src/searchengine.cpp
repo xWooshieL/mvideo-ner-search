@@ -74,9 +74,10 @@ SearchEngine::SearchEngine(QObject *parent)
 
 QString SearchEngine::dataDir() const
 {
-    // data рядом с exe (установленное приложение) либо на два уровня выше (dev-сборка)
+    // data рядом с exe (Windows) либо в Resources бандла (macOS .app), либо выше (dev-сборка)
     const QString appDir = QCoreApplication::applicationDirPath();
     for (const QString &candidate : {appDir + u"/data"_qs,
+                                     appDir + u"/../Resources/data"_qs,
                                      appDir + u"/../data"_qs,
                                      appDir + u"/../../data"_qs,
                                      appDir + u"/../../../data"_qs}) {

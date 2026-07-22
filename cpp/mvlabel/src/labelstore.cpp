@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QSettings>
+#include <QStandardPaths>
 #include <QTextStream>
 #include <QUrl>
 
@@ -19,8 +20,11 @@ LabelStore::LabelStore(QObject *parent)
 
 QString LabelStore::dataDir() const
 {
+    // рядом с exe (Windows), в Resources бандла (macOS .app) либо на уровень выше (dev-сборка)
     const QString appDir = QCoreApplication::applicationDirPath();
-    for (const QString &candidate : {appDir + u"/data"_qs, appDir + u"/../data"_qs}) {
+    for (const QString &candidate : {appDir + u"/data"_qs,
+                                     appDir + u"/../Resources/data"_qs,
+                                     appDir + u"/../data"_qs}) {
         QDir d(candidate);
         if (!d.entryList({u"queries_*.json"_qs}, QDir::Files).isEmpty())
             return d.absolutePath();
@@ -30,9 +34,26 @@ QString LabelStore::dataDir() const
 
 QString LabelStore::labelsDir() const
 {
-    const QString dir = QCoreApplication::applicationDirPath() + u"/labels"_qs;
+    // Windows/dev: labels рядом с exe. macOS: .app read-only после подписи/дистрибуции —
+    // пишем в стандартную папку данных пользователя, чтобы разметка не терялась.
+#ifdef Q_OS_MACOS
+    QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + u"/labels"_qs;
+#else
+    QString dir = QCoreApplication::applicationDirPath() + u"/labels"_qs;
+#endif
     QDir().mkpath(dir);
     return dir;
+}
+
+QString LabelStore::iniPath() const
+{
+#ifdef Q_OS_MACOS
+    const QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(dir);
+    return dir + u"/mvlabel.ini"_qs;
+#else
+    return QCoreApplication::applicationDirPath() + u"/mvlabel.ini"_qs;
+#endif
 }
 
 void LabelStore::load()
@@ -55,7 +76,7 @@ void LabelStore::load()
         }
     }
     if (m_annotatorKey.isEmpty()) {
-        QSettings ini(QCoreApplication::applicationDirPath() + u"/mvlabel.ini"_qs, QSettings::IniFormat);
+        QSettings ini(iniPath(), QSettings::IniFormat);
         m_annotatorKey = ini.value(u"annotator"_qs).toString();
     }
     if (m_annotatorKey.isEmpty())
@@ -191,7 +212,7 @@ void LabelStore::setAnnotator(const QString &key)
         return;
     m_overrideKey = low;
     // запоминаем выбор на следующие запуски
-    QSettings ini(QCoreApplication::applicationDirPath() + u"/mvlabel.ini"_qs, QSettings::IniFormat);
+    QSettings ini(iniPath(), QSettings::IniFormat);
     ini.setValue(u"annotator"_qs, low);
     load();
 }

@@ -126,6 +126,8 @@ figures/                  # 40+ графиков + скриншоты прило
 
 ## 🔨 Сборка
 
+### Windows
+
 Требования: Qt 6.5+ (MSVC), Visual Studio Build Tools, CMake, Inno Setup 6.
 
 ```powershell
@@ -138,6 +140,21 @@ cd installer
 iscc setup_mvsearch.iss
 iscc setup_mvlabel.iss
 ```
+
+### macOS
+
+CMake-файлы обоих приложений кросс-платформенные (`MACOSX_BUNDLE`, `.icns`, пути к данным и к разметке через `QStandardPaths` на маке), но собрать `.app`/`.dmg` можно только **на самом Mac** — Qt для macOS компилируется под конкретную ОС, кросс-компиляция с Windows не поддерживается.
+
+Требования на маке: Xcode Command Line Tools (`xcode-select --install`), CMake, Qt 6.5+ для macOS (Qt Online Installer или `brew install qt`).
+
+```bash
+git clone https://github.com/xWooshieL/mvideo-ner-search.git
+cd mvideo-ner-search
+chmod +x scripts/build-macos.sh
+./scripts/build-macos.sh ~/Qt/6.8.2/macos     # путь к твоей установке Qt для macOS
+```
+
+Скрипт сам сгенерирует `.icns` из `.iconset` (см. `scripts/make_iconset.py`, если нужно пересобрать иконки из PNG), соберёт оба `.app` через CMake, прогонит `macdeployqt` и упакует в `.dmg` — результат в `dist-macos/`. Ярлыки Никита/Некит/Лиза в приложении разметки работают так же, как на Windows, плюс переключатель аккаунтов внутри приложения.
 
 Python-пайплайн:
 
@@ -182,7 +199,7 @@ print(wl.label_query('телевизор samsung 55 дюймов чёрный'))
 | CRF v2 | переобучение на разметке с тегом MODEL, сверка с золотой |
 | RNN-типизатор | лёгкая BiLSTM для спанов, где цепь говорит «не знаю» (36%) |
 | Модель 1/0 | бустинг на ручных парах запрос↔карточка, чистка кликового шума |
-| macOS-сборка | Qt кросс-платформенный: сборка mvlabel под macOS для Лизы |
+| macOS-сборка | код и CMake готовы (`scripts/build-macos.sh`) — осталось прогнать на реальном Маке и подписать |
 
 ## 👥 Команда
 
