@@ -12,7 +12,8 @@ r = pp("Наушники Logitech G-Pro X SE 128гб")
 print(r.text_norm, r.model_spans, r.protected_spans)
 ```
 
-Ноутбук: [`01_data_preprocessing.ipynb`](./01_data_preprocessing.ipynb).
+Ноутбук: [`01_data_preprocessing.ipynb`](./01_data_preprocessing.ipynb) — построение пайплайна.  
+Обзор качества / готовность к gold: [`02_preprocessed_data_overview.ipynb`](./02_preprocessed_data_overview.ipynb).
 
 Артефакты:
 - `artifacts/model_phrases.txt` — линейки/модели (`g pro x se`, …)

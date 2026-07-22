@@ -1,0 +1,19 @@
+{
+  "n_model_phrases": 6130,
+  "n_ok_candidate": 5921,
+  "ok_share": 0.965905383360522,
+  "silver_with_model": {
+    "empty_share": 0.18325,
+    "has_MODEL_share": 0.15025,
+    "brand_latin_O_tail_share": 0.123375,
+    "lemma_mismatch_share": 0.18225
+  },
+  "silver_without_model": {
+    "empty_share": 0.19625,
+    "has_MODEL_share": 0.0,
+    "brand_latin_O_tail_share": 0.19975,
+    "lemma_mismatch_share": 0.18225
+  },
+  "verdict": "start_gold_now_parallel_to_dict_cleanup",
+  "asus_tuf_note": "needs models_path; phrase exists in model_phrases.txt"
+}

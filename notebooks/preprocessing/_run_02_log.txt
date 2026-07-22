@@ -1,0 +1,7 @@
+phrases=6130
+ok_candidate=5921/6130=0.966
+asus no [('asus', 'B-BRAND'), ('tuf', 'O'), ('gaming', 'O'), ('a15', 'O')]
+asus yes [('asus', 'B-BRAND'), ('tuf', 'B-MODEL'), ('gaming', 'I-MODEL'), ('a15', 'I-MODEL')]
+off={'empty': 0.1872, 'model': 0.0, 'otail': 0.21, 'mis': 0.1842}
+on={'empty': 0.1728, 'model': 0.1446, 'otail': 0.1304, 'mis': 0.1842}
+DONE
