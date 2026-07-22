@@ -62,6 +62,13 @@ def find_root() -> Path:
     return app_dir()
 
 
+def code_dir() -> Path:
+    """Где лежит пакет src: в frozen-сборке — во временной папке PyInstaller."""
+    if getattr(sys, "frozen", False):
+        return Path(getattr(sys, "_MEIPASS", app_dir()))
+    return find_root()
+
+
 # ================================================================= бэкенд
 class Backend:
     """Обёртка над экстрактором + каталог + RecSys только по фактам."""
@@ -72,6 +79,7 @@ class Backend:
         self.error = None
         try:
             root = find_root()
+            sys.path.insert(0, str(code_dir()))
             sys.path.insert(0, str(root))
             from src.service.extractor import QueryEntityExtractor
             self.extractor = QueryEntityExtractor.from_artifacts(
