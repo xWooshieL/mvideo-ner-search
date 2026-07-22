@@ -88,8 +88,8 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 text: winButton.glyph
-                font.pixelSize: 13
-                font.family: "Segoe MDL2 Assets"
+                font.pixelSize: Theme.isWindows ? 13 : 16
+                font.family: Theme.iconFont
                 color: hoverHandler.hovered && winButton.closeButton ? "#ffffff" : Theme.textSecondary
             }
 
@@ -98,7 +98,7 @@ Rectangle {
         }
 
         WindowButton {
-            glyph: "\uE921"
+            glyph: Theme.iconMinimize
             onActivated: {
                 if (typeof titleBar.targetWindow.animatedMinimize === "function")
                     titleBar.targetWindow.animatedMinimize()
@@ -108,12 +108,12 @@ Rectangle {
         }
 
         WindowButton {
-            glyph: titleBar.targetWindow.frameMaximized ? "\uE923" : "\uE922"
+            glyph: titleBar.targetWindow.frameMaximized ? Theme.iconRestore : Theme.iconMaximize
             onActivated: titleBar.toggleMaximize()
         }
 
         WindowButton {
-            glyph: "\uE8BB"
+            glyph: Theme.iconClose
             closeButton: true
             onActivated: titleBar.targetWindow.close()
         }

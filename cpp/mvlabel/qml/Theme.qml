@@ -48,7 +48,15 @@ QtObject {
     readonly property int fontLarge: 19
     readonly property int fontTitle: 24
 
-    readonly property string fontFamily: "Segoe UI"
+    readonly property bool isWindows: Qt.platform.os === "windows"
+    readonly property string fontFamily: isWindows ? "Segoe UI"
+                                      : (Qt.platform.os === "osx" || Qt.platform.os === "macos")
+                                        ? ".AppleSystemUIFont" : "sans-serif"
+    readonly property string iconFont: isWindows ? "Segoe MDL2 Assets" : fontFamily
+    readonly property string iconMinimize: isWindows ? "\uE921" : "\u2212"
+    readonly property string iconMaximize: isWindows ? "\uE922" : "\u25AD"
+    readonly property string iconRestore:  isWindows ? "\uE923" : "\u229E"
+    readonly property string iconClose:    isWindows ? "\uE8BB" : "\u00D7"
 
     readonly property color sidebarHover: "#faf2f2"
 

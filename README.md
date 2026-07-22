@@ -254,7 +254,35 @@ open dist-macos/*.app
    - `xattr -cr` снимает quarantine (флаг «скачано из интернета»).
    - `codesign --sign -` — ad-hoc подпись всей пачки (бинарь + Qt frameworks внутри бандла).
 4. GUI-вариант, если краша нет, а только диалог Gatekeeper: правый клик → «Открыть» → «Открыть всё равно» (`System Settings → Privacy & Security → Open Anyway`).
-5. Данные (словари/каталог для поиска, JSON запросов для разметки) лежат в `*.app/Contents/Resources/data` — переносить `.app` можно целиком.
+4. Данные (словари/каталог для поиска, JSON запросов для разметки) лежат в `*.app/Contents/Resources/data` — переносить `.app` можно целиком.
+
+#### 6. Как обновлять установщики / приложения после правок в git
+
+**Git сам по себе установленные приложения не обновляет.** Нужна пересборка и раздача новых артефактов.
+
+**macOS (на Маке):**
+```bash
+cd mvideo-ner-search
+git pull
+rm -rf cpp/mvsearch/build-macos cpp/mvlabel/build-macos dist-macos
+./scripts/build-macos.sh "$(brew --prefix qt)"
+# новые .app/.dmg лежат в dist-macos/ — ими и пользуйся / раздай команде
+```
+
+**Windows:**
+```powershell
+git pull
+# пересобрать приложения (пути к Qt свои)
+cd cpp/mvsearch; cmake --build build --config Release; cd ../..
+cd cpp/mvlabel;  cmake --build build --config Release; cd ../..
+cd installer
+iscc setup_mvsearch.iss
+iscc setup_mvlabel.iss
+# готовые Setup.exe — в installer/Output (или куда пишет iscc)
+# выложить в GitHub Releases, чтобы команда скачала заново
+```
+
+Коротко: `git push` → на машине сборки `git pull` → собрать → отдать новые Setup.exe / .dmg. Уже установленные копии сами не подтянутся.
 
 Python-пайплайн:
 

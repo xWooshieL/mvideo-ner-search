@@ -62,8 +62,7 @@ Rectangle {
                 anchors.centerIn: parent
                 text: root.icon
                 font.pixelSize: 15
-                font.family: root.icon.length > 0 && root.icon.charCodeAt(0) >= 0xE000
-                             ? "Segoe MDL2 Assets" : Theme.fontFamily
+                font.family: Theme.iconFont
                 color: root.active ? Theme.accent : Theme.textSecondary
 
                 Behavior on color { ColorAnimation { duration: 320; easing.type: Easing.InOutCubic } }
