@@ -16,6 +16,7 @@ class LabelStore : public QObject
     QML_SINGLETON
 
     Q_PROPERTY(QString annotator READ annotator NOTIFY loaded)
+    Q_PROPERTY(QString annotatorId READ annotatorKey NOTIFY loaded)
     Q_PROPERTY(QStringList queries READ queries NOTIFY loaded)
     Q_PROPERTY(QVariantList pairs READ pairs NOTIFY loaded)
     Q_PROPERTY(int bioDone READ bioDone NOTIFY bioSaved)
@@ -46,6 +47,10 @@ public:
 
     Q_INVOKABLE void openLabelsFolder();
 
+    // переключение аккаунта без перезапуска (один exe на команду)
+    QString annotatorKey() const { return m_annotatorKey; }
+    Q_INVOKABLE void setAnnotator(const QString &key);
+
     // env-переменные для демо и скриншотов
     Q_INVOKABLE QString envValue(const QString &name) const;
 
@@ -65,6 +70,7 @@ private:
     void flushMatch();
 
     bool m_ready = false;
+    QString m_overrideKey;
     QString m_annotatorKey;
     QString m_annotatorDisplay;
     QStringList m_queries;

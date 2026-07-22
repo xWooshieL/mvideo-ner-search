@@ -37,13 +37,21 @@ QString LabelStore::labelsDir() const
 
 void LabelStore::load()
 {
-    // аннотатор: аргумент запуска -> mvlabel.ini -> переменная окружения -> nikita
-    const QStringList args = QCoreApplication::arguments();
-    for (const QString &a : args) {
-        const QString low = a.toLower();
-        if (low == u"nikita"_qs || low == u"nekit"_qs || low == u"liza"_qs) {
-            m_annotatorKey = low;
-            break;
+    m_queries.clear();
+    m_pairs.clear();
+    m_bioRecords.clear();
+    m_matchRecords.clear();
+
+    // аннотатор: явный выбор -> аргумент запуска -> mvlabel.ini -> env -> nikita
+    m_annotatorKey = m_overrideKey;
+    if (m_annotatorKey.isEmpty()) {
+        const QStringList args = QCoreApplication::arguments();
+        for (const QString &a : args) {
+            const QString low = a.toLower();
+            if (low == u"nikita"_qs || low == u"nekit"_qs || low == u"liza"_qs) {
+                m_annotatorKey = low;
+                break;
+            }
         }
     }
     if (m_annotatorKey.isEmpty()) {
@@ -174,6 +182,18 @@ void LabelStore::flushMatch()
 void LabelStore::openLabelsFolder()
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(labelsDir()));
+}
+
+void LabelStore::setAnnotator(const QString &key)
+{
+    const QString low = key.toLower();
+    if (low == m_annotatorKey)
+        return;
+    m_overrideKey = low;
+    // запоминаем выбор на следующие запуски
+    QSettings ini(QCoreApplication::applicationDirPath() + u"/mvlabel.ini"_qs, QSettings::IniFormat);
+    ini.setValue(u"annotator"_qs, low);
+    load();
 }
 
 QString LabelStore::envValue(const QString &name) const

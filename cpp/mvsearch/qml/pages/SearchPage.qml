@@ -2,6 +2,7 @@
 import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
+import QtQuick.Effects
 import MvSearch
 import "../components"
 
@@ -369,12 +370,19 @@ Item {
                 spacing: 12
 
                 Image {
+                    id: emptyLogo
                     source: Theme.logoMarkSource
                     width: 72
                     height: 72
                     fillMode: Image.PreserveAspectFit
                     anchors.horizontalCenter: parent.horizontalCenter
-                    opacity: 0.35
+                    opacity: 0.45
+                    // перекрашиваем водяной знак в фирменный красный акцент программы
+                    layer.enabled: true
+                    layer.effect: MultiEffect {
+                        colorization: 1.0
+                        colorizationColor: Theme.accent
+                    }
                 }
 
                 Text {

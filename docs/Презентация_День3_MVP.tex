@@ -36,6 +36,7 @@
 \definecolor{okgreen}{HTML}{1F8A50}
 \definecolor{warnorange}{HTML}{C75000}
 \definecolor{purpletag}{HTML}{6A35B0}
+\definecolor{mvborder}{HTML}{E3D8D8}
 
 \graphicspath{{assets/}{assets/icons/}{../figures/}{figures/}{../figures/complex_eda/}{../figures/complex_eda/markov/}{../figures/complex_eda/model_tag/}{../figures/preprocessing/}{../figures/apps/}}
 
@@ -92,6 +93,16 @@
 \newcommand{\hnum}[1]{{\InterBold\color{mvdark}#1}}
 \newcommand{\hb}[1]{{\InterSemi\color{mvdark}#1}}
 \newcommand{\tnote}[1]{{\color{mvred}\itshape\fontsize{7}{9}\selectfont #1}}
+
+% скриншот приложения с мягкой тенью и рамкой: #1 = опции includegraphics, #2 = файл
+\usetikzlibrary{shadows.blur}
+\newcommand{\appshot}[2]{%
+\begin{tikzpicture}
+  \node[rounded corners=3pt, inner sep=1.5pt, fill=white, draw=mvborder, line width=0.5pt,
+        blur shadow={shadow blur steps=8, shadow xshift=0pt, shadow yshift=-1.2pt,
+                     shadow blur radius=2.4pt, shadow opacity=22}]
+    {\includegraphics[#1]{#2}};
+\end{tikzpicture}}
 
 % чипы-подсветка слов (пример разметки прямо в строке)
 \newcommand{\wtag}[2]{\tikz[baseline=-0.55ex]{\node[rounded corners=2pt, fill=#1, inner xsep=4pt, inner ysep=2.2pt, font=\InterSemi\fontsize{7.8}{9}\selectfont, text=white]{#2};}}
@@ -274,20 +285,20 @@
 % ============================================================
 \begin{frame}[t]
 \slidehead{предобработка · пример}{Живой пример: запрос до и после}
-\graynote{ИСХОДНЫЙ ЗАПРОС}{«Наушники Logitech G-Pro X SE 128гб» — так пишет реальный пользователь: дефисы, склейки, смесь языков.}
-\vspace{5pt}\par
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 1 · расклейка и сепараторы}\par\vspace{3pt}
-{\fontsize{9}{13}\selectfont
+\graynote{ИСХОДНЫЙ ЗАПРОС}{«Наушники Logitech G-Pro X SE 128гб» — дефисы, склейки, смесь языков.}
+\vspace{3pt}\par
+{\InterSemi\fontsize{8}{10}\selectfont Шаг 1 · расклейка и сепараторы}\par\vspace{2pt}
+{\fontsize{8.5}{12}\selectfont
 \wplain{наушники} \ \wplain{logitech} \ \wplain{g} \ \wplain{pro} \ \wplain{x} \ \wplain{se} \ \wplain{128} \ \wplain{гб}}\par\vspace{1pt}
-{\smalltext\color{mvgray} «G-Pro» распался в «g pro», «128гб» — в «128 гб». Теперь словари смогут найти каждую часть.}
-\par\vspace{7pt}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 2 · разметка со словарями и подсказками}\par\vspace{3pt}
-{\fontsize{9}{13}\selectfont
+{\smalltext\color{mvgray} «G-Pro» распался в «g pro», «128гб» — в «128 гб». Теперь словари найдут каждую часть.}
+\par\vspace{5pt}
+{\InterSemi\fontsize{8}{10}\selectfont Шаг 2 · разметка со словарями и подсказками}\par\vspace{2pt}
+{\fontsize{8.5}{12}\selectfont
 \wtag{mvred}{наушники · КАТЕГОРИЯ} \ \wtag{mvdark}{logitech · БРЕНД} \ \wtag{okgreen}{g pro x se · МОДЕЛЬ} \ \wtag{warnorange}{128 гб · АТРИБУТ}}\par\vspace{1pt}
-{\smalltext\color{mvgray} «g pro x se» поймал словарь моделей (собрали его майнингом — следующие слайды), «128 гб» — регулярка памяти.}
-\par\vspace{7pt}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Шаг 3 · готовые факты}\par\vspace{3pt}
-{\smalltext бренд = Logitech · категория = наушники · модель = g pro x se · память = 128 ГБ. Именно эти факты дальше идут в поиск и ранжирование.}
+{\smalltext\color{mvgray} «g pro x se» поймал словарь моделей из майнинга, «128 гб» — регулярка памяти.}
+\par\vspace{5pt}
+{\InterSemi\fontsize{8}{10}\selectfont Шаг 3 · готовые факты}\par\vspace{2pt}
+{\smalltext бренд = Logitech · категория = наушники · модель = g pro x se · память = 128 ГБ.}
 \slidefoot
 \end{frame}
 
@@ -364,17 +375,18 @@
 \begin{frame}[t]
 \slidehead{тег model · майнинг}{Майнинг словаря: пример «g pro»}
 \graynote{ИДЕЯ}{Названия кликнутых карточек уже содержат модели. Находим в названии бренд — и всё, что идёт после него, считаем кандидатом в модели.}
-\vspace{5pt}\par
+\vspace{4pt}\par
 \begin{columns}[T]
-\column{0.52\textwidth}
-{\InterSemi\fontsize{8}{10}\selectfont Название карточки $\to$ кандидаты}\par\vspace{4pt}
-{\fontsize{7.6}{11}\selectfont
-\wplain{Наушники} \ \wtag{mvdark}{Logitech} \ \wtag{okgreen}{G} \ \wtag{okgreen}{PRO} \ \wtag{okgreen}{X} \ \wtag{okgreen}{SE} \ \wplain{Black}}\par\vspace{4pt}
-{\smalltext После бренда снимаем 1–4 коротких токена и получаем цепочку кандидатов:}\par\vspace{3pt}
-{\renewcommand{\arraystretch}{1.1}\setlength{\tabcolsep}{5pt}
-\begin{tabular}{|L{2.3cm}|C{2.3cm}|}
+\column{0.49\textwidth}
+{\InterSemi\fontsize{8}{10}\selectfont Название карточки $\to$ кандидаты}\par\vspace{3pt}
+{\fontsize{6.8}{10}\selectfont
+\wplain{Наушники} \wtag{mvdark}{Logitech} \wtag{okgreen}{G} \wtag{okgreen}{PRO} \wtag{okgreen}{X} \wtag{okgreen}{SE} \wplain{Black}}\par\vspace{3pt}
+{\smalltext После бренда снимаем 1–4 коротких токена:}\par\vspace{2pt}
+{\renewcommand{\arraystretch}{1.05}\setlength{\tabcolsep}{4pt}
+\fontsize{7}{9}\selectfont
+\begin{tabular}{|L{2.0cm}|C{1.9cm}|}
 \hline
-\theadl{Кандидат} & \thead{Встретился раз}\\
+\theadl{Кандидат} & \thead{Раз}\\
 \hline
 \tcelll{g} & \tcellc{213}\\
 \hline
@@ -387,8 +399,8 @@
 \tcelll{g pro x se black} & \tcellc{2 — отсекли}\\
 \hline
 \end{tabular}}
-\column{0.45\textwidth}
-{\InterSemi\fontsize{8}{10}\selectfont Почему порог — 6 раз}\par\vspace{4pt}
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8}{10}\selectfont Почему порог — 6 раз}\par\vspace{3pt}
 {\smalltext
 \numdot{1}\ Фраза попадает в словарь, если встретилась \textbf{минимум 6 раз}. «g pro» видели 87 раз — берём. «g pro x se black» — два раза, случайный хвост, отсекаем.\par\vspace{3pt}
 \numdot{2}\ Порог 2 — словарь раздувается до 7215 фраз и тащит мусор. Порог 20 — остаётся 335 фраз, теряются редкие линейки.\par\vspace{3pt}
@@ -613,33 +625,94 @@ zenbook \ \biotag{okgreen}{B-MODEL}\par\vspace{3pt}
 \end{frame}
 
 % ============================================================
-% 19. КЛАССИФИКАТОР БРЕНДА
+% 19. КЛАССИФИКАТОР БРЕНДА v2 — SILVER-ДАТАСЕТ
 % ============================================================
 \begin{frame}[t]
-\slidehead{mvp · классификатор бренда}{Бренд, когда его нет в тексте}
-\graynote{НА ЧЁМ УЧИЛИ}{Обучающее множество собрано автоматически из кликов: запрос $\to$ самый частый бренд среди кликнутых карточек. Ни одной ручной метки.}
-\vspace{8pt}\par
+\slidehead{mvp · классификатор бренда}{Silver для бренда: 67 классов, не только бренды}
+\pinknote{КЛЮЧЕВАЯ ИДЕЯ}{Классификатор — запасной слой, когда словарь не нашёл бренд. Он не должен отвечать на каждый запрос: на «холодильник» нельзя тыкать в частый клик-бренд. Поэтому в классы добавили NO\_BRAND и UNKNOWN.}
+\vspace{5pt}\par
+\begin{columns}[T]
+\column{0.47\textwidth}
+\centering\includegraphics[width=0.96\textwidth,height=5.6cm,keepaspectratio]{brand_clf/mv_02_silver_composition.png}
+\column{0.5\textwidth}
+{\smalltext
+\numdot{1}\ Из 63 тысяч агрегированных запросов в silver попали 28 664: у остальных нет надёжного сигнала — их честно выбросили, а не разметили наугад.\par\vspace{3pt}
+\numdot{2}\ Уверенность метки — из кликов: клик выше в выдаче весит больше (вес 1/(1+позиция)), майор-бренд должен набрать не меньше 55\% веса.\par\vspace{3pt}
+\numdot{3}\ NO\_BRAND — запрос-категория без бренда («холодильник»). UNKNOWN — бренд есть, но вне топ-65 («стинол», «darina»): модель учится отказываться, а не угадывать похожий.\par\vspace{3pt}
+\numdot{4}\ Разбиение: 22 846 на обучение, 5 710 на валидацию.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 19b. КЛАССИФИКАТОР — 4 МОДЕЛИ
+% ============================================================
+\begin{frame}[t]
+\slidehead{mvp · классификатор бренда}{Четыре модели: что и как обучали}
+\graynote{ПОСТАНОВКА}{Мультикласс запрос $\to$ бренд на silver. Все четыре — линейные модели на TF-IDF: отвечают за миллисекунды, что критично для SLA. Разница — в признаках и балансировке.}
+\vspace{4pt}\par
+{\renewcommand{\arraystretch}{1.05}\setlength{\tabcolsep}{4pt}
+\fontsize{7}{9}\selectfont
+\begin{tabular}{|L{2.7cm}|L{4.3cm}|L{4.3cm}|}
+\hline
+\theadl{Модель} & \theadl{Признаки} & \theadl{Особенность}\\
+\hline
+\tcelll{\hb{LogReg слова+симв.}} & \tcelll{слова 1–2 + символьные n-граммы 2–4} & \tcelll{выбрана в прод: меньше всего ложных брендов}\\
+\hline
+\tcelll{SGD символьная} & \tcelll{символьные n-граммы} & \tcelll{лучший macro-F1, но чаще врёт на категориях}\\
+\hline
+\tcelll{LogReg символьная} & \tcelll{символьные n-граммы} & \tcelll{базовый вариант без словных признаков}\\
+\hline
+\tcelll{LogReg с балансом} & \tcelll{символьные n-граммы} & \tcelll{веса классов — хуже на редких брендах}\\
+\hline
+\end{tabular}}
+\par\vspace{4pt}
+{\smalltext
+\numdot{1}\ Символьные кусочки по 2–4 буквы делают «айфон», «afon» и «iphone» похожими — опечатки не страшны.\par\vspace{2pt}
+\numdot{2}\ Обучение с весами по уверенности клика: сомнительные метки влияют меньше. Все четыре модели сохранены, сравнение — на одной валидации.}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 19c. КЛАССИФИКАТОР — РЕЗУЛЬТАТЫ
+% ============================================================
+\begin{frame}[t]
+\slidehead{mvp · классификатор бренда}{Результаты: 0,95 macro-F1 и честные отказы}
+\begin{columns}[T]
+\column{0.47\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth,height=5.9cm,keepaspectratio]{brand_clf/mv_01_models_compare.png}
+\column{0.5\textwidth}
+\graynote{КАК ЧИТАТЬ}{Верх — macro-F1 до и после порогов отказа. Низ — доля запросов-категорий, где модель ошибочно навязала бренд (главная метрика, цель — ноль).}
+\vspace{5pt}\par
+{\smalltext
+\numdot{1}\ По macro-F1 SGD формально впереди (0{,}951 против 0{,}950), но разница — третий знак.\par\vspace{3pt}
+\numdot{2}\ Решает вторая метрика: у LogReg слова+символы ложный бренд на категориях 6{,}9\% против 9{,}4\% у SGD — её и берём в прод.\par\vspace{3pt}
+\numdot{3}\ F1 спец-классов: NO\_BRAND 0{,}88, UNKNOWN 0{,}86 — модель научилась говорить «бренда нет» и «не знаю».\par\vspace{3pt}
+\numdot{4}\ Примеры: \wplain{айфон 15 про} \chevron\ \wtag{mvdark}{Apple}, \wplain{холодильник} \chevron\ \wtag{mvgray}{NO\_BRAND}.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% 19d. КЛАССИФИКАТОР — ПОРОГИ И КАСКАД
+% ============================================================
+\begin{frame}[t]
+\slidehead{mvp · классификатор бренда}{Пороги отказа: лучше пусто, чем ложный бренд}
 \begin{columns}[T]
 \column{0.5\textwidth}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Как устроен}\par\vspace{5pt}
-{\smalltext
-\numdot{1}\ Признаки — кусочки слов по 3–5 букв. Поэтому «айфон», «afon» и «iphone» выглядят похоже, опечатки не страшны.\par\vspace{4pt}
-\numdot{2}\ 18 914 обучающих запросов, сорок самых частых брендов.\par\vspace{4pt}
-\numdot{3}\ Включается только когда словарь не нашёл бренд в тексте — как запасной вариант.}
+\vspace{2pt}\centering\includegraphics[width=0.96\textwidth,height=4.0cm,keepaspectratio]{brand_clf/mv_04_thresholds.png}
+\par\vspace{3pt}
+{\smalltext\color{mvgray} Хвост по классам: PlayStation 0{,}67 (4 примера), UNKNOWN 0{,}86, NO\_BRAND 0{,}88 — редкие классы ждут золотой разметки.}
 \column{0.47\textwidth}
-{\InterSemi\fontsize{8.5}{10.5}\selectfont Быстрый тест}\par\vspace{5pt}
-\begin{tikzpicture}[st/.style={rounded corners=2pt, fill=cardbg, inner sep=6pt, text width=\dimexpr\textwidth-14pt\relax, font=\smalltext}]
-\node[st]{
-\begin{tabular}{@{}ll@{}}
-Точность (топ-40 брендов) & \InterBold\color{mvred}0{,}80\\[3pt]
-Средний F1 по классам & \InterBold\color{mvred}0{,}77\\[3pt]
-Обучающих запросов & \InterBold 18 914\\
-\end{tabular}};
-\end{tikzpicture}
-\par\vspace{6pt}
-{\fontsize{8}{12}\selectfont
-\wplain{айфон 15 про макс} \ \chevron\ \wtag{mvdark}{Apple}\par\vspace{3pt}
-\wplain{редми ноут 13} \ \chevron\ \wtag{mvdark}{Xiaomi}}
+{\smalltext
+{\InterSemi Когда классификатор вообще зовут:}\par\vspace{3pt}
+\numdot{1}\ Словарь или алиас уже нашли бренд — не зовут.\par\vspace{3pt}
+\numdot{2}\ Запрос — чистая категория — не зовут, бренд пустой.\par\vspace{3pt}
+\numdot{3}\ Есть намёк на бренд (алиас, похожее на модель слово) — зовут.\par\vspace{5pt}
+{\InterSemi Как принимается ответ:}\par\vspace{3pt}
+\numdot{4}\ Уверенность top-1 не ниже 0{,}42 и отрыв от top-2 не меньше 0{,}08 — принимаем бренд.\par\vspace{3pt}
+\numdot{5}\ Ответ NO\_BRAND или UNKNOWN с уверенностью выше своего порога — бренд остаётся пустым, и это правильный ответ.\par\vspace{3pt}
+\numdot{6}\ Пороги не прошли — отказ, бренд пустой. С порогами точность даже растёт: отказы съедают в основном ошибки.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -691,12 +764,12 @@ F1 атрибуты & \InterBold 0{,}85\\
 \wtag{warnorange}{wi-fi} \chevron\ \wplain{связь}}
 \column{0.5\textwidth}
 \graynote{ЭТО БЕЙЗЛАЙН}{Цепь ничего не «понимает» — она запоминает частоты пар токенов. Дальше по плану — переход к RNN (следующий слайд).}
-\vspace{5pt}\par
+\vspace{4pt}\par
 {\smalltext
-\numdot{1}\ {\InterSemi Откуда метки, если разметки нет?} От регулярок-учителей. Регулярка «число + гб» сама знает, что это память, — прогоняем её по 60 тысячам запросов и каждой паре токенов записываем тип, который назначила регулярка.\par\vspace{3pt}
-\numdot{2}\ {\InterSemi Что запоминает цепь.} Таблицу частот: пара «<число>|гб» встретилась 154 раза, и все 154 раза регулярка сказала «память». На инференсе цепь просто смотрит пару соседних токенов в спане.\par\vspace{3pt}
-\numdot{3}\ {\InterSemi Зачем, если есть регулярка?} Цепь обобщает шире: срабатывает и на паре, которую регулярка целиком не поймала (опечатки, перестановки), и отвечает за доли миллисекунды.\par\vspace{3pt}
-\numdot{4}\ Точность против правил-учителя — 0{,}62; в 36\% случаев цепь честно говорит «не знаю», но типы между собой почти не путает.}
+\numdot{1}\ {\InterSemi Откуда метки?} От регулярок-учителей: регулярка «число + гб» сама знает, что это память, — прогоняем её по 60 тыс. запросов и записываем тип каждой паре токенов.\par\vspace{2pt}
+\numdot{2}\ {\InterSemi Что запоминает цепь.} Таблицу частот: пара «<число>|гб» встретилась 154 раза — все 154 раза «память». На инференсе цепь смотрит пару соседних токенов.\par\vspace{2pt}
+\numdot{3}\ {\InterSemi Зачем, если есть регулярка?} Цепь обобщает шире: ловит пары с опечатками и перестановками, отвечает за доли миллисекунды.\par\vspace{2pt}
+\numdot{4}\ Точность против правил — 0{,}62; в 36\% случаев цепь честно говорит «не знаю», но типы почти не путает.}
 \end{columns}
 \slidefoot
 \end{frame}
@@ -786,21 +859,21 @@ F1 атрибуты & \InterBold 0{,}85\\
 \vspace{7pt}\par
 \begin{columns}[T]
 \column{0.4\textwidth}
-\vspace{10pt}
+\vspace{6pt}
 \begin{center}
 \begin{tikzpicture}[
-  bx/.style={rounded corners=3pt, minimum height=0.8cm, minimum width=1.9cm, align=center, font=\InterSemi\fontsize{7.5}{9}\selectfont},
-  ar/.style={-{Stealth[length=2mm]}, line width=1.1pt, mvred}
+  bx/.style={rounded corners=3pt, minimum height=0.7cm, minimum width=1.7cm, align=center, font=\InterSemi\fontsize{7}{8.5}\selectfont},
+  ar/.style={-{Stealth[length=1.8mm]}, line width=1pt, mvred}
 ]
-  \def\R{1.55}
+  \def\R{1.35}
   \node[bx, fill=mvdark, text=white] (model) at (90:\R) {Модель};
-  \node[bx, fill=mvred, text=white] (unc) at (0:\R+0.55) {Сомнения};
+  \node[bx, fill=mvred, text=white] (unc) at (0:\R+0.35) {Сомнения};
   \node[bx, fill=mvdark, text=white] (lab) at (270:\R) {Разметка};
-  \node[bx, fill=mvred, text=white] (ret) at (180:\R+0.55) {Дообучение};
-  \draw[ar] (55:\R+0.35) arc (55:35:\R+0.35);
-  \draw[ar] (325:\R+0.35) arc (325:305:\R+0.35);
-  \draw[ar] (235:\R+0.35) arc (235:215:\R+0.35);
-  \draw[ar] (145:\R+0.35) arc (145:125:\R+0.35);
+  \node[bx, fill=mvred, text=white] (ret) at (180:\R+0.35) {Дообучение};
+  \draw[ar] (58:\R+0.15) arc (58:34:\R+0.15);
+  \draw[ar] (328:\R+0.15) arc (328:304:\R+0.15);
+  \draw[ar] (238:\R+0.15) arc (238:214:\R+0.15);
+  \draw[ar] (148:\R+0.15) arc (148:124:\R+0.15);
 \end{tikzpicture}
 \end{center}
 \column{0.57\textwidth}
@@ -823,11 +896,11 @@ F1 атрибуты & \InterBold 0{,}85\\
 \begin{columns}[T]
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_label_stage1.png}\par\vspace{2pt}
+\appshot{width=\dimexpr\textwidth-8pt\relax,height=4.6cm,keepaspectratio}{apps/cpp_label_stage1.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Этап 1 — разметка B/I/O: активный блок в красной рамке, метки над блоками}
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_label_stage2.png}\par\vspace{2pt}
+\appshot{width=\dimexpr\textwidth-8pt\relax,height=4.6cm,keepaspectratio}{apps/cpp_label_stage2.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Этап 2 — тип сущности: у каждого типа описание, когда его ставить}
 \end{columns}
 \slidefoot
@@ -843,11 +916,11 @@ F1 атрибуты & \InterBold 0{,}85\\
 \begin{columns}[T]
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_label_stage3.png}\par\vspace{2pt}
+\appshot{width=\dimexpr\textwidth-8pt\relax,height=4.6cm,keepaspectratio}{apps/cpp_label_stage3.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Этап 3 — подтип атрибута: у каждого описание и перевод; «другое» — ручной ввод}
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_label_match.png}\par\vspace{2pt}
+\appshot{width=\dimexpr\textwidth-8pt\relax,height=4.6cm,keepaspectratio}{apps/cpp_label_match.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Режим 1/0 с гайдом: когда ставить 1, когда 0; история и прогресс}
 \end{columns}
 \slidefoot
@@ -863,11 +936,11 @@ F1 атрибуты & \InterBold 0{,}85\\
 \begin{columns}[T]
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_mvp_search.png}\par\vspace{2pt}
+\appshot{width=\dimexpr\textwidth-8pt\relax,height=4.6cm,keepaspectratio}{apps/cpp_mvp_search.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Факты чипами + товары, отранжированные по фактам, с полосой релевантности}
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_mvp_json.png}\par\vspace{2pt}
+\appshot{width=\dimexpr\textwidth-8pt\relax,height=4.6cm,keepaspectratio}{apps/cpp_mvp_json.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} По клику раскрывается JSON с сущностями; таймер извлечения — в шапке}
 \end{columns}
 \slidefoot
@@ -883,7 +956,7 @@ F1 атрибуты & \InterBold 0{,}85\\
 \begin{columns}[T]
 \column{0.49\textwidth}
 \centering
-\includegraphics[width=\textwidth,height=5.2cm,keepaspectratio]{apps/cpp_mvp_stats.png}\par\vspace{2pt}
+\appshot{width=\dimexpr\textwidth-8pt\relax,height=4.6cm,keepaspectratio}{apps/cpp_mvp_stats.png}\par\vspace{2pt}
 {\smalltext\color{mvgray} Страница статистики: словари, каталог, метрики качества и устройство каскада}
 \column{0.49\textwidth}
 {\smalltext

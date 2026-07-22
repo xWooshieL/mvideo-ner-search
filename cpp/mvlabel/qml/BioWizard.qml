@@ -1,5 +1,5 @@
 // трёхэтапный мастер BIO-разметки: B/I/O -> тип сущности -> подтип атрибута
-// фон (история) заблюрен, запрос разбит на блоки по центру
+// тип ставится на сущность целиком (B I ... I — одна группа), фон (история) заблюрен
 import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Effects
@@ -13,14 +13,15 @@ Item {
     // ---- состояние
     property int pos: LabelStore.firstUnlabeledBio()
     property int stage: 0            // 0 = BIO, 1 = тип, 2 = подтип
-    property int cursor: 0           // активный блок (этап 0/1) или атрибут (этап 2)
+    property int cursor: 0           // активный блок (этап 0) или группа (этапы 1/2)
     property int subChoice: 0
+    property bool wizardOpen: true   // false = окно разметки закрыто, виден фон с историей
     property var tokens: []
     property var bio: []             // "B"/"I"/"O"/""
-    property var cats: []            // тип для каждого токена
+    property var cats: []            // тип для каждого токена (внутри группы одинаковый)
     property var subs: []            // подтип для ATTR
-    property var entityIdx: []       // индексы токенов с B/I (этап 1)
-    property var attrIdx: []         // индексы токенов ATTR (этап 2)
+    property var groups: []          // сущности: массив массивов индексов токенов
+    property var attrGroups: []      // группы с типом ATTR (этап 2)
 
     readonly property var categories: ["BRAND", "MODEL", "CATEGORY", "ATTR", "GENRE"]
     readonly property var catColors: [Theme.tagBrand, Theme.tagModel, Theme.tagCategory, Theme.tagAttr, Theme.tagGenre]
@@ -51,6 +52,35 @@ Item {
         { code: "other", ru: qsTr("другое (ввести вручную)"), desc: qsTr("если ни один подтип не подходит") }
     ]
 
+    // сущности из BIO: B открывает группу, соседний I продолжает её
+    function computeGroups() {
+        let g = []
+        for (let i = 0; i < tokens.length; ++i) {
+            const t = bio[i]
+            if (t === "B") {
+                g.push([i])
+            } else if (t === "I") {
+                if (g.length > 0 && g[g.length - 1][g[g.length - 1].length - 1] === i - 1)
+                    g[g.length - 1].push(i)
+                else
+                    g.push([i])   // I без B — считаем отдельной сущностью
+            }
+        }
+        groups = g
+    }
+
+    function computeAttrGroups() {
+        let a = []
+        for (let gi = 0; gi < groups.length; ++gi)
+            if (cats[groups[gi][0]] === "ATTR")
+                a.push(groups[gi])
+        attrGroups = a
+    }
+
+    function groupText(g) {
+        return g.map(i => tokens[i]).join(" ")
+    }
+
     function loadQuery() {
         const q = LabelStore.queries[pos] || ""
         tokens = q.split(/\s+/).filter(t => t.length > 0)
@@ -71,7 +101,31 @@ Item {
         }
         bio = b; cats = c; subs = s
         stage = 0; cursor = 0; subChoice = 0
+        groups = []; attrGroups = []
         manualField.visible = false
+    }
+
+    // восстановление последнего этапа сохранённого запроса (маленькая кнопка «назад»)
+    function restoreStage() {
+        const hasBio = bio.some(t => t !== "")
+        if (!hasBio)
+            return
+        computeGroups()
+        const hasCats = groups.length > 0 && groups.some(g => cats[g[0]] !== "")
+        if (!hasCats) {
+            stage = 0
+            cursor = tokens.length - 1
+            return
+        }
+        computeAttrGroups()
+        if (attrGroups.length > 0) {
+            stage = 2
+            cursor = attrGroups.length - 1
+            subChoice = 0
+        } else {
+            stage = 1
+            cursor = groups.length - 1
+        }
     }
 
     Component.onCompleted: {
@@ -96,27 +150,23 @@ Item {
             cursor = Math.min(2, tokens.length - 1)
             return
         }
-        const catPat = ["CATEGORY", "ATTR", "", "BRAND", "MODEL"]
-        entityIdx = []
-        for (let i = 0; i < tokens.length; ++i) {
-            if (b[i] === "B" || b[i] === "I") {
-                entityIdx.push(i)
-                c[i] = catPat[i % catPat.length] || "ATTR"
-            }
-        }
-        bio = b; cats = c
+        bio = b
+        computeGroups()
+        const catPat = ["CATEGORY", "ATTR", "BRAND", "MODEL"]
+        for (let gi = 0; gi < groups.length; ++gi)
+            for (const i of groups[gi])
+                c[i] = catPat[gi % catPat.length]
+        cats = c
         if (demo === "stage2") {
             stage = 1
             cursor = 0
         } else if (demo === "stage3") {
-            attrIdx = []
-            for (let i = 0; i < tokens.length; ++i)
-                if (c[i] === "ATTR")
-                    attrIdx.push(i)
-            if (attrIdx.length === 0) {
-                c[entityIdx[0]] = "ATTR"
+            computeAttrGroups()
+            if (attrGroups.length === 0 && groups.length > 0) {
+                for (const i of groups[0])
+                    c[i] = "ATTR"
                 cats = c
-                attrIdx = [entityIdx[0]]
+                computeAttrGroups()
             }
             stage = 2
             cursor = 0
@@ -155,63 +205,51 @@ Item {
             infoDialog.open()
             return
         }
-        confirmDialog.text = qsTr("Вы подтверждаете разметку B/I/O?")
-        confirmDialog.acceptAction = function() {
-            // дефолтный тип для сущностей
-            let c = cats.slice()
-            entityIdx = []
-            for (let i = 0; i < tokens.length; ++i) {
-                if (bio[i] === "B" || bio[i] === "I") {
-                    entityIdx.push(i)
-                    if (c[i] === "") c[i] = "BRAND"
-                }
-            }
-            cats = c
-            if (entityIdx.length === 0) { save(); return }
-            stage = 1
-            cursor = 0
-        }
-        confirmDialog.open()
+        computeGroups()
+        if (groups.length === 0) { save(); return }
+        // дефолтный тип для групп без типа
+        let c = cats.slice()
+        for (const g of groups)
+            for (const i of g)
+                if (c[i] === "") c[i] = "BRAND"
+        cats = c
+        stage = 1
+        cursor = 0
     }
 
-    // ---- этап 1: типы
+    // ---- этап 1: тип на всю сущность
     function setType(catIndex) {
         let c = cats.slice()
-        c[entityIdx[cursor]] = categories[catIndex]
+        for (const i of groups[cursor])
+            c[i] = categories[catIndex]
         cats = c
-        if (cursor < entityIdx.length - 1)
+        if (cursor < groups.length - 1)
             cursor++
     }
 
     function cycleType(d) {
         let c = cats.slice()
-        const i = entityIdx[cursor]
-        let ci = categories.indexOf(c[i] || "BRAND")
+        const g = groups[cursor]
+        let ci = categories.indexOf(c[g[0]] || "BRAND")
         ci = (ci + d + categories.length) % categories.length
-        c[i] = categories[ci]
+        for (const i of g)
+            c[i] = categories[ci]
         cats = c
     }
 
     function typeEnter() {
-        if (cursor < entityIdx.length - 1) {
+        if (cursor < groups.length - 1) {
             cursor++
             return
         }
-        confirmDialog.text = qsTr("Точно проставили все типы?")
-        confirmDialog.acceptAction = function() {
-            attrIdx = []
-            for (let i = 0; i < tokens.length; ++i)
-                if ((bio[i] === "B" || bio[i] === "I") && cats[i] === "ATTR")
-                    attrIdx.push(i)
-            if (attrIdx.length === 0) { save(); return }
-            stage = 2
-            cursor = 0
-            subChoice = 0
-        }
-        confirmDialog.open()
+        computeAttrGroups()
+        if (attrGroups.length === 0) { save(); return }
+        stage = 2
+        cursor = 0
+        subChoice = 0
     }
 
-    // ---- этап 2: подтипы
+    // ---- этап 2: подтип на всю ATTR-группу
     function subEnter() {
         const st = subtypes[subChoice]
         if (st.code === "other") {
@@ -220,7 +258,8 @@ Item {
             return
         }
         let s = subs.slice()
-        s[attrIdx[cursor]] = st.code
+        for (const i of attrGroups[cursor])
+            s[i] = st.code
         subs = s
         subNext()
     }
@@ -230,7 +269,8 @@ Item {
         if (txt.length === 0)
             return
         let s = subs.slice()
-        s[attrIdx[cursor]] = txt
+        for (const i of attrGroups[cursor])
+            s[i] = txt
         subs = s
         manualField.text = ""
         manualField.visible = false
@@ -239,7 +279,7 @@ Item {
     }
 
     function subNext() {
-        if (cursor < attrIdx.length - 1) {
+        if (cursor < attrGroups.length - 1) {
             cursor++
             subChoice = 0
         } else {
@@ -266,13 +306,26 @@ Item {
         if (pos > 0) { pos--; loadQuery() }
     }
 
+    // маленькая кнопка: назад на последнее состояние, а не на BIO
+    function prevQueryState() {
+        if (pos > 0) {
+            pos--
+            loadQuery()
+            restoreStage()
+        }
+    }
+
     function nextQuery() {
         if (pos < LabelStore.queries.length - 1) { pos++; loadQuery() }
     }
 
-    // ---- клавиатура
+    // ---- клавиатура (латиница и русская раскладка: b/и, i/ш, o/щ)
     focus: true
     Keys.onPressed: (event) => {
+        if (!wizardOpen) {
+            event.accepted = false
+            return
+        }
         if (manualField.visible) {
             if (event.key === Qt.Key_Escape) {
                 manualField.visible = false
@@ -280,11 +333,12 @@ Item {
             }
             return
         }
+        const txt = (event.text || "").toLowerCase()
         event.accepted = true
         if (stage === 0) {
-            if (event.key === Qt.Key_B) setBio("B")
-            else if (event.key === Qt.Key_I) setBio("I")
-            else if (event.key === Qt.Key_O) setBio("O")
+            if (event.key === Qt.Key_B || txt === "и") setBio("B")
+            else if (event.key === Qt.Key_I || txt === "ш") setBio("I")
+            else if (event.key === Qt.Key_O || txt === "щ") setBio("O")
             else if (event.key === Qt.Key_Left) cursor = Math.max(0, cursor - 1)
             else if (event.key === Qt.Key_Right) cursor = Math.min(tokens.length - 1, cursor + 1)
             else if (event.key === Qt.Key_Backspace) bioBackspace()
@@ -295,7 +349,7 @@ Item {
             else if (event.key === Qt.Key_Up) cycleType(-1)
             else if (event.key === Qt.Key_Down) cycleType(1)
             else if (event.key === Qt.Key_Left) cursor = Math.max(0, cursor - 1)
-            else if (event.key === Qt.Key_Right) cursor = Math.min(entityIdx.length - 1, cursor + 1)
+            else if (event.key === Qt.Key_Right) cursor = Math.min(groups.length - 1, cursor + 1)
             else if (event.key === Qt.Key_Backspace) { stage = 0; cursor = tokens.length - 1 }
             else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) typeEnter()
             else event.accepted = false
@@ -306,6 +360,8 @@ Item {
             }
             else if (event.key === Qt.Key_Up) subChoice = (subChoice - 1 + subtypes.length) % subtypes.length
             else if (event.key === Qt.Key_Down) subChoice = (subChoice + 1) % subtypes.length
+            else if (event.key === Qt.Key_Left) { if (cursor > 0) { cursor--; subChoice = 0 } }
+            else if (event.key === Qt.Key_Right) { if (cursor < attrGroups.length - 1) { cursor++; subChoice = 0 } }
             else if (event.key === Qt.Key_Backspace) { stage = 1; cursor = 0 }
             else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) subEnter()
             else event.accepted = false
@@ -315,6 +371,13 @@ Item {
     function catColor(cat) {
         const i = categories.indexOf(cat)
         return i >= 0 ? catColors[i] : Theme.tagO
+    }
+
+    // токен входит в активную группу?
+    function tokenActive(index) {
+        if (stage === 0) return index === cursor
+        const g = stage === 1 ? groups[cursor] : attrGroups[cursor]
+        return g !== undefined && g.indexOf(index) >= 0
     }
 
     // ================= вёрстка =================
@@ -354,7 +417,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            // фоновая история — блюрим
+            // фоновая история — блюрим, пока открыт мастер
             AppCard {
                 id: backdrop
                 anchors.fill: parent
@@ -365,12 +428,73 @@ Item {
                     anchors.margins: 16
                     spacing: 8
 
-                    Text {
-                        text: qsTr("История разметок (клик — открыть запрос)")
-                        font.pixelSize: 11
-                        font.family: Theme.fontFamily
-                        font.weight: Font.Bold
-                        color: Theme.textSecondary
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 10
+
+                        Text {
+                            text: qsTr("История разметок (клик — открыть запрос)")
+                            font.pixelSize: 11
+                            font.family: Theme.fontFamily
+                            font.weight: Font.Bold
+                            color: Theme.textSecondary
+                        }
+
+                        Item { Layout.fillWidth: true }
+
+                        // переключатель аккаунтов — доступен, когда мастер закрыт
+                        Row {
+                            visible: !wizard.wizardOpen
+                            spacing: 6
+
+                            Repeater {
+                                model: [
+                                    { key: "nikita", label: qsTr("Никита") },
+                                    { key: "nekit", label: qsTr("Некит") },
+                                    { key: "liza", label: qsTr("Лиза") }
+                                ]
+
+                                Rectangle {
+                                    required property var modelData
+                                    readonly property bool current: LabelStore.annotatorId === modelData.key
+                                    width: accText.implicitWidth + 22
+                                    height: 28
+                                    radius: 7
+                                    color: current ? Theme.accent : Theme.surface
+                                    border.width: 1
+                                    border.color: current ? Theme.accent : Theme.borderStrong
+
+                                    Text {
+                                        id: accText
+                                        anchors.centerIn: parent
+                                        text: parent.modelData.label
+                                        font.pixelSize: Theme.fontSmall
+                                        font.family: Theme.fontFamily
+                                        font.weight: Font.Bold
+                                        color: parent.current ? "#ffffff" : Theme.text
+                                    }
+
+                                    HoverHandler { cursorShape: Qt.PointingHandCursor }
+                                    TapHandler {
+                                        onTapped: {
+                                            LabelStore.setAnnotator(parent.modelData.key)
+                                            wizard.pos = LabelStore.firstUnlabeledBio()
+                                            wizard.loadQuery()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        AccentButton {
+                            visible: !wizard.wizardOpen
+                            text: qsTr("Продолжить разметку")
+                            implicitHeight: 30
+                            onClicked: {
+                                wizard.wizardOpen = true
+                                wizard.forceActiveFocus()
+                            }
+                        }
                     }
 
                     ListView {
@@ -405,13 +529,15 @@ Item {
                                 onTapped: {
                                     wizard.pos = modelData.index
                                     wizard.loadQuery()
+                                    wizard.wizardOpen = true
+                                    wizard.forceActiveFocus()
                                 }
                             }
                         }
                     }
                 }
 
-                layer.enabled: true
+                layer.enabled: wizard.wizardOpen
                 layer.effect: MultiEffect {
                     blurEnabled: true
                     blur: 0.85
@@ -422,6 +548,7 @@ Item {
             // передний план — мастер
             Rectangle {
                 id: front
+                visible: wizard.wizardOpen
                 anchors.centerIn: parent
                 width: Math.min(parent.width - 40, 920)
                 height: Math.min(parent.height - 24, frontCol.implicitHeight + 44)
@@ -429,6 +556,30 @@ Item {
                 color: Qt.alpha(Theme.surface, 0.96)
                 border.width: 1
                 border.color: Theme.border
+
+                // крестик — закрыть окно разметки (можно вернуться позже)
+                Rectangle {
+                    id: closeBtn
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.margins: 10
+                    width: 26
+                    height: 26
+                    radius: 13
+                    color: closeHover.hovered ? Theme.accentSoft : "transparent"
+                    z: 5
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: "\u2715"
+                        font.pixelSize: 12
+                        font.weight: Font.Bold
+                        color: closeHover.hovered ? Theme.accent : Theme.textSecondary
+                    }
+
+                    HoverHandler { id: closeHover; cursorShape: Qt.PointingHandCursor }
+                    TapHandler { onTapped: wizard.wizardOpen = false }
+                }
 
                 ColumnLayout {
                     id: frontCol
@@ -471,11 +622,7 @@ Item {
                                 required property string modelData
                                 required property int index
 
-                                readonly property bool isActive: {
-                                    if (wizard.stage === 0) return index === wizard.cursor
-                                    if (wizard.stage === 1) return wizard.entityIdx[wizard.cursor] === index
-                                    return wizard.attrIdx[wizard.cursor] === index
-                                }
+                                readonly property bool isActive: wizard.tokenActive(index)
                                 readonly property string myBio: wizard.bio[index] || ""
                                 readonly property string myCat: wizard.cats[index] || ""
                                 readonly property string mySub: wizard.subs[index] || ""
@@ -570,10 +717,10 @@ Item {
                                 Layout.fillWidth: true
                                 text: {
                                     if (wizard.stage === 0)
-                                        return qsTr("Клавиши: B — начало сущности · I — продолжение · O — не сущность")
+                                        return qsTr("Клавиши: B/и — начало сущности · I/ш — продолжение · O/щ — не сущность")
                                     if (wizard.stage === 1)
-                                        return qsTr("Блок «%1» — выберите тип:").arg(wizard.tokens[wizard.entityIdx[wizard.cursor]] || "")
-                                    return qsTr("Атрибут «%1» — выберите подтип:").arg(wizard.tokens[wizard.attrIdx[wizard.cursor]] || "")
+                                        return qsTr("Сущность «%1» — выберите тип (один на всю сущность):").arg(wizard.groups[wizard.cursor] !== undefined ? wizard.groupText(wizard.groups[wizard.cursor]) : "")
+                                    return qsTr("Атрибут «%1» — выберите подтип:").arg(wizard.attrGroups[wizard.cursor] !== undefined ? wizard.groupText(wizard.attrGroups[wizard.cursor]) : "")
                                 }
                                 font.pixelSize: Theme.fontSmall
                                 font.family: Theme.fontFamily
@@ -585,7 +732,7 @@ Item {
                             Text {
                                 visible: wizard.stage === 0
                                 Layout.fillWidth: true
-                                text: qsTr("B ставим на первое слово сущности, I — на её продолжение, O — на служебные слова («для», «купить», «недорого»). Метка появляется над блоком. Backspace — снять метку и шагнуть назад, стрелки — навигация, Enter на последнем блоке — подтвердить этап.")
+                                text: qsTr("B ставим на первое слово сущности, I — на её продолжение, O — на служебные слова («для», «купить», «недорого»). Работают обе раскладки: B/I/O и и/ш/щ. Backspace — снять метку и шагнуть назад, стрелки — навигация, Enter на последнем блоке — дальше.")
                                 font.pixelSize: Theme.fontSmall
                                 font.family: Theme.fontFamily
                                 color: Theme.text
@@ -598,12 +745,13 @@ Item {
 
                                 Text {
                                     required property int index
+                                    readonly property string curCat: wizard.groups[wizard.cursor] !== undefined ? (wizard.cats[wizard.groups[wizard.cursor][0]] || "") : ""
                                     Layout.fillWidth: true
-                                    text: (wizard.cats[wizard.entityIdx[wizard.cursor]] === wizard.categories[index] ? "▶ " : "   ")
+                                    text: (curCat === wizard.categories[index] ? "▶ " : "   ")
                                           + (index + 1) + " · " + wizard.categories[index] + " — " + wizard.catShort[index]
                                     font.pixelSize: Theme.fontSmall
                                     font.family: Theme.fontFamily
-                                    font.weight: wizard.cats[wizard.entityIdx[wizard.cursor]] === wizard.categories[index] ? Font.Bold : Font.Normal
+                                    font.weight: curCat === wizard.categories[index] ? Font.Bold : Font.Normal
                                     color: Theme.text
                                 }
                             }
@@ -613,7 +761,8 @@ Item {
                                 Layout.fillWidth: true
                                 Layout.topMargin: 4
                                 text: {
-                                    const cur = wizard.cats[wizard.entityIdx[wizard.cursor]] || "BRAND"
+                                    if (wizard.groups[wizard.cursor] === undefined) return ""
+                                    const cur = wizard.cats[wizard.groups[wizard.cursor][0]] || "BRAND"
                                     const i = wizard.categories.indexOf(cur)
                                     return qsTr("Выбран %1: %2").arg(cur).arg(wizard.catFull[i >= 0 ? i : 0])
                                 }
@@ -665,9 +814,9 @@ Item {
                     Text {
                         Layout.alignment: Qt.AlignHCenter
                         text: wizard.stage === 0
-                              ? qsTr("B / I / O — тег · ←/→ — блоки · Backspace — снять и назад · Enter — подтвердить")
+                              ? qsTr("B/и · I/ш · O/щ — тег · ←/→ — блоки · Backspace — снять и назад · Enter — дальше")
                               : wizard.stage === 1
-                              ? qsTr("1–5 — тип · ↑/↓ — выбор · ←/→ — блоки · Enter — подтвердить · Backspace — назад")
+                              ? qsTr("1–5 — тип сущности · ↑/↓ — выбор · ←/→ — сущности · Enter — дальше · Backspace — назад")
                               : qsTr("1–9 или ↑/↓ — подтип · Enter — применить и дальше · Backspace — назад")
                         font.pixelSize: 10
                         font.family: Theme.fontFamily
@@ -681,9 +830,25 @@ Item {
         RowLayout {
             Layout.fillWidth: true
 
-            GhostButton {
-                text: qsTr("← Предыдущий запрос")
-                onClicked: wizard.prevQuery()
+            Column {
+                spacing: 4
+
+                // маленькая кнопка: назад на последнее состояние (не на BIO)
+                GhostButton {
+                    text: "↩"
+                    implicitHeight: 24
+                    implicitWidth: 40
+                    onClicked: wizard.prevQueryState()
+
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 400
+                    ToolTip.text: qsTr("Назад на последнее состояние разметки")
+                }
+
+                GhostButton {
+                    text: qsTr("← Предыдущий запрос")
+                    onClicked: wizard.prevQuery()
+                }
             }
 
             Item { Layout.fillWidth: true }
@@ -695,65 +860,7 @@ Item {
         }
     }
 
-    // ---- диалоги
-    Dialog {
-        id: confirmDialog
-        anchors.centerIn: parent
-        modal: true
-        width: 380
-        padding: 22
-
-        property string text
-        property var acceptAction: function() {}
-
-        background: Rectangle {
-            radius: Theme.radiusLarge
-            color: Theme.surface
-            border.width: 1
-            border.color: Theme.border
-        }
-
-        Overlay.modal: Rectangle { color: Qt.rgba(0, 0, 0, 0.35) }
-
-        contentItem: ColumnLayout {
-            spacing: 16
-
-            Text {
-                Layout.fillWidth: true
-                text: confirmDialog.text
-                font.pixelSize: Theme.fontMedium
-                font.family: Theme.fontFamily
-                font.weight: Font.DemiBold
-                color: Theme.text
-                wrapMode: Text.WordWrap
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 10
-
-                AccentButton {
-                    Layout.fillWidth: true
-                    text: qsTr("Да, подтверждаю")
-                    onClicked: {
-                        confirmDialog.close()
-                        confirmDialog.acceptAction()
-                        wizard.forceActiveFocus()
-                    }
-                }
-
-                GhostButton {
-                    Layout.fillWidth: true
-                    text: qsTr("Нет, ещё поправлю")
-                    onClicked: {
-                        confirmDialog.close()
-                        wizard.forceActiveFocus()
-                    }
-                }
-            }
-        }
-    }
-
+    // ---- инфо-диалог (незаполненные блоки)
     Dialog {
         id: infoDialog
         anchors.centerIn: parent
