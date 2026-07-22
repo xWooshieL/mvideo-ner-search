@@ -1,0 +1,10 @@
+clicks=150000
+brand=5567 o_tail=2508 share=0.451
+top tails: [{'o_tail_phrase': '15', 'count': 23}, {'o_tail_phrase': '16', 'count': 15}, {'o_tail_phrase': '11', 'count': 14}, {'o_tail_phrase': 'watch', 'count': 12}, {'o_tail_phrase': 'pro', 'count': 11}, {'o_tail_phrase': '14', 'count': 10}, {'o_tail_phrase': '55', 'count': 10}, {'o_tail_phrase': '65', 'count': 10}]
+raw=7700 titles=42497
+saved model_phrases n=1344
+AFTER наушники logitech g pro x se -> [('наушники', 'B-CATEGORY'), ('logitech', 'B-BRAND'), ('g', 'B-MODEL'), ('pro', 'I-MODEL'), ('x', 'I-MODEL'), ('se', 'I-MODEL')]
+AFTER dyson v15 -> [('dyson', 'B-BRAND'), ('v15', 'B-MODEL')]
+AFTER samsung galaxy s24 -> [('samsung', 'B-BRAND'), ('galaxy', 'B-BRAND'), ('s24', 'O')]
+reduction=0.238 model_queries=1125
+DONE

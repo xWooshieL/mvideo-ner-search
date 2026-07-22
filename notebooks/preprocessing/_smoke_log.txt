@@ -1,0 +1,10 @@
+clicks=80000
+mined=3925
+saved_models=2945 has_gproxse=True
+Q='наушники logitech g-pro x se' norm='наушники logitech g pro x se' model=[{'text': 'g pro x se', 'start_tok': 2, 'end_tok': 6, 'label': 'MODEL'}] prot=[] bio=[('наушники', 'B-CATEGORY'), ('logitech', 'B-BRAND'), ('g', 'B-MODEL'), ('pro', 'I-MODEL'), ('x', 'I-MODEL'), ('se', 'I-MODEL')]
+Q='Красный Октябрь' norm='красный октябрь' model=[] prot=[{'text': 'красный октябрь', 'start_tok': 0, 'end_tok': 2, 'label': 'PROTECTED_BRAND'}] bio=[('красный', 'B-BRAND'), ('октябрь', 'I-BRAND')]
+Q='красный телефон' norm='красный телефон' model=[] prot=[] bio=[('красный', 'B-ATTR'), ('телефон', 'B-CATEGORY')]
+Q='Ноутбук 16гб' norm='ноутбук 16 гб' model=[] prot=[] bio=[('ноутбук', 'B-CATEGORY'), ('16', 'B-ATTR'), ('гб', 'I-ATTR')]
+Q='dyson v15' norm='dyson v15' model=[{'text': 'v15', 'start_tok': 1, 'end_tok': 2, 'label': 'MODEL'}] prot=[] bio=[('dyson', 'B-BRAND'), ('v15', 'B-MODEL')]
+share_model=0.1572
+DONE

@@ -247,6 +247,7 @@ class WeakLabeler:
     categories: Set[str] = field(default_factory=set)
     genres: Set[str] = field(default_factory=set)  # НОВОЕ: для жанров фильмов/игр
     persons: Set[str] = field(default_factory=set)  # НОВОЕ: для актеров и режиссеров
+    models: Set[str] = field(default_factory=set)  # линейки / product lines (g pro x se, v15, …)
     colors: Set[str] = field(default_factory=lambda: set(COLORS))
 
     # lower -> canonical display form
@@ -254,12 +255,14 @@ class WeakLabeler:
     category_canonical: Dict[str, str] = field(default_factory=dict)
     genre_canonical: Dict[str, str] = field(default_factory=dict)  # НОВОЕ
     person_canonical: Dict[str, str] = field(default_factory=dict)  # НОВОЕ
+    model_canonical: Dict[str, str] = field(default_factory=dict)
 
     # sorted longest-first phrase lists (token sequences)
     _brand_phrases: List[List[str]] = field(default_factory=list, repr=False)
     _category_phrases: List[List[str]] = field(default_factory=list, repr=False)
     _genre_phrases: List[List[str]] = field(default_factory=list, repr=False)  # НОВОЕ
     _person_phrases: List[List[str]] = field(default_factory=list, repr=False)
+    _model_phrases: List[List[str]] = field(default_factory=list, repr=False)
 
     @classmethod
     def from_files(
@@ -268,12 +271,14 @@ class WeakLabeler:
             categories_path: Path | str,
             genres_path: Path | str | None = None,  # НОВОЕ: опциональный путь к жанрам
             persons_path: Path | str | None = None,  # НОВОЕ: опциональный путь к персонам
+            models_path: Path | str | None = None,
     ) -> "WeakLabeler":
         brands = _load_lines(brands_path)
         categories = _load_lines(categories_path)
         genres = _load_lines(genres_path) if genres_path else []
         persons = _load_lines(persons_path) if persons_path else []
-        return cls.from_iterables(brands, categories, genres, persons)
+        models = _load_lines(models_path) if models_path else []
+        return cls.from_iterables(brands, categories, genres, persons, models)
 
     @classmethod
     def from_iterables(
@@ -282,6 +287,7 @@ class WeakLabeler:
             categories: Iterable[str] | None = None,
             genres: Iterable[str] | None = None,  # НОВОЕ
             persons: Iterable[str] | None = None,  # НОВОЕ
+            models: Iterable[str] | None = None,
     ) -> "WeakLabeler":
         # 1. Обработка брендов / вендоров
         brand_canonical: Dict[str, str] = {}
@@ -331,15 +337,31 @@ class WeakLabeler:
             pn = _normalize(p)
             person_canonical[pn] = p
 
+        # 5. Product lines / MODEL (g pro x se, v15, …) — не путать с ATTR-числами
+        model_canonical: Dict[str, str] = {}
+        for m in models or []:
+            m = (m or "").strip()
+            if len(m) < 2:
+                continue
+            mn = _normalize(m)
+            toks = mn.split()
+            if not toks:
+                continue
+            if all(t.replace(".", "").isdigit() for t in toks):
+                continue
+            model_canonical[mn] = m
+
         obj = cls(
             brands=set(brand_canonical.keys()),
             categories=set(cat_canonical.keys()),
             genres=set(genre_canonical.keys()),  # НОВОЕ
             persons=set(person_canonical.keys()),  # НОВОЕ
+            models=set(model_canonical.keys()),
             brand_canonical=brand_canonical,
             category_canonical=cat_canonical,
             genre_canonical=genre_canonical,  # НОВОЕ
             person_canonical=person_canonical,  # НОВОЕ
+            model_canonical=model_canonical,
         )
         obj._compile_phrases()
         return obj
@@ -349,16 +371,19 @@ class WeakLabeler:
         cat_phrases = [p.split() for p in self.categories if p]
         genre_phrases = [p.split() for p in self.genres if p]  # НОВОЕ
         person_phrases = [p.split() for p in self.persons if p]  # НОВОЕ
+        model_phrases = [p.split() for p in self.models if p]
 
         brand_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
         cat_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
         genre_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))  # НОВОЕ
         person_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))  # НОВОЕ
+        model_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
 
         self._brand_phrases = brand_phrases
         self._category_phrases = cat_phrases
         self._genre_phrases = genre_phrases  # НОВОЕ
         self._person_phrases = person_phrases  # НОВОЕ
+        self._model_phrases = model_phrases
 
     def label_query(self, query: str) -> List[Tuple[str, str]]:
         """Return list of (token, BIO-tag)."""
@@ -370,20 +395,22 @@ class WeakLabeler:
 
         # 1) Brands (longest match)
         self._apply_phrases(lower_toks, tags, self._brand_phrases, "BRAND")
-        # 2) Categories
+        # 2) MODEL / product line (после бренда, только на O)
+        self._apply_phrases(lower_toks, tags, self._model_phrases, "MODEL")
+        # 3) Categories
         self._apply_phrases(lower_toks, tags, self._category_phrases, "CATEGORY")
-        # 3) Genres (например, "боевик")
+        # 4) Genres (например, "боевик")
         self._apply_phrases(lower_toks, tags, self._genre_phrases, "GENRE")
-        # 4) Persons (актеры, режиссеры вроде "Лиам Нисон")
+        # 5) Persons (актеры, режиссеры вроде "Лиам Нисон")
         self._apply_phrases(lower_toks, tags, self._person_phrases, "PERSON")
 
-        # 5) Colors as ATTR
+        # 6) Colors as ATTR
         for i, lt in enumerate(lower_toks):
             if tags[i] != "O":
                 continue
             if lt in self.colors or lt.replace("ё", "е") in self.colors:
                 tags[i] = "B-ATTR"
-        # 6) Regex attributes on original query → map to tokens
+        # 7) Regex attributes on original query → map to tokens
         self._apply_attr_patterns(query, tokens, tags)
 
         return [(tokens[i][0], tags[i]) for i in range(len(tokens))]
@@ -481,6 +508,7 @@ def entities_to_structured(entities: List[Dict], labeler: Optional[WeakLabeler] 
     """Превращает список найденных сущностей в итоговый JSON-пакет для ответа пользователю или аналитики, раскладывая всё по полочкам (бренд, категория, атрибуты)"""
     brand = None
     category = None
+    model = None
     attributes: Dict[str, List[str]] = {}
     for ent in entities:
         label = ent["label"]
@@ -491,12 +519,16 @@ def entities_to_structured(entities: List[Dict], labeler: Optional[WeakLabeler] 
         elif label == "CATEGORY" and category is None:
             key = _normalize(text)
             category = labeler.category_canonical.get(key, text) if labeler else text
+        elif label == "MODEL" and model is None:
+            key = _normalize(text)
+            model = labeler.model_canonical.get(key, text) if labeler else text
         elif label == "ATTR":
             attr_type = _guess_attr_type(text)
             attributes.setdefault(attr_type, []).append(text)
     return {
         "brand": brand,
         "category": category,
+        "model": model,
         "attributes": {k: v[0] if len(v) == 1 else v for k, v in attributes.items()},
     }
 

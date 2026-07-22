@@ -5,7 +5,8 @@
 Ноутбуки:
 - [`01_methods_eda.ipynb`](./01_methods_eda.ipynb) — обзор методов  
 - [`02_markov_eda.ipynb`](./02_markov_eda.ipynb) — типизация ATTR (Markov / vs RNN)  
-- [`03_click_eda.ipynb`](./03_click_eda.ipynb) — разметка релевантности кликов
+- [`03_click_eda.ipynb`](./03_click_eda.ipynb) — разметка релевантности кликов  
+- [`04_model_tag_eda.ipynb`](./04_model_tag_eda.ipynb) — тег `MODEL`, майнинг `model_phrases.txt`, пороги
 
 > Целевой вход продакшена — **поисковый запрос**, выход — структурированные факты (`brand`, `category`, `attributes`) за **&lt; 100 мс**.  
 > Клики и карточки SKU — **топливо** для словарей, weak labels и retrieval, а не объект парсинга в инференсе.

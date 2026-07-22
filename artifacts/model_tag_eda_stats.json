@@ -1,0 +1,107 @@
+{
+  "sample_queries": 15000,
+  "with_brand": 7046,
+  "latin_o_tails_before": 3262,
+  "latin_o_tails_after": 2502,
+  "o_tail_reduction": 0.2329858982219497,
+  "queries_with_model_after": 1573,
+  "min_count": 6,
+  "n_model_phrases": 1512,
+  "chosen_threshold_table": [
+    {
+      "min_count": 2,
+      "dict_size": 7215,
+      "o_tail_coverage": 0.3543838136112814
+    },
+    {
+      "min_count": 3,
+      "dict_size": 3783,
+      "o_tail_coverage": 0.31759656652360513
+    },
+    {
+      "min_count": 4,
+      "dict_size": 2601,
+      "o_tail_coverage": 0.28080931943592885
+    },
+    {
+      "min_count": 5,
+      "dict_size": 1894,
+      "o_tail_coverage": 0.2431023911710607
+    },
+    {
+      "min_count": 6,
+      "dict_size": 1512,
+      "o_tail_coverage": 0.22011036174126303
+    },
+    {
+      "min_count": 7,
+      "dict_size": 1246,
+      "o_tail_coverage": 0.20478234212139793
+    },
+    {
+      "min_count": 8,
+      "dict_size": 1079,
+      "o_tail_coverage": 0.19343960760269774
+    },
+    {
+      "min_count": 9,
+      "dict_size": 905,
+      "o_tail_coverage": 0.1768853464132434
+    },
+    {
+      "min_count": 10,
+      "dict_size": 802,
+      "o_tail_coverage": 0.17136725935009198
+    },
+    {
+      "min_count": 11,
+      "dict_size": 709,
+      "o_tail_coverage": 0.15971796443899447
+    },
+    {
+      "min_count": 12,
+      "dict_size": 644,
+      "o_tail_coverage": 0.15021459227467812
+    },
+    {
+      "min_count": 13,
+      "dict_size": 564,
+      "o_tail_coverage": 0.14040465971796443
+    },
+    {
+      "min_count": 14,
+      "dict_size": 514,
+      "o_tail_coverage": 0.1358062538320049
+    },
+    {
+      "min_count": 15,
+      "dict_size": 475,
+      "o_tail_coverage": 0.13243408951563457
+    },
+    {
+      "min_count": 16,
+      "dict_size": 443,
+      "o_tail_coverage": 0.12507664009809932
+    },
+    {
+      "min_count": 17,
+      "dict_size": 405,
+      "o_tail_coverage": 0.11833231146535868
+    },
+    {
+      "min_count": 18,
+      "dict_size": 386,
+      "o_tail_coverage": 0.11587982832618025
+    },
+    {
+      "min_count": 19,
+      "dict_size": 359,
+      "o_tail_coverage": 0.11036174126302882
+    },
+    {
+      "min_count": 20,
+      "dict_size": 335,
+      "o_tail_coverage": 0.10545677498467199
+    }
+  ]
+}

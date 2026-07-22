@@ -1,0 +1,11 @@
+{
+  "n_model_phrases": 2945,
+  "demo_g_pro_x_se": [
+    {
+      "text": "g pro x se",
+      "start_tok": 1,
+      "end_tok": 5,
+      "label": "MODEL"
+    }
+  ]
+}
