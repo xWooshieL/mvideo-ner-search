@@ -10,6 +10,10 @@ Item {
 
     property int mode: LabelStore.envValue("MV_DEMO") === "match" ? 1 : 0   // 0 = BIO, 1 = match
 
+    SettingsPopup {
+        id: settingsPopup
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
@@ -79,6 +83,25 @@ Item {
                     label: qsTr("Соответствие 1/0")
                     active: mainWindow.mode === 1
                     onClicked: mainWindow.mode = 1
+                }
+
+                Rectangle {
+                    Layout.preferredWidth: 34
+                    Layout.preferredHeight: 34
+                    radius: 8
+                    color: settingsHover.hovered ? Qt.rgba(1, 1, 1, 0.18) : "transparent"
+
+                    Behavior on color { ColorAnimation { duration: 140 } }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: "\u2699"
+                        font.pixelSize: 17
+                        color: "#ffffff"
+                    }
+
+                    HoverHandler { id: settingsHover; cursorShape: Qt.PointingHandCursor }
+                    TapHandler { onTapped: settingsPopup.settingsPopup.open() }
                 }
             }
         }

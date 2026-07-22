@@ -40,6 +40,7 @@ qt_add_qml_module(mvlabel
         qml/MainWindow.qml
         qml/BioWizard.qml
         qml/MatchPage.qml
+        qml/SettingsPopup.qml
         qml/components/AccentButton.qml
         qml/components/GhostButton.qml
         qml/components/AppCard.qml

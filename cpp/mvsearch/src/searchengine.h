@@ -58,6 +58,11 @@ public:
     Q_INVOKABLE QString envQuery() const;
     Q_INVOKABLE QString envShootPath() const;
 
+    // удаление приложения из настроек — как в ГК МОС: помечаем, что стереть, потом
+    // запускаем деинсталлятор Inno Setup и закрываемся
+    Q_INVOKABLE void prepareForUninstall(bool deleteSettings);
+    Q_INVOKABLE void launchUninstaller();
+
 signals:
     void readyChanged();
 
