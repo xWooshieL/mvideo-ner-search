@@ -23,7 +23,6 @@ Item {
     property bool reviewReady: false          // Enter в окне проверки принимаем только после паузы
     property var pendingTags: []
     property var pendingSubs: ({})
-    property var reviewLines: []
     property var tokens: []
     property var bio: []             // "B"/"I"/"O"/""
     property var cats: []            // тип для каждого токена (внутри группы одинаковый)
@@ -116,11 +115,10 @@ Item {
         reviewReady = false
         pendingTags = []
         pendingSubs = ({})
-        reviewLines = []
         reviewOpenTimer.stop()
         reviewReadyTimer.stop()
-        if (reviewDialog.visible)
-            reviewDialog.close()
+        if (reviewOverlay.visible)
+            reviewOverlay.visible = false
         closeManualSubtype()
         // ВАЖНО: без этого клавиатурный фокус мог "залипнуть" на скрытом manualField
         // (например, если ушли на новый запрос кликом мыши, не нажав Enter после
@@ -344,17 +342,6 @@ Item {
     }
 
     // ---- сохранение и переходы
-    function buildReviewLines(tags, st) {
-        let lines = []
-        for (let i = 0; i < tokens.length; ++i) {
-            let line = tokens[i] + "  →  " + tags[i]
-            if (st[String(i)])
-                line += " · " + st[String(i)]
-            lines.push(line)
-        }
-        return lines
-    }
-
     function save() {
         let tags = []
         let st = ({})
@@ -365,17 +352,16 @@ Item {
         }
         pendingTags = tags
         pendingSubs = st
-        reviewLines = buildReviewLines(tags, st)
         reviewReady = false
         blockWizardKeys = true
         reviewOpenTimer.restart()
     }
 
     function confirmReview() {
-        if (!reviewDialog.visible)
+        if (!reviewOverlay.visible || !reviewReady)
             return
         LabelStore.saveBio(pos, tokens.join(" "), pendingTags, pendingSubs)
-        reviewDialog.close()
+        reviewOverlay.visible = false
         reviewReady = false
         blockWizardKeys = false
         if (pos < LabelStore.queries.length - 1)
@@ -384,9 +370,9 @@ Item {
     }
 
     function rejectReview() {
-        if (!reviewDialog.visible)
+        if (!reviewOverlay.visible)
             return
-        reviewDialog.close()
+        reviewOverlay.visible = false
         reviewReady = false
         blockWizardKeys = false
         restoreStage()
@@ -398,20 +384,20 @@ Item {
         interval: 0
         repeat: false
         onTriggered: {
-            reviewDialog.open()
-            // короткая пауза: тот же Enter, что завершил этап, не должен сразу подтвердить review
+            reviewOverlay.visible = true
+            // пауза: Enter, которым закрыли этап 3, не должен сразу подтвердить review
             reviewReadyTimer.restart()
         }
     }
 
     Timer {
         id: reviewReadyTimer
-        interval: 120
+        interval: 180
         repeat: false
         onTriggered: {
             blockWizardKeys = false
             reviewReady = true
-            reviewDialog.forceActiveFocus()
+            reviewOverlay.forceActiveFocus()
         }
     }
 
@@ -439,7 +425,13 @@ Item {
             event.accepted = false
             return
         }
-        if (reviewDialog.visible) {
+        if (reviewOverlay.visible) {
+            if (reviewReady) {
+                if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter)
+                    confirmReview()
+                else if (event.key === Qt.Key_Escape || event.key === Qt.Key_Backspace)
+                    rejectReview()
+            }
             event.accepted = true
             return
         }
@@ -1053,24 +1045,14 @@ Item {
         }
     }
 
-    // ---- проверка разметки перед сохранением
-    Dialog {
-        id: reviewDialog
-        anchors.centerIn: parent
-        modal: true
-        width: Math.min(parent.width - 48, 520)
-        padding: 22
-        focus: true
-        closePolicy: Popup.NoAutoClose
-
-        background: Rectangle {
-            radius: Theme.radiusLarge
-            color: Theme.surface
-            border.width: 1
-            border.color: Theme.border
-        }
-
-        Overlay.modal: Rectangle { color: Qt.rgba(0, 0, 0, 0.45) }
+    // ---- проверка разметки перед сохранением (оверлей, не Dialog — иначе Enter без фокуса)
+    Rectangle {
+        id: reviewOverlay
+        anchors.fill: parent
+        visible: false
+        z: 100
+        color: Qt.rgba(0, 0, 0, 0.45)
+        focus: visible
 
         Keys.onPressed: (event) => {
             if (!wizard.reviewReady) {
@@ -1084,90 +1066,152 @@ Item {
                 wizard.rejectReview()
                 event.accepted = true
             } else {
-                event.accepted = false
+                event.accepted = true
             }
         }
 
-        contentItem: ColumnLayout {
-            spacing: 14
+        MouseArea {
+            anchors.fill: parent
+            onClicked: reviewOverlay.forceActiveFocus()
+        }
 
-            Text {
-                Layout.fillWidth: true
-                text: qsTr("Правильно ли разметили?")
-                font.pixelSize: Theme.fontMedium
-                font.family: Theme.fontFamily
-                font.weight: Font.Bold
-                color: Theme.text
+        Rectangle {
+            anchors.centerIn: parent
+            width: Math.min(parent.width - 40, 720)
+            height: Math.min(parent.height - 40, reviewInner.implicitHeight + 48)
+            radius: Theme.radiusLarge
+            color: Theme.surface
+            border.width: 1
+            border.color: Theme.border
+            clip: true
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: reviewOverlay.forceActiveFocus()
             }
 
-            Text {
-                Layout.fillWidth: true
-                text: "«" + (LabelStore.queries[wizard.pos] || "") + "»"
-                font.pixelSize: Theme.fontBody
-                font.family: Theme.fontFamily
-                color: Theme.textSecondary
-                wrapMode: Text.WordWrap
-            }
+            ColumnLayout {
+                id: reviewInner
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.margins: 24
+                spacing: 16
 
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(280, reviewCol.implicitHeight + 20)
-                radius: Theme.radiusSmall
-                color: Theme.surfaceAlt
-                border.width: 1
-                border.color: Theme.border
-                clip: true
+                Text {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                    text: qsTr("Правильно ли разметили?")
+                    font.pixelSize: Theme.fontMedium
+                    font.family: Theme.fontFamily
+                    font.weight: Font.Bold
+                    color: Theme.text
+                }
 
-                Flickable {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    contentHeight: reviewCol.implicitHeight
-                    clip: true
-                    boundsBehavior: Flickable.StopAtBounds
+                Text {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                    text: qsTr("Запрос %1 · «%2»")
+                          .arg(wizard.pos + 1)
+                          .arg(LabelStore.queries[wizard.pos] || "")
+                    font.pixelSize: Theme.fontSmall
+                    font.family: Theme.fontFamily
+                    color: Theme.textSecondary
+                    wrapMode: Text.WordWrap
+                }
 
-                    Column {
-                        id: reviewCol
-                        width: parent.width
-                        spacing: 6
+                Flow {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 10
 
-                        Repeater {
-                            model: wizard.reviewLines
-                            Text {
-                                required property string modelData
-                                width: reviewCol.width
-                                text: modelData
-                                font.pixelSize: Theme.fontSmall
-                                font.family: Theme.fontFamily
-                                color: Theme.text
-                                wrapMode: Text.WordWrap
+                    Repeater {
+                        model: wizard.tokens.length
+
+                        Column {
+                            id: revCol
+                            required property int index
+                            spacing: 4
+
+                            readonly property string tok: wizard.tokens[index] || ""
+                            readonly property string myBio: wizard.bio[index] || ""
+                            readonly property string myCat: wizard.cats[index] || ""
+                            readonly property string mySub: wizard.subs[index] || ""
+
+                            Rectangle {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                width: revTag.implicitWidth + 14
+                                height: 20
+                                radius: 5
+                                color: revCol.myBio === "O" ? Theme.tagO
+                                       : revCol.myCat !== "" ? wizard.catColor(revCol.myCat)
+                                       : Theme.tagBrand
+
+                                Text {
+                                    id: revTag
+                                    anchors.centerIn: parent
+                                    text: {
+                                        if (revCol.myBio === "O") return "O"
+                                        let t = revCol.myBio
+                                        if (revCol.myCat !== "") t += "-" + revCol.myCat
+                                        if (revCol.mySub !== "") t += " · " + revCol.mySub
+                                        return t
+                                    }
+                                    font.pixelSize: 9
+                                    font.family: Theme.fontFamily
+                                    font.weight: Font.Bold
+                                    color: "#ffffff"
+                                }
+                            }
+
+                            Rectangle {
+                                width: revTok.implicitWidth + 34
+                                height: 50
+                                radius: 10
+                                color: revCol.myBio === "O" ? Theme.surfaceAlt
+                                       : revCol.myCat !== "" ? wizard.catColor(revCol.myCat)
+                                       : Theme.tagBrand
+                                border.width: 1
+                                border.color: Theme.border
+
+                                Text {
+                                    id: revTok
+                                    anchors.centerIn: parent
+                                    text: revCol.tok
+                                    font.pixelSize: Theme.fontMedium
+                                    font.family: Theme.fontFamily
+                                    font.weight: Font.Bold
+                                    color: revCol.myBio === "O" ? Theme.textSecondary : "#ffffff"
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            Text {
-                Layout.fillWidth: true
-                text: qsTr("Enter — да, верно · Esc / Backspace — исправить")
-                font.pixelSize: 10
-                font.family: Theme.fontFamily
-                color: Theme.textTertiary
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 10
-
-                GhostButton {
+                Text {
                     Layout.fillWidth: true
-                    text: qsTr("Исправить")
-                    onClicked: wizard.rejectReview()
+                    horizontalAlignment: Text.AlignHCenter
+                    text: qsTr("Enter — да, верно · Esc — исправить")
+                    font.pixelSize: 10
+                    font.family: Theme.fontFamily
+                    color: Theme.textTertiary
                 }
 
-                AccentButton {
+                RowLayout {
                     Layout.fillWidth: true
-                    text: qsTr("Да, верно")
-                    onClicked: wizard.confirmReview()
+                    spacing: 10
+
+                    GhostButton {
+                        Layout.fillWidth: true
+                        text: qsTr("Исправить")
+                        onClicked: wizard.rejectReview()
+                    }
+
+                    AccentButton {
+                        Layout.fillWidth: true
+                        text: qsTr("Да, верно ↵")
+                        onClicked: wizard.confirmReview()
+                    }
                 }
             }
         }

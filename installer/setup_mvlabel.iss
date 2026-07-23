@@ -1,6 +1,6 @@
-; установщик М.Видео Разметка v0.1.3 — стиль как у ГК МОС
+; установщик М.Видео Разметка v0.1.4 — стиль как у ГК МОС
 #define AppName "М.Видео Разметка"
-#define AppVersion "0.1.3"
+#define AppVersion "0.1.4"
 #define AppPublisher "Команда буткемпа М.Видео"
 #define AppExeName "MvLabel.exe"
 #define DistDir "C:\mv-app\dist\mvlabel"
