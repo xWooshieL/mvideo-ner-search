@@ -279,8 +279,14 @@ Item {
         subs = s
         manualField.text = ""
         manualField.visible = false
-        wizard.forceActiveFocus()
-        subNext()
+        // Нельзя сразу forceActiveFocus + subNext в том же Enter-событии:
+        // фокус вернётся мастеру, и тот же Enter повторно вызовет Keys.onPressed
+        // → subEnter() на СЛЕДУЮЩИЙ ATTR с дефолтным подтипом (memory_storage)
+        // → если ATTR был последним, сразу save() и прыжок на следующий запрос.
+        Qt.callLater(function() {
+            wizard.forceActiveFocus()
+            subNext()
+        })
     }
 
     function subNext() {
@@ -332,10 +338,14 @@ Item {
             return
         }
         if (manualField.visible) {
+            // Пока открыт ручной ввод — Enter обрабатывает только TextField.onAccepted.
+            // Иначе тот же Enter долетает до мастера и «прокликивает» следующий ATTR.
             if (event.key === Qt.Key_Escape) {
                 manualField.visible = false
-                event.accepted = true
+                manualField.text = ""
+                wizard.forceActiveFocus()
             }
+            event.accepted = true
             return
         }
         const txt = (event.text || "").toLowerCase()
