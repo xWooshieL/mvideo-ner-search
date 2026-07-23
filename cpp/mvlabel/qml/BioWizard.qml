@@ -18,6 +18,11 @@ Item {
     property int cursor: 0           // активный блок (этап 0) или группа (этапы 1/2)
     property int subChoice: 0
     property bool wizardOpen: true   // false = окно разметки закрыто, виден фон с историей
+    // блокирует Keys мастера на время ручного ввода / пока Enter после other не «остыл»
+    property bool blockWizardKeys: false
+    property bool reviewReady: false          // Enter в окне проверки принимаем только после паузы
+    property var pendingTags: []
+    property var pendingSubs: ({})
     property var tokens: []
     property var bio: []             // "B"/"I"/"O"/""
     property var cats: []            // тип для каждого токена (внутри группы одинаковый)
@@ -106,12 +111,38 @@ Item {
         bio = b; cats = c; subs = s
         stage = 0; cursor = 0; subChoice = 0
         groups = []; attrGroups = []
-        manualField.text = ""
-        manualField.visible = false
+        blockWizardKeys = false
+        reviewReady = false
+        pendingTags = []
+        pendingSubs = ({})
+        reviewOpenTimer.stop()
+        reviewReadyTimer.stop()
+        if (reviewOverlay.visible)
+            reviewOverlay.visible = false
+        closeManualSubtype()
         // ВАЖНО: без этого клавиатурный фокус мог "залипнуть" на скрытом manualField
         // (например, если ушли на новый запрос кликом мыши, не нажав Enter после
         // ручного ввода подтипа) — тогда B/I/O/цифры перестают что-либо делать.
         wizard.forceActiveFocus()
+    }
+
+    function closeManualSubtype() {
+        manualField.text = ""
+        manualField.focus = false
+        manualField.visible = false
+    }
+
+    function openManualSubtype() {
+        // blockWizardKeys: пока поле открыто, Enter/цифры не обрабатывает мастер
+        // (иначе тот же Enter, что открыл поле, или Enter подтверждения other
+        // снова вызывает subEnter и залипает на пункте 9).
+        blockWizardKeys = true
+        manualField.text = ""
+        manualField.visible = true
+        Qt.callLater(function() {
+            if (manualField.visible)
+                manualField.forceActiveFocus()
+        })
     }
 
     // восстановление последнего этапа сохранённого запроса (маленькая кнопка «назад»)
@@ -263,8 +294,7 @@ Item {
     function subEnter() {
         const st = subtypes[subChoice]
         if (st.code === "other") {
-            manualField.visible = true
-            manualField.forceActiveFocus()
+            openManualSubtype()
             return
         }
         let s = subs.slice()
@@ -282,24 +312,32 @@ Item {
         for (const i of attrGroups[cursor])
             s[i] = txt
         subs = s
-        manualField.text = ""
-        manualField.visible = false
-        // Нельзя сразу forceActiveFocus + subNext в том же Enter-событии:
-        // фокус вернётся мастеру, и тот же Enter повторно вызовет Keys.onPressed
-        // → subEnter() на СЛЕДУЮЩИЙ ATTR с дефолтным подтипом (memory_storage)
-        // → если ATTR был последним, сразу save() и прыжок на следующий запрос.
-        Qt.callLater(function() {
-            wizard.forceActiveFocus()
-            subNext()
-        })
+        closeManualSubtype()
+        // Держим blockWizardKeys=true до срабатывания таймера: тот же Enter,
+        // который подтвердил TextField, не должен снова вызвать subEnter()
+        // (с subChoice всё ещё на other/9) и открыть поле / съесть клавиатуру.
+        blockWizardKeys = true
+        manualAdvanceTimer.restart()
     }
 
     function subNext() {
+        closeManualSubtype()
         if (cursor < attrGroups.length - 1) {
             cursor++
             subChoice = 0
         } else {
             save()
+        }
+    }
+
+    Timer {
+        id: manualAdvanceTimer
+        interval: 0
+        repeat: false
+        onTriggered: {
+            subNext()
+            blockWizardKeys = false
+            wizard.forceActiveFocus()
         }
     }
 
@@ -312,10 +350,55 @@ Item {
             if (subs[i] !== "")
                 st[String(i)] = subs[i]
         }
-        LabelStore.saveBio(pos, tokens.join(" "), tags, st)
+        pendingTags = tags
+        pendingSubs = st
+        reviewReady = false
+        blockWizardKeys = true
+        reviewOpenTimer.restart()
+    }
+
+    function confirmReview() {
+        if (!reviewOverlay.visible || !reviewReady)
+            return
+        LabelStore.saveBio(pos, tokens.join(" "), pendingTags, pendingSubs)
+        reviewOverlay.visible = false
+        reviewReady = false
+        blockWizardKeys = false
         if (pos < LabelStore.queries.length - 1)
             pos++
         loadQuery()
+    }
+
+    function rejectReview() {
+        if (!reviewOverlay.visible)
+            return
+        reviewOverlay.visible = false
+        reviewReady = false
+        blockWizardKeys = false
+        restoreStage()
+        wizard.forceActiveFocus()
+    }
+
+    Timer {
+        id: reviewOpenTimer
+        interval: 0
+        repeat: false
+        onTriggered: {
+            reviewOverlay.visible = true
+            // пауза: Enter, которым закрыли этап 3, не должен сразу подтвердить review
+            reviewReadyTimer.restart()
+        }
+    }
+
+    Timer {
+        id: reviewReadyTimer
+        interval: 180
+        repeat: false
+        onTriggered: {
+            blockWizardKeys = false
+            reviewReady = true
+            reviewOverlay.forceActiveFocus()
+        }
     }
 
     function prevQuery() {
@@ -342,12 +425,27 @@ Item {
             event.accepted = false
             return
         }
-        if (manualField.visible) {
-            // Пока открыт ручной ввод — Enter обрабатывает только TextField.onAccepted.
-            // Иначе тот же Enter долетает до мастера и «прокликивает» следующий ATTR.
+        if (reviewOverlay.visible) {
+            if (reviewReady) {
+                if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter)
+                    confirmReview()
+                else if (event.key === Qt.Key_Escape || event.key === Qt.Key_Backspace)
+                    rejectReview()
+            }
+            event.accepted = true
+            return
+        }
+        // Фокус в поле other — не перехватываем (иначе нельзя печатать).
+        if (manualField.activeFocus) {
+            event.accepted = false
+            return
+        }
+        // Enter после other / поле видимо без фокуса — глотаем, чтобы не залипнуть на 9.
+        if (blockWizardKeys || manualField.visible) {
             if (event.key === Qt.Key_Escape) {
-                manualField.visible = false
-                manualField.text = ""
+                closeManualSubtype()
+                blockWizardKeys = false
+                manualAdvanceTimer.stop()
                 wizard.forceActiveFocus()
             }
             event.accepted = true
@@ -830,11 +928,22 @@ Item {
                         id: manualField
                         Layout.fillWidth: true
                         visible: false
+                        focus: false
+                        activeFocusOnPress: true
                         placeholderText: qsTr("например: purpose / feature / material — Enter")
                         font.pixelSize: Theme.fontBody
                         font.family: Theme.fontFamily
                         color: Theme.text
                         onAccepted: wizard.manualDone()
+                        Keys.onPressed: (event) => {
+                            if (event.key === Qt.Key_Escape) {
+                                wizard.closeManualSubtype()
+                                wizard.blockWizardKeys = false
+                                wizard.manualAdvanceTimer.stop()
+                                wizard.forceActiveFocus()
+                                event.accepted = true
+                            }
+                        }
 
                         background: Rectangle {
                             radius: Theme.radiusSmall
@@ -931,6 +1040,178 @@ Item {
                 onClicked: {
                     infoDialog.close()
                     wizard.forceActiveFocus()
+                }
+            }
+        }
+    }
+
+    // ---- проверка разметки перед сохранением (оверлей, не Dialog — иначе Enter без фокуса)
+    Rectangle {
+        id: reviewOverlay
+        anchors.fill: parent
+        visible: false
+        z: 100
+        color: Qt.rgba(0, 0, 0, 0.45)
+        focus: visible
+
+        Keys.onPressed: (event) => {
+            if (!wizard.reviewReady) {
+                event.accepted = true
+                return
+            }
+            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                wizard.confirmReview()
+                event.accepted = true
+            } else if (event.key === Qt.Key_Escape || event.key === Qt.Key_Backspace) {
+                wizard.rejectReview()
+                event.accepted = true
+            } else {
+                event.accepted = true
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: reviewOverlay.forceActiveFocus()
+        }
+
+        Rectangle {
+            anchors.centerIn: parent
+            width: Math.min(parent.width - 40, 720)
+            height: Math.min(parent.height - 40, reviewInner.implicitHeight + 48)
+            radius: Theme.radiusLarge
+            color: Theme.surface
+            border.width: 1
+            border.color: Theme.border
+            clip: true
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: reviewOverlay.forceActiveFocus()
+            }
+
+            ColumnLayout {
+                id: reviewInner
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.margins: 24
+                spacing: 16
+
+                Text {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                    text: qsTr("Правильно ли разметили?")
+                    font.pixelSize: Theme.fontMedium
+                    font.family: Theme.fontFamily
+                    font.weight: Font.Bold
+                    color: Theme.text
+                }
+
+                Text {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                    text: qsTr("Запрос %1 · «%2»")
+                          .arg(wizard.pos + 1)
+                          .arg(LabelStore.queries[wizard.pos] || "")
+                    font.pixelSize: Theme.fontSmall
+                    font.family: Theme.fontFamily
+                    color: Theme.textSecondary
+                    wrapMode: Text.WordWrap
+                }
+
+                Flow {
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 10
+
+                    Repeater {
+                        model: wizard.tokens.length
+
+                        Column {
+                            id: revCol
+                            required property int index
+                            spacing: 4
+
+                            readonly property string tok: wizard.tokens[index] || ""
+                            readonly property string myBio: wizard.bio[index] || ""
+                            readonly property string myCat: wizard.cats[index] || ""
+                            readonly property string mySub: wizard.subs[index] || ""
+
+                            Rectangle {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                width: revTag.implicitWidth + 14
+                                height: 20
+                                radius: 5
+                                color: revCol.myBio === "O" ? Theme.tagO
+                                       : revCol.myCat !== "" ? wizard.catColor(revCol.myCat)
+                                       : Theme.tagBrand
+
+                                Text {
+                                    id: revTag
+                                    anchors.centerIn: parent
+                                    text: {
+                                        if (revCol.myBio === "O") return "O"
+                                        let t = revCol.myBio
+                                        if (revCol.myCat !== "") t += "-" + revCol.myCat
+                                        if (revCol.mySub !== "") t += " · " + revCol.mySub
+                                        return t
+                                    }
+                                    font.pixelSize: 9
+                                    font.family: Theme.fontFamily
+                                    font.weight: Font.Bold
+                                    color: "#ffffff"
+                                }
+                            }
+
+                            Rectangle {
+                                width: revTok.implicitWidth + 34
+                                height: 50
+                                radius: 10
+                                color: revCol.myBio === "O" ? Theme.surfaceAlt
+                                       : revCol.myCat !== "" ? wizard.catColor(revCol.myCat)
+                                       : Theme.tagBrand
+                                border.width: 1
+                                border.color: Theme.border
+
+                                Text {
+                                    id: revTok
+                                    anchors.centerIn: parent
+                                    text: revCol.tok
+                                    font.pixelSize: Theme.fontMedium
+                                    font.family: Theme.fontFamily
+                                    font.weight: Font.Bold
+                                    color: revCol.myBio === "O" ? Theme.textSecondary : "#ffffff"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Text {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                    text: qsTr("Enter — да, верно · Esc — исправить")
+                    font.pixelSize: 10
+                    font.family: Theme.fontFamily
+                    color: Theme.textTertiary
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 10
+
+                    GhostButton {
+                        Layout.fillWidth: true
+                        text: qsTr("Исправить")
+                        onClicked: wizard.rejectReview()
+                    }
+
+                    AccentButton {
+                        Layout.fillWidth: true
+                        text: qsTr("Да, верно ↵")
+                        onClicked: wizard.confirmReview()
+                    }
                 }
             }
         }

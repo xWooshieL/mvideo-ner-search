@@ -6,7 +6,7 @@
 
 **Извлечение структурированных фактов из поисковых запросов за миллисекунды**
 
-![Версия](https://img.shields.io/badge/версия-0.1.2-f20601?style=for-the-badge)
+![Версия](https://img.shields.io/badge/версия-0.1.4-f20601?style=for-the-badge)
 ![Платформа](https://img.shields.io/badge/Windows-10%2F11-0078d4?style=for-the-badge&logo=windows)
 ![Qt](https://img.shields.io/badge/Qt-6.8-41cd52?style=for-the-badge&logo=qt)
 ![C++](https://img.shields.io/badge/C%2B%2B-17-00599c?style=for-the-badge&logo=cplusplus)
