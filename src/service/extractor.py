@@ -17,8 +17,14 @@ from src.ner.labeling import (
 from src.ner.model_crf import CRFNerModel
 
 
+_BRAND_REJECT = {"NO_BRAND", "UNKNOWN", "__UNK__", "null", "none", ""}
+
+
 class QueryEntityExtractor:
-    """Fast hybrid extractor targeting <100ms per query."""
+    """Fast hybrid extractor targeting <100ms per query.
+
+    Cascade: rules (labeling.py) → CRF NER → fuzzy → brand clf fallback → ATTR typer.
+    """
 
     def __init__(
         self,
@@ -26,15 +32,23 @@ class QueryEntityExtractor:
         ner_model: Optional[CRFNerModel] = None,
         brand_classifier=None,
         category_classifier=None,
+        attr_type_model=None,
+        attr_type_policy: Optional[Dict[str, Any]] = None,
+        model_phrases: Optional[set] = None,
         fuzzy_threshold: int = 92,
         use_fuzzy: bool = True,
+        use_attr_clf: bool = True,
     ):
         self.labeler = labeler
         self.ner_model = ner_model
         self.brand_classifier = brand_classifier
         self.category_classifier = category_classifier
+        self.attr_type_model = attr_type_model
+        self.attr_type_policy = attr_type_policy or {}
+        self.model_phrases = model_phrases or set()
         self.fuzzy_threshold = fuzzy_threshold
         self.use_fuzzy = use_fuzzy
+        self.use_attr_clf = use_attr_clf and attr_type_model is not None
         # Prefer longer brands; drop ultra-short noisy keys except whitelist
         short_ok = {"lg", "hp", "jbl", "bq", "tcl", "msi", "bbk", "aoc"}
         self._brand_list = sorted(
@@ -82,18 +96,39 @@ class QueryEntityExtractor:
 
         brand_clf = None
         cat_clf = None
+        attr_pipe = None
+        attr_policy: Dict[str, Any] = {}
+        model_phrases: set = set()
+        import joblib
+
         brand_path = models_dir / "brand_clf.joblib"
         cat_path = models_dir / "category_clf.joblib"
+        attr_path = models_dir / "attr_type_clf.joblib"
         if brand_path.exists():
-            import joblib
-
             brand_clf = joblib.load(brand_path)
         if cat_path.exists():
-            import joblib
-
             cat_clf = joblib.load(cat_path)
+        if attr_path.exists():
+            attr_pipe = joblib.load(attr_path)
+            from src.ner.attr_type_clf import load_policy
 
-        return cls(labeler=labeler, ner_model=ner, brand_classifier=brand_clf, category_classifier=cat_clf)
+            attr_policy = load_policy()
+        if mp.exists():
+            model_phrases = {
+                ln.strip().lower()
+                for ln in mp.read_text(encoding="utf-8").splitlines()
+                if ln.strip()
+            }
+
+        return cls(
+            labeler=labeler,
+            ner_model=ner,
+            brand_classifier=brand_clf,
+            category_classifier=cat_clf,
+            attr_type_model=attr_pipe,
+            attr_type_policy=attr_policy,
+            model_phrases=model_phrases,
+        )
 
     def extract(self, query: str) -> Dict[str, Any]:
         t0 = time.perf_counter()
@@ -147,8 +182,8 @@ class QueryEntityExtractor:
         # Pass 4: ML classifiers as soft fallback (never invent brand-like categories)
         if structured["brand"] is None and self.brand_classifier is not None:
             try:
-                pred = self.brand_classifier.predict([query])[0]
-                if pred and pred != "__UNK__":
+                pred = str(self.brand_classifier.predict([query])[0])
+                if pred and pred not in _BRAND_REJECT:
                     structured["brand"] = pred
             except Exception:
                 pass
@@ -162,13 +197,24 @@ class QueryEntityExtractor:
             except Exception:
                 pass
 
+        # Pass 5: ATTR typer (ML clf with reject; falls back to regex teacher)
+        attributes = structured["attributes"]
+        if self.use_attr_clf:
+            attributes = self._type_attributes(
+                entities,
+                brand=structured.get("brand") or "",
+                category=structured.get("category") or "",
+                query=query,
+            )
+
         latency_ms = (time.perf_counter() - t0) * 1000.0
         return {
             "query": query,
             "entities": entities,
             "brand": structured["brand"],
             "category": structured["category"],
-            "attributes": structured["attributes"],
+            "model": structured.get("model"),
+            "attributes": attributes,
             "latency_ms": round(latency_ms, 3),
         }
 
@@ -185,11 +231,71 @@ class QueryEntityExtractor:
             "has_crf": self.ner_model is not None,
             "has_brand_clf": self.brand_classifier is not None,
             "has_category_clf": self.category_classifier is not None,
+            "has_attr_clf": self.use_attr_clf,
             "n_brands_dict": len(self.labeler.brands),
             "n_categories_dict": len(self.labeler.categories),
+            "n_models_dict": len(self.labeler.models),
             "wall_ms": round((time.perf_counter() - t0) * 1000.0, 3),
         }
         return base
+
+    def _type_attributes(
+        self,
+        entities: List[Dict],
+        *,
+        brand: str,
+        category: str,
+        query: str,
+    ) -> Dict[str, Any]:
+        """Типизация ATTR-спанов через attr_type_clf (+ reject). Teacher — fallback."""
+        from src.ner.attr_type_clf import LABEL_UNKNOWN, looks_like_model
+        from src.ner.labeling import _guess_attr_type
+
+        attr_ents = [e for e in entities if e.get("label") == "ATTR" and (e.get("text") or "").strip()]
+        if not attr_ents:
+            return {}
+
+        # mask all ATTR spans for query_masked feature
+        chars = list(query)
+        for e in sorted(attr_ents, key=lambda x: -(x.get("span") or [0, 0])[0]):
+            span = e.get("span")
+            if not span:
+                continue
+            a, b = span
+            chars[a:b] = list("<ATTR>")
+        query_masked = re.sub(r"\s+", " ", "".join(chars)).strip() or query
+
+        tau = float(self.attr_type_policy.get("min_confidence", 0.55))
+        reject = self.attr_type_policy.get("reject_label", LABEL_UNKNOWN)
+        pipe = self.attr_type_model
+        out: Dict[str, List[str]] = {}
+
+        for e in attr_ents:
+            span_text = (e.get("text") or "").strip()
+            if looks_like_model(span_text, self.model_phrases):
+                label = reject
+            else:
+                try:
+                    from src.ner.attr_type_clf import _row
+
+                    row = _row(span_text, brand or "", category or "", query_masked)
+                    raw = str(pipe.predict(row)[0])
+                    conf = 1.0
+                    if hasattr(pipe, "predict_proba"):
+                        proba = pipe.predict_proba(row)[0]
+                        conf = float(proba.max())
+                        raw = str(pipe.classes_[int(proba.argmax())])
+                    label = reject if conf < tau else raw
+                except Exception:
+                    label = _guess_attr_type(span_text)
+            if label in {LABEL_UNKNOWN, "unknown", "other"}:
+                # keep teacher type for demos when clf rejects / other
+                teacher = _guess_attr_type(span_text)
+                label = teacher if teacher != "other" else label
+            out.setdefault(label, []).append(span_text)
+            e["attr_type"] = label
+
+        return {k: v[0] if len(v) == 1 else v for k, v in out.items()}
 
     def _merge_entities(self, primary: List[Dict], secondary: List[Dict]) -> List[Dict]:
         """Prefer dictionary spans; add non-overlapping ML entities."""
