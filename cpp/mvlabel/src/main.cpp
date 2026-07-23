@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setOrganizationName(QStringLiteral("MVideo"));
     app.setApplicationName(QStringLiteral("М.Видео Разметка"));
-    app.setApplicationVersion(QStringLiteral("0.1.2"));
+    app.setApplicationVersion(QStringLiteral("0.1.3"));
     app.setWindowIcon(QIcon(QStringLiteral(":/qt/qml/MvLabel/assets/icon.png")));
 
     QQuickStyle::setStyle(QStringLiteral("Basic"));

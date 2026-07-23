@@ -18,6 +18,12 @@ Item {
     property int cursor: 0           // активный блок (этап 0) или группа (этапы 1/2)
     property int subChoice: 0
     property bool wizardOpen: true   // false = окно разметки закрыто, виден фон с историей
+    // блокирует Keys мастера на время ручного ввода / пока Enter после other не «остыл»
+    property bool blockWizardKeys: false
+    property bool reviewReady: false          // Enter в окне проверки принимаем только после паузы
+    property var pendingTags: []
+    property var pendingSubs: ({})
+    property var reviewLines: []
     property var tokens: []
     property var bio: []             // "B"/"I"/"O"/""
     property var cats: []            // тип для каждого токена (внутри группы одинаковый)
@@ -106,12 +112,39 @@ Item {
         bio = b; cats = c; subs = s
         stage = 0; cursor = 0; subChoice = 0
         groups = []; attrGroups = []
-        manualField.text = ""
-        manualField.visible = false
+        blockWizardKeys = false
+        reviewReady = false
+        pendingTags = []
+        pendingSubs = ({})
+        reviewLines = []
+        reviewOpenTimer.stop()
+        reviewReadyTimer.stop()
+        if (reviewDialog.visible)
+            reviewDialog.close()
+        closeManualSubtype()
         // ВАЖНО: без этого клавиатурный фокус мог "залипнуть" на скрытом manualField
         // (например, если ушли на новый запрос кликом мыши, не нажав Enter после
         // ручного ввода подтипа) — тогда B/I/O/цифры перестают что-либо делать.
         wizard.forceActiveFocus()
+    }
+
+    function closeManualSubtype() {
+        manualField.text = ""
+        manualField.focus = false
+        manualField.visible = false
+    }
+
+    function openManualSubtype() {
+        // blockWizardKeys: пока поле открыто, Enter/цифры не обрабатывает мастер
+        // (иначе тот же Enter, что открыл поле, или Enter подтверждения other
+        // снова вызывает subEnter и залипает на пункте 9).
+        blockWizardKeys = true
+        manualField.text = ""
+        manualField.visible = true
+        Qt.callLater(function() {
+            if (manualField.visible)
+                manualField.forceActiveFocus()
+        })
     }
 
     // восстановление последнего этапа сохранённого запроса (маленькая кнопка «назад»)
@@ -263,8 +296,7 @@ Item {
     function subEnter() {
         const st = subtypes[subChoice]
         if (st.code === "other") {
-            manualField.visible = true
-            manualField.forceActiveFocus()
+            openManualSubtype()
             return
         }
         let s = subs.slice()
@@ -282,19 +314,16 @@ Item {
         for (const i of attrGroups[cursor])
             s[i] = txt
         subs = s
-        manualField.text = ""
-        manualField.visible = false
-        // Нельзя сразу forceActiveFocus + subNext в том же Enter-событии:
-        // фокус вернётся мастеру, и тот же Enter повторно вызовет Keys.onPressed
-        // → subEnter() на СЛЕДУЮЩИЙ ATTR с дефолтным подтипом (memory_storage)
-        // → если ATTR был последним, сразу save() и прыжок на следующий запрос.
-        Qt.callLater(function() {
-            wizard.forceActiveFocus()
-            subNext()
-        })
+        closeManualSubtype()
+        // Держим blockWizardKeys=true до срабатывания таймера: тот же Enter,
+        // который подтвердил TextField, не должен снова вызвать subEnter()
+        // (с subChoice всё ещё на other/9) и открыть поле / съесть клавиатуру.
+        blockWizardKeys = true
+        manualAdvanceTimer.restart()
     }
 
     function subNext() {
+        closeManualSubtype()
         if (cursor < attrGroups.length - 1) {
             cursor++
             subChoice = 0
@@ -303,7 +332,29 @@ Item {
         }
     }
 
+    Timer {
+        id: manualAdvanceTimer
+        interval: 0
+        repeat: false
+        onTriggered: {
+            subNext()
+            blockWizardKeys = false
+            wizard.forceActiveFocus()
+        }
+    }
+
     // ---- сохранение и переходы
+    function buildReviewLines(tags, st) {
+        let lines = []
+        for (let i = 0; i < tokens.length; ++i) {
+            let line = tokens[i] + "  →  " + tags[i]
+            if (st[String(i)])
+                line += " · " + st[String(i)]
+            lines.push(line)
+        }
+        return lines
+    }
+
     function save() {
         let tags = []
         let st = ({})
@@ -312,10 +363,56 @@ Item {
             if (subs[i] !== "")
                 st[String(i)] = subs[i]
         }
-        LabelStore.saveBio(pos, tokens.join(" "), tags, st)
+        pendingTags = tags
+        pendingSubs = st
+        reviewLines = buildReviewLines(tags, st)
+        reviewReady = false
+        blockWizardKeys = true
+        reviewOpenTimer.restart()
+    }
+
+    function confirmReview() {
+        if (!reviewDialog.visible)
+            return
+        LabelStore.saveBio(pos, tokens.join(" "), pendingTags, pendingSubs)
+        reviewDialog.close()
+        reviewReady = false
+        blockWizardKeys = false
         if (pos < LabelStore.queries.length - 1)
             pos++
         loadQuery()
+    }
+
+    function rejectReview() {
+        if (!reviewDialog.visible)
+            return
+        reviewDialog.close()
+        reviewReady = false
+        blockWizardKeys = false
+        restoreStage()
+        wizard.forceActiveFocus()
+    }
+
+    Timer {
+        id: reviewOpenTimer
+        interval: 0
+        repeat: false
+        onTriggered: {
+            reviewDialog.open()
+            // короткая пауза: тот же Enter, что завершил этап, не должен сразу подтвердить review
+            reviewReadyTimer.restart()
+        }
+    }
+
+    Timer {
+        id: reviewReadyTimer
+        interval: 120
+        repeat: false
+        onTriggered: {
+            blockWizardKeys = false
+            reviewReady = true
+            reviewDialog.forceActiveFocus()
+        }
     }
 
     function prevQuery() {
@@ -342,12 +439,21 @@ Item {
             event.accepted = false
             return
         }
-        if (manualField.visible) {
-            // Пока открыт ручной ввод — Enter обрабатывает только TextField.onAccepted.
-            // Иначе тот же Enter долетает до мастера и «прокликивает» следующий ATTR.
+        if (reviewDialog.visible) {
+            event.accepted = true
+            return
+        }
+        // Фокус в поле other — не перехватываем (иначе нельзя печатать).
+        if (manualField.activeFocus) {
+            event.accepted = false
+            return
+        }
+        // Enter после other / поле видимо без фокуса — глотаем, чтобы не залипнуть на 9.
+        if (blockWizardKeys || manualField.visible) {
             if (event.key === Qt.Key_Escape) {
-                manualField.visible = false
-                manualField.text = ""
+                closeManualSubtype()
+                blockWizardKeys = false
+                manualAdvanceTimer.stop()
                 wizard.forceActiveFocus()
             }
             event.accepted = true
@@ -830,11 +936,22 @@ Item {
                         id: manualField
                         Layout.fillWidth: true
                         visible: false
+                        focus: false
+                        activeFocusOnPress: true
                         placeholderText: qsTr("например: purpose / feature / material — Enter")
                         font.pixelSize: Theme.fontBody
                         font.family: Theme.fontFamily
                         color: Theme.text
                         onAccepted: wizard.manualDone()
+                        Keys.onPressed: (event) => {
+                            if (event.key === Qt.Key_Escape) {
+                                wizard.closeManualSubtype()
+                                wizard.blockWizardKeys = false
+                                wizard.manualAdvanceTimer.stop()
+                                wizard.forceActiveFocus()
+                                event.accepted = true
+                            }
+                        }
 
                         background: Rectangle {
                             radius: Theme.radiusSmall
@@ -931,6 +1048,126 @@ Item {
                 onClicked: {
                     infoDialog.close()
                     wizard.forceActiveFocus()
+                }
+            }
+        }
+    }
+
+    // ---- проверка разметки перед сохранением
+    Dialog {
+        id: reviewDialog
+        anchors.centerIn: parent
+        modal: true
+        width: Math.min(parent.width - 48, 520)
+        padding: 22
+        focus: true
+        closePolicy: Popup.NoAutoClose
+
+        background: Rectangle {
+            radius: Theme.radiusLarge
+            color: Theme.surface
+            border.width: 1
+            border.color: Theme.border
+        }
+
+        Overlay.modal: Rectangle { color: Qt.rgba(0, 0, 0, 0.45) }
+
+        Keys.onPressed: (event) => {
+            if (!wizard.reviewReady) {
+                event.accepted = true
+                return
+            }
+            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                wizard.confirmReview()
+                event.accepted = true
+            } else if (event.key === Qt.Key_Escape || event.key === Qt.Key_Backspace) {
+                wizard.rejectReview()
+                event.accepted = true
+            } else {
+                event.accepted = false
+            }
+        }
+
+        contentItem: ColumnLayout {
+            spacing: 14
+
+            Text {
+                Layout.fillWidth: true
+                text: qsTr("Правильно ли разметили?")
+                font.pixelSize: Theme.fontMedium
+                font.family: Theme.fontFamily
+                font.weight: Font.Bold
+                color: Theme.text
+            }
+
+            Text {
+                Layout.fillWidth: true
+                text: "«" + (LabelStore.queries[wizard.pos] || "") + "»"
+                font.pixelSize: Theme.fontBody
+                font.family: Theme.fontFamily
+                color: Theme.textSecondary
+                wrapMode: Text.WordWrap
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: Math.min(280, reviewCol.implicitHeight + 20)
+                radius: Theme.radiusSmall
+                color: Theme.surfaceAlt
+                border.width: 1
+                border.color: Theme.border
+                clip: true
+
+                Flickable {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    contentHeight: reviewCol.implicitHeight
+                    clip: true
+                    boundsBehavior: Flickable.StopAtBounds
+
+                    Column {
+                        id: reviewCol
+                        width: parent.width
+                        spacing: 6
+
+                        Repeater {
+                            model: wizard.reviewLines
+                            Text {
+                                required property string modelData
+                                width: reviewCol.width
+                                text: modelData
+                                font.pixelSize: Theme.fontSmall
+                                font.family: Theme.fontFamily
+                                color: Theme.text
+                                wrapMode: Text.WordWrap
+                            }
+                        }
+                    }
+                }
+            }
+
+            Text {
+                Layout.fillWidth: true
+                text: qsTr("Enter — да, верно · Esc / Backspace — исправить")
+                font.pixelSize: 10
+                font.family: Theme.fontFamily
+                color: Theme.textTertiary
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 10
+
+                GhostButton {
+                    Layout.fillWidth: true
+                    text: qsTr("Исправить")
+                    onClicked: wizard.rejectReview()
+                }
+
+                AccentButton {
+                    Layout.fillWidth: true
+                    text: qsTr("Да, верно")
+                    onClicked: wizard.confirmReview()
                 }
             }
         }
