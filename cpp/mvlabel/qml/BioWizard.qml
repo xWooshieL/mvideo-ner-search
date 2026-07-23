@@ -102,7 +102,12 @@ Item {
         bio = b; cats = c; subs = s
         stage = 0; cursor = 0; subChoice = 0
         groups = []; attrGroups = []
+        manualField.text = ""
         manualField.visible = false
+        // ВАЖНО: без этого клавиатурный фокус мог "залипнуть" на скрытом manualField
+        // (например, если ушли на новый запрос кликом мыши, не нажав Enter после
+        // ручного ввода подтипа) — тогда B/I/O/цифры перестают что-либо делать.
+        wizard.forceActiveFocus()
     }
 
     // восстановление последнего этапа сохранённого запроса (маленькая кнопка «назад»)
