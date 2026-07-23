@@ -91,9 +91,9 @@ CRF игнорирует `subtypes` (это attr-type слой).
 
 ## Artifacts
 
-- `D:\Projects-26-06-2026\mvideo-ner-search\artifacts\ner\silver_bio_slice.parquet`
-- `D:\Projects-26-06-2026\mvideo-ner-search\artifacts\ner\silver_bio_preview.parquet`
-- `D:\Projects-26-06-2026\mvideo-ner-search\artifacts\ner\eda_meta.json`
+- `D:\Projects-26-06-2026\mvideo-ner-search\artifacts\silver\ner_bio\silver_bio_slice.parquet`
+- `D:\Projects-26-06-2026\mvideo-ner-search\artifacts\silver\ner_bio\silver_bio_preview.parquet`
+- `D:\Projects-26-06-2026\mvideo-ner-search\artifacts\silver\ner_bio\eda_meta.json`
 - figures: `figures/ner/01_*.png`
 
 Next: `02_crf_classifier.ipynb` — train CRF on this silver, eval on gold.

@@ -1,0 +1,11 @@
+canon,n,teacher_agree,clf_agree
+ALL,91,0.6813,0.5165
+type,35,0.8286,0.7714
+memory_storage,18,0.2222,0.3333
+other,11,1.0,0.0
+purpose,10,1.0,0.6
+size,8,0.25,0.25
+color,4,1.0,1.0
+volume,2,0.0,0.0
+weight,2,1.0,1.0
+quantity,1,0.0,0.0

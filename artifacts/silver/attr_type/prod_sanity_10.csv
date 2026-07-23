@@ -1,0 +1,11 @@
+span,brand,category,expect,pred,raw_pred,confidence,reason,ok,teacher
+16 г,asus,ноутбук,memory_storage,UNKNOWN,UNKNOWN,0.503,low_confidence,False,memory_storage
+16 гб,asus,ноутбук,memory_storage,memory_storage,memory_storage,0.852,clf,True,memory_storage
+256 g,samsung,смартфон,memory_storage,memory_storage,memory_storage,0.972,clf,True,memory_storage
+5 g,samsung,смартфон,UNKNOWN,memory_storage,memory_storage,0.867,clf,False,other
+2 кг,bosch,пылесос,weight,weight,weight,0.912,clf,True,weight
+150 грамм,,весы,weight,size,size,0.722,clf,False,weight
+1920x1080,xiaomi,монитор,resolution_exact,resolution_exact,resolution_exact,0.855,clf,True,resolution_exact
+4k,lg,телевизор,resolution_standard,UNKNOWN,size,0.503,low_confidence,False,resolution_standard
+15.6 дюйм,asus,ноутбук,size,size,size,0.974,clf,True,size
+g pro,logitech,наушники,UNKNOWN,UNKNOWN,UNKNOWN,1.0,modelish_rule,True,other

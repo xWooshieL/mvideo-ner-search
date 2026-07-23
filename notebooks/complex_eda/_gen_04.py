@@ -5,7 +5,7 @@ import json
 import uuid
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parent / "04_model_tag_eda.ipynb"
+OUT = Path(__file__).resolve().parent / "02_model_tag_eda.ipynb"
 
 
 def nid() -> str:

@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-NB = Path(__file__).resolve().parent / "01_eda.ipynb"
+NB = Path(__file__).resolve().parent / "01_data_and_methods_eda.ipynb"
 
 cells: list[dict] = []
 

@@ -4,22 +4,22 @@
   "top_k": 80,
   "min_confidence": 0.55,
   "n_agg_queries": 63267,
-  "n_silver": 28664,
-  "n_train": 22846,
-  "n_val": 5710,
+  "n_silver": 28704,
+  "n_train": 22879,
+  "n_val": 5717,
   "n_classes": 67,
   "label_reason_counts": {
     "no_evidence_drop": 29290,
-    "alias_hint": 10996,
+    "alias_hint": 11032,
     "brand_in_query": 8764,
     "category_only": 7108,
     "ood_brand_surface": 6099,
     "ambiguous_clicks": 932,
-    "low_conf_with_evidence": 62,
+    "low_conf_with_evidence": 26,
     "other_drop": 16
   },
-  "no_brand_share": 0.20513536142897013,
-  "unknown_share": 0.10713787329053866,
+  "no_brand_share": 0.2048494983277592,
+  "unknown_share": 0.10712792642140469,
   "category_only_in_agg": 0.1123492500039515,
   "thresholds": {
     "TAU_ACCEPT": 0.42,
@@ -27,5 +27,7 @@
     "TAU_NO_BRAND": 0.35,
     "TAU_UNKNOWN": 0.3,
     "REQUIRE_BRAND_EVIDENCE": true
-  }
+  },
+  "has_no_brand": true,
+  "has_unknown": true
 }

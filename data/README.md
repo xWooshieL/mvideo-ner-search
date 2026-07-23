@@ -17,34 +17,31 @@
 
 ---
 
-## 2. Каноническая раскладка `artifacts/` (с legacy-fallback)
+## 2. Каноническая раскладка `artifacts/` (единый источник правды)
 
 ```text
 artifacts/
-  dicts/                         # канон словарей
-    brands.txt
-    categories.txt
-    model_phrases.txt
-    protected_brands.txt
-  silver/
-    ner_bio/                     # CRF BIO
-    attr_type/                   # ATTR-span typing tables
-    brand_clf/                   # query→brand tables
-  attr_type/                     # runtime: joblib, metrics, policy (не silver)
-  brand_clf/                     # runtime: train_runs, policy (+ legacy silver mirror)
-  ner/                           # legacy mirror NER silver
-  brands.txt …                   # legacy копии словарей (не удаляем)
+  dicts/                         # словари
+    brands.txt  categories.txt  model_phrases.txt  protected_brands.txt
+  silver/                        # silver-датасеты + метрики/policy по задаче
+    ner_bio/                     #   CRF BIO: silver_bio_slice.parquet(*), overview, crf_train_metrics
+    attr_type/                   #   ATTR-span typing: silver(*), prod_* метрики, inference_policy
+    brand_clf/                   #   query→brand: silver(*), train_runs/, label_map, inference_policy
+  gold/                          # эталон: bio_liza.jsonl + gold_stats.json
+  metrics/                       # сводные таблицы для презентаций (gold_metrics_*, model_comparison, silver_row_counts)
 ```
 
-**Читатели:** `resolve_dict()` / `resolve_silver()` в [`src/data_utils.py`](../src/data_utils.py) — сначала canonical, иначе legacy.  
-**Запись silver:** `save_silver_parquet(..., mirror=True)` пишет в оба места.  
-**Синк:** `python scripts/sync_artifact_layout.py` (копирует legacy→canonical, ничего не удаляет).
+(*) parquet/joblib лежат локально и в `.gitignore`; в git — только превью-CSV, JSON-статистики и policy.
 
-| Silver | Канон | Legacy (зеркало) |
-|---|---|---|
-| NER BIO | `artifacts/silver/ner_bio/` | `artifacts/ner/` |
-| ATTR-type | `artifacts/silver/attr_type/` | `artifacts/attr_type/*silver*` |
-| Brand clf | `artifacts/silver/brand_clf/` | `artifacts/brand_clf/silver_*` |
+**Читатели:** `resolve_dict()` / `resolve_silver()` в [`src/data_utils.py`](../src/data_utils.py). Раньше была
+двойная (legacy) раскладка `artifacts/{attr_type,brand_clf,ner}/` — теперь константы `ATTR_TYPE_DIR` /
+`BRAND_CLF_DIR` / `NER_DIR_LEGACY` указывают прямо на `artifacts/silver/<kind>/`, дублирования нет.
+
+| Silver | Путь |
+|---|---|
+| NER BIO | `artifacts/silver/ner_bio/` |
+| ATTR-type | `artifacts/silver/attr_type/` |
+| Brand clf | `artifacts/silver/brand_clf/` |
 
 ---
 

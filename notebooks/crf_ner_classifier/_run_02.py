@@ -18,13 +18,17 @@ from sklearn.model_selection import train_test_split
 from src.data_utils import (
     DARK_SLATE,
     FIGURES_DIR,
+    METRICS_DIR,
     MODELS,
     MVIDEO_RED,
+    SILVER_NER_BIO,
     apply_plot_style,
     ensure_dirs,
     resolve_silver,
     save_stats,
 )
+
+OUT = SILVER_NER_BIO
 from src.ner.labeling import tokenize
 from src.ner.metrics import summarize_metrics
 from src.ner.model_crf import CRFNerModel
@@ -37,7 +41,6 @@ MAX_ITERS = 80
 MIN_ENTITIES = 1  # keep sentences with ≥1 B-*
 REPORT = Path(__file__).resolve().parent / "02_crf_report.md"
 GOLD = ROOT / "data" / "gold" / "bio_liza.jsonl"
-OUT = ROOT / "artifacts" / "ner"
 FIG = FIGURES_DIR / "ner"
 LABELS = ["BRAND", "CATEGORY", "MODEL", "ATTR"]
 
@@ -149,8 +152,6 @@ def main() -> None:
     # --- save ---
     model_path = MODELS / "ner_crf.pkl"
     model.save(model_path)
-    # also versioned
-    model.save(MODELS / "ner_crf__silver_v1.pkl")
     log(f"saved {model_path}")
 
     metrics = {
@@ -170,20 +171,13 @@ def main() -> None:
     (OUT / "crf_train_metrics.json").write_text(
         json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    # mirror under silver ner_bio
-    from src.data_utils import SILVER_NER_BIO
-
-    SILVER_NER_BIO.mkdir(parents=True, exist_ok=True)
-    (SILVER_NER_BIO / "crf_train_metrics.json").write_text(
-        json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
     save_stats(
         {
             "ner_crf_silver_micro_f1": round(silver_m["micro"]["f1"], 4),
             "ner_crf_gold_micro_f1": round(gold_m["micro"]["f1"], 4) if gold_m else None,
             "n_train": len(train_sents),
         },
-        name="ner_crf_metrics.json",
+        METRICS_DIR / "ner_crf_metrics.json",
     )
 
     # --- plots ---
@@ -299,7 +293,7 @@ def main() -> None:
         "2. Trust **gold** more than silver-val.",
         "3. Expand `silver_bio_slice` (more queries) before claiming prod-ready F1.",
         "",
-        "Artifacts: `models/ner_crf.pkl`, `artifacts/ner/crf_train_metrics.json`.",
+        "Artifacts: `models/ner_crf.pkl`, `artifacts/silver/ner_bio/crf_train_metrics.json`.",
     ]
     REPORT.write_text("\n".join(lines), encoding="utf-8")
     log(f"DONE report={REPORT}")

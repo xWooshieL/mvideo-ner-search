@@ -1,0 +1,8 @@
+task,dataset,rows
+ner_bio,silver_bio_slice.parquet,5000
+attr_type,attr_type_silver_raw.parquet,4367
+attr_type,attr_type_train_prod.parquet,3176
+attr_type,attr_type_val_prod.parquet,795
+brand_clf,silver_brand_train.parquet,22879
+brand_clf,silver_brand_val.parquet,5717
+brand_clf,silver_brand_all.parquet,28596

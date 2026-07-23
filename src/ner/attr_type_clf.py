@@ -15,7 +15,7 @@ from src.preprocessing.pipeline import _norm_key
 LABEL_UNKNOWN = "UNKNOWN"
 _ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_MODEL = _ROOT / "models" / "attr_type_clf.joblib"
-DEFAULT_POLICY = _ROOT / "artifacts" / "attr_type" / "inference_policy.json"
+DEFAULT_POLICY = _ROOT / "artifacts" / "silver" / "attr_type" / "inference_policy.json"
 
 _MODELISH_RE = re.compile(r"^[a-z]{1,3}(?:\s+[a-z0-9]{1,8}){1,3}$")
 _UNIT_HINT = re.compile(

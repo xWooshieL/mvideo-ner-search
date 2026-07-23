@@ -8,9 +8,10 @@ Sequence tagging (BIO) для поисковых запросов: `BRAND` / `CA
 |---|---|---|
 | Brand clf (query → brand) | MVP есть | `notebooks/brand_classifier_train/` |
 | ATTR type clf (ATTR span → type/purpose/…) | MVP есть | `notebooks/markov_typer/03_…` |
-| **CRF NER (токены → BIO spans)** | следующий шаг | этот каталог |
+| **CRF NER (токены → BIO spans)** | ✅ обучен, gold-eval есть | этот каталог |
 
-ATTR-классификатор для MVP можно считать законченным, пока растёт gold: воспроизведение = `labeling.py` + `02` silver + `03` / `_run_04_prod.py` + артефакты в `models/attr_type_clf.joblib`.
+Все три модели каскада воспроизводимы (см. блок «Воспроизведение» в корневом README).
+Честные метрики CRF на gold — `artifacts/metrics/gold_metrics_ner.csv`.
 
 ## Как классифицирует CRF (это не TF-IDF)
 
@@ -44,7 +45,6 @@ query → brand_clf (fallback / отдельный трек)
 | [`01_crf_eda.ipynb`](./01_crf_eda.ipynb) | срез silver, quality, gold parity |
 | [`02_crf_classifier.ipynb`](./02_crf_classifier.ipynb) | **обучение CRF** + gold eval |
 | [`02_crf_report.md`](./02_crf_report.md) | метрики train |
-| [`crf_ner_status.md`](./crf_ner_status.md) | разбор 06/08 + gaps |
 | [`01_crf_eda_report.md`](./01_crf_eda_report.md) | отчёт EDA |
 
 CLI:

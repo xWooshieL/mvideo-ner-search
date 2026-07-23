@@ -1,4 +1,12 @@
 metric,value
-queries,5000.0
+queries_sampled,5000.0
+silver_rows,5000.0
 silver_with_entity,4344.0
-weak_gold_f1,0.566
+share_with_entity,0.8688
+mean_tokens,3.1074
+p95_tokens,6.0
+n_BRAND,2446.0
+n_CATEGORY,3560.0
+n_MODEL,663.0
+n_ATTR,783.0
+model_gain_queries_4k,120.0

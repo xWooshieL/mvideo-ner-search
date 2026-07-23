@@ -21,11 +21,13 @@ sys.path.insert(0, str(ROOT))
 
 from src.data_utils import (  # noqa: E402
     ARTIFACTS_DIR,
+    BRAND_CLF_DIR,
     DARK_SLATE,
     FIGURES_DIR,
     MUTED,
     MVIDEO_RED,
     apply_plot_style,
+    categories_path,
     ensure_dirs,
     load_query_clicks,
     save_stats,
@@ -74,7 +76,7 @@ def main() -> None:
     ensure_dirs()
     apply_plot_style()
     FIG = FIGURES_DIR / "preprocessing" / "brand_clf"
-    OUT = ARTIFACTS_DIR / "brand_clf"
+    OUT = BRAND_CLF_DIR
     FIG.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
 
@@ -161,7 +163,7 @@ def main() -> None:
 
     cat_lines = [
         _norm_key(x)
-        for x in (ARTIFACTS_DIR / "categories.txt").read_text(encoding="utf-8").splitlines()
+        for x in categories_path().read_text(encoding="utf-8").splitlines()
         if len(_norm_key(x)) >= 3
     ]
     _cat_stop = {

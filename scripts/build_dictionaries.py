@@ -78,7 +78,7 @@ def main():
     ap.add_argument(
         "--data",
         type=Path,
-        default=ROOT / "файлы" / "query_clicks.parquet",
+        default=ROOT / "data" / "query_clicks.parquet",
     )
     ap.add_argument("--out", type=Path, default=ROOT / "artifacts")
     ap.add_argument("--max-rows", type=int, default=500_000)
@@ -131,18 +131,13 @@ def main():
         if len(categories) >= args.top_categories:
             break
 
-    brands_path = args.out / "brands.txt"
-    cats_path = args.out / "categories.txt"
+    # каноническая раскладка: словари живут в artifacts/dicts/
+    dicts = args.out / "dicts" if args.out.name == "artifacts" else args.out
+    dicts.mkdir(parents=True, exist_ok=True)
+    brands_path = dicts / "brands.txt"
+    cats_path = dicts / "categories.txt"
     brands_path.write_text("\n".join(brands) + "\n", encoding="utf-8")
     cats_path.write_text("\n".join(categories) + "\n", encoding="utf-8")
-
-    # канон: artifacts/dicts/ (если out == artifacts)
-    dicts = args.out / "dicts"
-    if args.out.name == "artifacts" or (args.out / "attr_type").exists() or args.out.resolve().name == "artifacts":
-        dicts.mkdir(parents=True, exist_ok=True)
-        (dicts / "brands.txt").write_text("\n".join(brands) + "\n", encoding="utf-8")
-        (dicts / "categories.txt").write_text("\n".join(categories) + "\n", encoding="utf-8")
-        print(f"Also saved → {dicts / 'brands.txt'}")
 
     print(f"Saved {len(brands)} brands → {brands_path}")
     print(f"Saved {len(categories)} categories → {cats_path}")

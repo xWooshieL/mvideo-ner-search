@@ -1,0 +1,11 @@
+task,model,f1_macro,note
+brand_clf,sgd_char,0.9404,silver-val (no brand gold)
+brand_clf,logreg_char_bal,0.9356,silver-val (no brand gold)
+brand_clf,logreg_wordchar,0.929,silver-val (no brand gold)
+brand_clf,logreg_char,0.9116,silver-val (no brand gold)
+attr_type,sgd_span_ctx_masked,0.9466,silver-val (relabelled teacher)
+attr_type,markov_lookup,0.9049,silver-val (relabelled teacher)
+attr_type,logreg_span_char,0.8603,silver-val (relabelled teacher)
+attr_type,logreg_span_wordchar,0.8326,silver-val (relabelled teacher)
+attr_type,logreg_span_ctx,0.8319,silver-val (relabelled teacher)
+ner_crf,linear_chain_crf,0.8475,silver-val microF1; gold microF1=0.5922

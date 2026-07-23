@@ -1,7 +1,7 @@
 # Silver brand-clf: договорённости и подводные камни
 
 Документ к ноутбуку [`03_brand_data_preprocessing.ipynb`](./03_brand_data_preprocessing.ipynb)  
-и артефактам `artifacts/brand_clf/`.
+и артефактам `artifacts/silver/brand_clf/`.
 
 ---
 
@@ -106,7 +106,7 @@ Majority-бренд: \(b^\star = \arg\max_b W_b\).
 иначе спорное               → UNKNOWN / DROP
 ```
 
-Категории берутся из **`artifacts/categories.txt` целиком** (не ручной короткий EXTRA-список).
+Категории берутся из **`artifacts/dicts/categories.txt` целиком** (не ручной короткий EXTRA-список).
 
 Алиасы — из `BRAND_ALIASES` в `src/ner/labeling.py`.
 
@@ -114,7 +114,7 @@ Majority-бренд: \(b^\star = \arg\max_b W_b\).
 
 ## 5. Когда звать clf (inference policy)
 
-Файл: `artifacts/brand_clf/inference_policy.json`.
+Файл: `artifacts/silver/brand_clf/inference_policy.json`.
 
 ### Cascade
 
@@ -176,10 +176,10 @@ Majority снижает шум, но не убирает.
 
 | Путь | Содержимое |
 |---|---|
-| `artifacts/brand_clf/silver_brand_{train,val,all}.parquet` | silver |
-| `artifacts/brand_clf/label_map.json` | id↔label, `special` |
-| `artifacts/brand_clf/inference_policy.json` | cascade + τ |
-| `artifacts/brand_clf/silver_brand_stats.json` | сводка прогона |
+| `artifacts/silver/brand_clf/silver_brand_{train,val,all}.parquet` | silver |
+| `artifacts/silver/brand_clf/label_map.json` | id↔label, `special` |
+| `artifacts/silver/brand_clf/inference_policy.json` | cascade + τ |
+| `artifacts/silver/brand_clf/silver_brand_stats.json` | сводка прогона |
 | `figures/preprocessing/brand_clf/` | EDA-картинки |
 
 Колонки parquet (главные):  

@@ -1,9 +1,0 @@
-load clicks n=400000
-raw=286649 uq=70537
-agg=63267 mean_conf=0.959
-evidence {"brand_in_query": 0.4181010637457126, "has_alias": 0.1784026427679517, "category_only": 0.10212274961670381}
-reasons {"no_evidence_drop": 29632, "alias_hint": 11033, "brand_in_query": 8869, "category_only": 6461, "ood_brand_surface": 6170, "ambiguous_clicks": 1060, "low_conf_with_evidence": 26, "other_drop": 16}
-silver=28898 no_brand=0.206 unk=0.107
-fridge_labels {"NO_BRAND": 193, "Haier": 83, "UNKNOWN": 57, "Gorenje": 33, "Indesit": 33}
-train=23029 val=5757 classes=67
-DONE {"sample_n_clicks": 400000, "seed": 42, "top_k": 80, "min_confidence": 0.55, "n_agg_queries": 63267, "n_silver": 28898, "n_train": 23029, "n_val": 5757, "n_classes": 67, "label_reason_counts": {"no_evidence_drop": 29632, "alias_hint": 11033, "brand_in_query": 8869, "category_only": 6461, "ood_brand_surface": 6170, "ambiguous_clicks": 1060, "low_conf_with_evidence": 26, "other_drop": 16}, "no_brand_share": 0.20579278842826493, "unknown_share": 0.10713544189909337, "category_only_in_agg": 0.10212274961670381, "thresholds": {"TAU_ACCEPT": 0.42, "TAU_MARGIN": 0.08, "TAU_NO_BRAND": 0.35, "TAU_UNKNOWN": 0.3, "REQUIRE_BRAND_EVIDENCE": true}, "has_no_brand": true, "has_unknown": true}

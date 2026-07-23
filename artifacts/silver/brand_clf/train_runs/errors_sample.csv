@@ -1,0 +1,315 @@
+query_norm,query_raw,brand,click_brand,label_id,label_reason,confidence,sample_weight,n_clicks,n_brands,brand_in_query,has_alias,is_category_only,tier,runner_up,weight_margin,pred
+стиральная машина candy,стиральная машина candy,NO_BRAND,Candy,65,category_only,1.0,1.0,44,1,True,False,True,special,,1.0,Candy
+стиральная машина узкая candy smart pro,Стиральная машина узкая Candy Smart Pro,Candy,Candy,12,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+ирригатор jetpik,ирригатор jetpik,UNKNOWN,Jetpik,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+гайковерт ударный аккумулятор,гайковерт ударный аккумулятор,UNKNOWN,WJB,66,ambiguous_clicks,0.28571428571428575,0.9,4,4,False,False,False,special,FoxWeld,0.0,NO_BRAND
+steam deck,steam deck,NO_BRAND,Valve,65,category_only,0.9930212135462906,1.0,46,3,False,False,True,special,GameSpot,0.9889360702563144,UNKNOWN
+набор посуды taller,набор посуды taller,NO_BRAND,TalleR,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,TalleR
+зубр,зубр,UNKNOWN,Зубр,66,ood_brand_surface,1.0,0.9,4,1,True,False,False,special,,1.0,NO_BRAND
+беспроводные колонки jbl,Беспроводные колонки JBL,NO_BRAND,JBL,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,JBL
+холодильники двухстворчатый,холодильники двухстворчатый,UNKNOWN,Haier,66,ambiguous_clicks,0.482717036354521,0.9,6,5,False,False,False,special,Maunfeld,0.13516077017926587,NO_BRAND
+сабельная пила,сабельная пила,UNKNOWN,Oasis,66,ambiguous_clicks,0.24346789718331652,0.9,16,12,False,False,False,special,Makita,0.04591108918313966,NO_BRAND
+yoshiro холодильник,yoshiro холодильник,UNKNOWN,Yoshiro,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+карта памяти kingston,карта памяти kingston,NO_BRAND,Kingston,65,category_only,1.0,1.0,3,1,True,False,True,special,,1.0,Kingston
+стиральная машина bosch узкая турция,стиральная машина bosch узкая турция,Bosch,Bosch,9,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+беспроводная портативная колонка jbl,беспроводная портативная колонка jbl,NO_BRAND,JBL,65,category_only,1.0,1.0,6,1,True,False,True,special,,1.0,JBL
+встраиваемая морозилка под столешницу zugel,встраиваемая морозилка под столешницу zugel,UNKNOWN,ZUGEL,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+панель индукционная kuppersberg,панель индукционная kuppersberg,NO_BRAND,Kuppersberg,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Kuppersberg
+микроволновая печь соло pioneer mw229 d,Микроволновая печь соло Pioneer MW229D,UNKNOWN,Pioneer,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+стиральная машинка стиральная машинка candy aqua 114 д-2,стиральная машинка стиральная машинка candy aqua 114д-2,Candy,Candy,12,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+яндекс дропс наушники,Яндекс дропс наушники,UNKNOWN,Яндекс,66,low_conf_with_evidence,0.5,0.9,2,2,True,False,False,special,beets,0.0,Яндекс
+робот пылесос midea,робот пылесос midea,NO_BRAND,Midea,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Midea
+игровая консоль sony playstation 4,игровая консоль sony playstation 4,PlayStation,PlayStation,47,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,Sony
+выпрямители волос утюжок для волос dyson,выпрямители волос утюжок для волос dyson,Dyson,Dyson,20,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+msi видеокарта geforce rtx 5060 8 гб rtx 5060 8 g shadow 2 x oc,MSI Видеокарта GeForce RTX 5060 8 ГБ (RTX 5060 8G SHADOW 2X OC),MSI,MSI,40,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+холодильники двухкамерные grundig no frost,холодильники двухкамерные grundig no frost,Grundig,Grundig,24,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+дрели шуруповерты аккумуляторные,дрели шуруповерты аккумуляторные,UNKNOWN,Zerten,66,ambiguous_clicks,0.2794036219262045,0.9,10,10,False,False,False,special,Rokodil,0.0,NO_BRAND
+чайник термопот 3 л,чайник термопот 3л,UNKNOWN,Tesler,66,ambiguous_clicks,0.3333333333333333,0.9,3,3,False,False,False,special,Deerma,0.0,NO_BRAND
+мясорубка tefal,мясорубка tefal,UNKNOWN,Tefal,66,low_conf_with_evidence,0.5,0.9,2,2,True,False,False,special,Moulinex,0.0,Tefal
+утюги марки яромир,утюги марки яромир,UNKNOWN,Яромир,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+keephone,Keephone,UNKNOWN,Keephone,66,ood_brand_surface,1.0,0.9,2,1,True,False,False,special,,1.0,Apple
+электрическая плита gorenje,Электрическая плита Gorenje,NO_BRAND,Gorenje,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Gorenje
+пылесос delta,пылесос delta,UNKNOWN,Delta,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+наушники игровые logitech,наушники игровые logitech,NO_BRAND,Logitech,65,category_only,1.0,1.0,6,1,True,False,True,special,,1.0,Logitech
+духовой шкаф hisense,духовой шкаф hisense,NO_BRAND,Hisense,65,category_only,1.0,1.0,11,1,True,False,True,special,,1.0,Hisense
+встраиваемая вытяжка midea,встраиваемая вытяжка midea,NO_BRAND,Midea,65,category_only,1.0,1.0,3,1,True,False,True,special,,1.0,Midea
+электрический духовой шкаф monsher moe 6163 noir,Электрический духовой шкаф Monsher MOE 6163 Noir,UNKNOWN,Monsher,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+холодильники двухкамерные gorenje инверторный,холодильники двухкамерные gorenje инверторный,NO_BRAND,Gorenje,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Gorenje
+узкие стиральные машины bosch,узкие стиральные машины Bosch,Bosch,Bosch,9,brand_in_query,0.8,0.8,2,2,True,False,False,high,Hisense,0.6,NO_BRAND
+встраиваемая микроволновая печь свч bosch,встраиваемая микроволновая печь свч bosch,Bosch,Bosch,9,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+узкие стиральные машины beko,узкие стиральные машины beko,Beko,Beko,8,brand_in_query,1.0,1.0,5,1,True,False,False,high,,1.0,NO_BRAND
+музыкальный центр micro grundig,музыкальный центр Micro Grundig,Grundig,Grundig,24,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+умная камера яндекс,умная камера яндекс,NO_BRAND,Яндекс,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Яндекс
+whoop фитнес-браслет 5.0 mg светло-серый,"Whoop Фитнес-браслет 5.0 MG, светло-серый",UNKNOWN,Whoop,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+газовая плита darina,газовая плита darina,NO_BRAND,Darina,65,category_only,0.9485609308022045,1.0,7,2,True,False,True,special,DARINA,0.897121861604409,UNKNOWN
+лодочные моторы,лодочные моторы,UNKNOWN,HDX,66,ambiguous_clicks,0.4618026253550439,0.9,12,6,False,False,False,special,MARLIN,0.1478726633417,NO_BRAND
+лампочка эра,лампочка эра,UNKNOWN,ЭРА,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+мобильный кондиционер hisense,мобильный кондиционер hisense,NO_BRAND,Hisense,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Hisense
+узкие стиральные машины hisense,узкие стиральные машины hisense,Hisense,Hisense,29,brand_in_query,1.0,1.0,5,1,True,False,False,high,,1.0,NO_BRAND
+тепломаш,тепломаш,UNKNOWN,Тепломаш,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+стиральная машина beko wspe6h612 a с фронтальной загрузкой 6.5 кг 1200 об мин с паром инверторная,"Стиральная машина Beko WSPE6H612A, с фронтальной загрузкой, 6.5кг, 1200об/мин, с паром, инверторная",Beko,Beko,8,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+игры для sony playstation 4,Игры для sony PlayStation 4,PlayStation,PlayStation,47,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,Sony
+magssory беспроводное зарядное устройство,magssory беспроводное зарядное устройство,UNKNOWN,Magssory,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+встроенный духовой шкаф bosch очистка легкой эмали,Встроенный духовой шкаф bosch очистка лёгкой эмали,Bosch,Bosch,9,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+очиститель для кофемашин,очиститель для кофемашин,UNKNOWN,Italco,66,ambiguous_clicks,0.4480150382670187,0.9,5,5,False,False,False,special,BIORETTO,0.25600859329543924,NO_BRAND
+посуда,посуда,NO_BRAND,Tefal,65,category_only,0.2900477642191853,1.0,74,30,False,False,True,special,Hi,0.03651519691107835,UNKNOWN
+варочная панель электрическая gartz hes421 b,Варочная панель электрическая GARTZ HES421B,UNKNOWN,GARTZ,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+электрические чайники стеклянный tefal,электрические чайники стеклянный tefal,Tefal,Tefal,59,brand_in_query,1.0,1.0,10,1,True,False,False,high,,1.0,NO_BRAND
+электрическая панель bosch,Электрическая панель bosch,NO_BRAND,Bosch,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Bosch
+встроенная посудомоечная машина krona 60,встроенная посудомоечная машина krona 60,Krona,Krona,36,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+игровые ноутбуки msi,игровые ноутбуки msi,NO_BRAND,MSI,65,category_only,1.0,1.0,47,1,True,False,True,special,,1.0,MSI
+вентилятор напольный для дома,вентилятор напольный для дома,UNKNOWN,Ballu,66,ambiguous_clicks,0.3338763445248048,0.9,7,7,False,False,False,special,Ami,0.0,NO_BRAND
+холодильники side side,холодильники side side,UNKNOWN,Liebherr,66,ambiguous_clicks,0.404001421825014,0.9,4,4,False,False,False,special,Kuppersberg,0.062154064896155985,NO_BRAND
+кронштейн для кондиционера,кронштейн для кондиционера,UNKNOWN,Рэмо,66,ambiguous_clicks,0.39682539682539675,0.9,12,4,False,False,False,special,Ballu,0.039682539682539646,NO_BRAND
+умная розетка яндекс,умная розетка яндекс,NO_BRAND,Яндекс,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Яндекс
+термощуп,термощуп,UNKNOWN,Kitfort,66,ambiguous_clicks,0.4285714285714286,0.9,3,3,False,False,False,special,Levenhuk,0.1428571428571429,NO_BRAND
+наушники беспроводные полноразмерные sony,наушники беспроводные полноразмерные sony,Sony,Sony,55,brand_in_query,1.0,1.0,3,1,True,False,False,high,,1.0,NO_BRAND
+candy smart pro,candy smart pro,NO_BRAND,Candy,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Candy
+встраиваемая индукционная плита на 4,встраиваемая индукционная плита на 4,UNKNOWN,Haier,66,ambiguous_clicks,0.3482662324175103,0.9,18,13,False,False,False,special,Gorenje,0.154044716135977,NO_BRAND
+раковина,раковина,NO_BRAND,Orange,65,category_only,0.3817607310699685,1.0,23,8,False,False,True,special,Stella Polar,0.17627606789259564,UNKNOWN
+варочная панель индукционная kuppersberg,варочная панель индукционная kuppersberg,NO_BRAND,Kuppersberg,65,category_only,1.0,1.0,12,1,True,False,True,special,,1.0,Kuppersberg
+сковорода hi кованый,сковорода hi кованый,Hi,Hi,28,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+магнитная зарядка apple,магнитная зарядка apple,UNKNOWN,WALKER,66,ambiguous_clicks,0.47297297297297297,0.9,3,3,False,False,False,special,Apple,0.18918918918918917,Apple
+духовка шкаф gorenje,Духовка шкаф gorenje,NO_BRAND,Gorenje,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Gorenje
+встраиваемая варочная панель индукционная electrolux,встраиваемая варочная панель индукционная electrolux,Electrolux,Electrolux,21,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+tcl сплит система,tcl сплит система,NO_BRAND,TCL,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,TCL
+кофеварка капельная redmond cm704,Кофеварка капельная REDMOND CM704,Redmond,Redmond,50,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+weissgauff wes плита электрическая,weissgauff wes плита электрическая,UNKNOWN,Weissgauff,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+блендер стационарный hi hb207,Блендер стационарный Hi HB207,Hi,Hi,28,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+dyson вертикальный моющий,dyson вертикальный моющий,NO_BRAND,Dyson,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Dyson
+стиральная машинка electrolux,стиральная машинка electrolux,NO_BRAND,Electrolux,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Electrolux
+встраиваемый духовой шкаф gorenje,встраиваемый духовой шкаф gorenje,NO_BRAND,Gorenje,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Gorenje
+моноблок msi pro,моноблок msi pro,NO_BRAND,MSI,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,MSI
+отпариватель mie,отпариватель mie,UNKNOWN,Mie,66,ood_brand_surface,1.0,0.9,3,1,True,False,False,special,,1.0,NO_BRAND
+оперативная память ddr4 16 gb,оперативная память ddr4 16gb,UNKNOWN,KingSpec,66,ambiguous_clicks,0.49740932642487046,0.9,5,3,False,False,False,special,Netac,0.077720207253886,NO_BRAND
+светильник напольный торшер moderli diy,"Светильник напольный, торшер Moderli DIY",UNKNOWN,Moderli,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+музыкальный центр sony,музыкальный центр sony,NO_BRAND,Sony,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Sony
+очиститель воздуха приточный ballu oneair asp- 200,Очиститель воздуха приточный Ballu ONEAIR ASP- 200,Ballu,Ballu,6,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+посудомоечные машины electrolux,посудомоечные машины electrolux,NO_BRAND,Electrolux,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Electrolux
+духовой шкаф candy,духовой шкаф candy,NO_BRAND,Candy,65,category_only,1.0,1.0,4,1,True,False,True,special,,1.0,Candy
+яндекс plus подписки,яндекс plus подписки,NO_BRAND,Яндекс,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Яндекс
+набор кухонных ножей taller,Набор кухонных ножей TalleR,TalleR,TalleR,57,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+стиральная машинка beko,стиральная машинка beko,NO_BRAND,Beko,65,category_only,1.0,1.0,31,1,True,False,True,special,,1.0,Beko
+накладные наушники jbl,Накладные наушники jbl,NO_BRAND,JBL,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,JBL
+беспроводной пылесос gorenje,беспроводной пылесос gorenje,NO_BRAND,Gorenje,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Gorenje
+смарт приставка sber,смарт приставка sber,NO_BRAND,Sber,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Sber
+встраиваемый холодильник candy,встраиваемый холодильник candy,NO_BRAND,Candy,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Candy
+встраиваемая варочная панель электрическая gorenje,встраиваемая варочная панель электрическая gorenje,Gorenje,Gorenje,23,brand_in_query,1.0,1.0,5,1,True,False,False,high,,1.0,NO_BRAND
+инверторный кондиционер royal,инверторный кондиционер royal,NO_BRAND,Royal Clima,65,category_only,1.0,1.0,1,1,False,False,True,special,,1.0,UNKNOWN
+стиральная сушильная машинка beko г,стиральная сушильная машинка beko  г,Beko,Beko,8,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+сушильная машина midea,сушильная машина midea,NO_BRAND,Midea,65,category_only,1.0,1.0,9,1,True,False,True,special,,1.0,Midea
+пылесос моющий dreame,Пылесос моющий dreame,NO_BRAND,Dreame,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Dreame
+powerbank,Powerbank,UNKNOWN,Deppa,66,ambiguous_clicks,0.4743340892207907,0.9,20,8,False,False,False,special,Aukey,0.2862974733312058,NO_BRAND
+фен dreame mini,фен dreame mini,NO_BRAND,Dreame,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Dreame
+сковорода hi кованный mvnkklgr 128 28 cv,сковорода hi (кованный)MVNKKLGR 128 28cv,Hi,Hi,28,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+bosch диск терка,bosch диск терка,NO_BRAND,Bosch,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Bosch
+вертикальный беспроводной пылесос dreame,вертикальный беспроводной пылесос dreame,NO_BRAND,Dreame,65,category_only,0.8346700374731445,1.0,20,2,True,False,True,special,Dreame Trouver,0.669340074946289,Dreame
+холодильники уцененные,холодильники уцененные,UNKNOWN,Indesit,66,ambiguous_clicks,0.3404954213297054,0.9,18,9,False,False,False,special,Hi,0.06960271195985306,NO_BRAND
+варочная панель газовая homsair hgg323 gcbk,Варочная панель газовая HOMSAir HGG323GCBK,UNKNOWN,HOMSAir,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+морозильная камера maunfeld,Морозильная камера MAUNFELD,NO_BRAND,Maunfeld,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Maunfeld
+армед рециркулятор,армед рециркулятор,UNKNOWN,АРМЕД,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+калонка,Калонка,UNKNOWN,Blackton,66,ambiguous_clicks,0.34084649096220226,0.9,13,8,False,False,False,special,JBL,0.14563440977475914,NO_BRAND
+измерить умное кольцо sber,измерить умное кольцо sber,Sber,Sber,53,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+миксер ручной gorenje,миксер ручной gorenje,NO_BRAND,Gorenje,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Gorenje
+вытяжка кухонная островная meferi,Вытяжка кухонная островная MEFERI,UNKNOWN,MEFERI,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+газовая варочная поверхность встраиваемая midea,газовая варочная поверхность встраиваемая midea,Midea,Midea,42,brand_in_query,1.0,1.0,2,1,True,False,False,high,,1.0,NO_BRAND
+варочная панель индукционная bosch,варочная панель индукционная bosch,NO_BRAND,Bosch,65,category_only,1.0,1.0,7,1,True,False,True,special,,1.0,Bosch
+1. asus rog hyperion gr701 btf edition корпус пк,1. ASUS ROG Hyperion GR701 BTF Edition корпус пк,ASUS,GIGABYTE,0,alias_hint,1.0,1.0,1,1,False,True,False,high,,1.0,UNKNOWN
+king вентилятор,King вентилятор,UNKNOWN,King,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+часы elari,Часы Elari,UNKNOWN,Elari,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+очиститель-увлажнитель воздуха dyson ph05 purifier humidify cool ph2 de nox белый золотой,Очиститель-увлажнитель воздуха Dyson PH05 Purifier Humidify + Cool PH2 De-NOx (Белый/Золотой),Dyson,Dyson,20,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+электрические чайники gorenje,электрические чайники gorenje,NO_BRAND,Gorenje,65,category_only,1.0,1.0,6,1,True,False,True,special,,1.0,Gorenje
+kuppersberg газовая панель,Kuppersberg газовая панель,NO_BRAND,Kuppersberg,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Kuppersberg
+чехол на iphone14 pro,чехол на iphone14 pro,UNKNOWN,Deppa,66,ambiguous_clicks,0.44164037854889593,0.9,4,4,False,False,False,special,Koss Market,0.0,Apple
+фотокамера sony беззеркальный,фотокамера sony беззеркальный,Sony,Sony,55,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+кабель lightning type c,кабель lightning type c,UNKNOWN,Baseus,66,ambiguous_clicks,0.42806619766544457,0.9,14,8,False,False,False,special,Rock,0.2585562747803813,NO_BRAND
+27 монитор lg ultragear 27gs60 qc b 2560x1440 va 180 гц 2хhdmi 1 хdp изогнутый фиолетовый 27gs60 qc b.aruq,"27"" Монитор LG UltraGear 27GS60QC-B,  2560x1440,  VA,  180Гц,  2хHDMI,  1хDP,  изогнутый, фиолетовый [27gs60qc-b.aruq]",LG,LG,38,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+пылесос моющий вертикальный trouver к30,пылесос моющий вертикальный trouver к30,UNKNOWN,Trouver,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+беспроводной вертикальный моющий пылесос roborock,беспроводной вертикальный моющий пылесос roborock,UNKNOWN,Roborock,66,ood_brand_surface,1.0,0.9,5,1,True,False,False,special,,1.0,NO_BRAND
+sony playstation 4 игры,sony playstation 4 игры,UNKNOWN,Playstation,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,Sony
+кондиционер мобильный hisense,кондиционер мобильный hisense,NO_BRAND,Hisense,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Hisense
+maunfeld вытяжка кухонная thames 601 pm полновстраиваемая рециркуляционная,"MAUNFELD Вытяжка кухонная THAMES 601PM, полновстраиваемая рециркуляционная",Maunfeld,Maunfeld,41,brand_in_query,1.0,1.0,2,1,True,False,False,high,,1.0,NO_BRAND
+вентилятор напольный centek ct-5026 диаметр 43 см 3 скорости мощность 55 вт устойчивая платформа черный,"Вентилятор напольный Centek CT-5026 диаметр 43см, 3 скорости, мощность 55Вт, устойчивая платформа, чёрный",Centek,Centek,15,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+встраиваемая техника,встраиваемая техника,UNKNOWN,Kuppersberg,66,ambiguous_clicks,0.3442028985507246,0.9,6,6,False,False,False,special,Gressel,0.11473429951690822,NO_BRAND
+сетевой фильтр с предохранителем,сетевой фильтр с предохранителем,UNKNOWN,ARTSTYLE,66,ambiguous_clicks,0.21820259418508045,0.9,14,10,False,False,False,special,ЭРА,0.03896474896162152,NO_BRAND
+плита beraum,плита beraum,UNKNOWN,Beraum,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+клавиатура logitech pro,клавиатура logitech pro,NO_BRAND,Logitech,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Logitech
+кондиционер сплит ballu,кондиционер сплит ballu,NO_BRAND,Ballu,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Ballu
+внешний аккумулятор power bank baseus pico go ultra,внешний аккумулятор power bank Baseus pico Go ultra,Baseus,Baseus,7,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+тройник agni,тройник agni,UNKNOWN,AGNI,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+пылесосы вертикальные karcher,пылесосы вертикальные karcher,NO_BRAND,Karcher,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Karcher
+колонки урал,колонки урал,UNKNOWN,Урал,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+кондиционер сплит система инверторный centek,кондиционер сплит система инверторный centek,Centek,Centek,15,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+планетарный миксер с тестомесильной redmond,планетарный миксер с тестомесильной redmond,Redmond,Redmond,50,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+наушники jbl детские,наушники jbl детские,NO_BRAND,JBL,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,JBL
+встраиваемая свч gorenje,встраиваемая свч gorenje,NO_BRAND,Gorenje,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Gorenje
+газовая плита с газовой,газовая плита с газовой,UNKNOWN,Darina,66,ambiguous_clicks,0.4959888385071503,0.9,3,3,False,False,False,special,Gefest,0.02755493547261948,NO_BRAND
+восстановленный смартфон apple,восстановленный смартфон apple,NO_BRAND,Apple,65,category_only,1.0,1.0,7,1,True,False,True,special,,1.0,Apple
+вертикальный пылесос carrera,вертикальный пылесос carrera,NO_BRAND,Carrera,65,category_only,1.0,1.0,4,1,True,False,True,special,,1.0,Carrera
+кусторез,Кусторез,UNKNOWN,Tabi,66,ambiguous_clicks,0.4974950346849407,0.9,7,7,False,False,False,special,NR,0.2763861303805226,NO_BRAND
+посудомоечная машина компактная midea маленькая,посудомоечная машина компактная midea маленькая,Midea,Midea,42,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+стиральная машина узкая lg,стиральная машина узкая lg,NO_BRAND,LG,65,category_only,1.0,1.0,3,1,True,False,True,special,,1.0,LG
+утюг с автоотключением,утюг с автоотключением,NO_BRAND,Polaris,65,category_only,0.41275920645456543,1.0,15,7,False,False,True,special,Tefal,0.01617846021726241,UNKNOWN
+сотейник,сотейник,UNKNOWN,REGENT inox,66,ambiguous_clicks,0.4740602004795564,0.9,7,7,False,False,False,special,Mayer&Boch,0.2708915431311751,NO_BRAND
+стиральная машина gorenje wd2pa854 adw c с фронтальной загрузкой 8 кг 1400 об мин с паром с сушкой инверторная,"Стиральная машина Gorenje WD2PA854ADW/C, с фронтальной загрузкой, 8кг, 1400об/мин, с паром, с сушкой, инверторная",Gorenje,Gorenje,23,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+встраиваемая микроволновка midea,встраиваемая микроволновка midea,NO_BRAND,Midea,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Midea
+кабель lightning baseus,кабель lightning baseus,NO_BRAND,Baseus,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Baseus
+морозильная камера beko,морозильная камера beko,NO_BRAND,Beko,65,category_only,1.0,1.0,12,1,True,False,True,special,,1.0,Beko
+планетарный миксер с тестомесильной,планетарный миксер с тестомесильной,UNKNOWN,Redmond,66,ambiguous_clicks,0.13339351637968225,0.9,67,27,False,False,False,special,Moulinex,0.00405434756194789,NO_BRAND
+фен щетка braun,Фен щетка braun,NO_BRAND,Braun,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Braun
+внешний аккумулятор magsafe 10000,внешний аккумулятор magsafe 10000,UNKNOWN,Baseus,66,ambiguous_clicks,0.4649365962625514,0.9,10,5,False,False,False,special,Deppa,0.22433692018993256,NO_BRAND
+картридж к фильтру для очистки воды philips,картридж к фильтру для очистки воды philips,Philips,Philips,46,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+яндекс станция мини,яндекс станция мини,NO_BRAND,Яндекс,65,category_only,0.8498754648742707,1.0,15,2,True,False,True,special,EMBODIMENT,0.6997509297485413,Яндекс
+игровые ноутбуки acer,игровые ноутбуки acer,UNKNOWN,Acer,66,ood_brand_surface,1.0,0.9,4,1,True,True,False,special,,1.0,NO_BRAND
+наушники беспроводные realme,наушники беспроводные realme,NO_BRAND,realme,65,category_only,1.0,1.0,4,1,True,False,True,special,,1.0,realme
+батарейки,батарейки,NO_BRAND,GP,65,category_only,0.31549413571080737,1.0,47,15,False,False,True,special,Carrera,0.15336607462182517,UNKNOWN
+телефоны мобильные сенсорные redmi,телефоны мобильные сенсорные redmi,Xiaomi,Redmi,62,alias_hint,1.0,1.0,1,1,True,True,False,high,,1.0,NO_BRAND
+встраиваемая варочная панель kuppersberg,встраиваемая варочная панель kuppersberg,NO_BRAND,Kuppersberg,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Kuppersberg
+кухонные ножи tefal,кухонные ножи tefal,NO_BRAND,Tefal,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Tefal
+встраиваемые посудомоечные машины kuppersberg,встраиваемые посудомоечные машины kuppersberg,NO_BRAND,Kuppersberg,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Kuppersberg
+пылесос ручной tefal,пылесос ручной tefal,NO_BRAND,Tefal,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Tefal
+беспроводная зарядка deppa,беспроводная зарядка deppa,NO_BRAND,Deppa,65,category_only,1.0,1.0,4,1,True,False,True,special,,1.0,Deppa
+фены babyliss pro,фены babyliss pro,NO_BRAND,BaByliss Pro,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,UNKNOWN
+jbl наушники беспроводные,jbl наушники беспроводные,NO_BRAND,JBL,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,JBL
+кабель tfn,кабель TFN,UNKNOWN,TFN,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+сушильные машины midea,сушильные машины Midea,NO_BRAND,Midea,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Midea
+стиральная машинка атлант 60у1213-01,стиральная машинка атлант 60У1213-01,UNKNOWN,Атлант,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+насос садовый скважинный oasis sn 60 60 высота подъема 60 м кабель 30 м 3600 л час,"Насос садовый скважинный Oasis SN 60/60, высота подъема 60 м, кабель 30м, 3600 л/час",Oasis,Oasis,44,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+холодильники двухкамерные no frost lg,холодильники двухкамерные no frost lg,LG,LG,38,brand_in_query,1.0,1.0,14,1,True,False,False,high,,1.0,NO_BRAND
+часы suunto,часы suunto,UNKNOWN,Suunto,66,ood_brand_surface,1.0,0.9,3,1,True,False,False,special,,1.0,NO_BRAND
+робот пылесос dreame,Робот пылесос dreame,NO_BRAND,Dreame,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Dreame
+кресло метта,кресло метта,UNKNOWN,Метта,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+кофеварка demiand rivo 7в1 автоматический капучинатор,"Кофеварка DEMIAND RIVO 7в1, автоматический капучинатор",DEMIAND,DEMIAND,16,brand_in_query,1.0,1.0,4,1,True,False,False,high,,1.0,NO_BRAND
+фен щетка polaris,фен щетка polaris,NO_BRAND,Polaris,65,category_only,1.0,1.0,3,1,True,False,True,special,,1.0,Polaris
+встраиваемый электрический духовой шкаф bosch,встраиваемый электрический духовой шкаф bosch,Bosch,Bosch,9,brand_in_query,0.8870762491443067,0.8870762491443067,37,3,True,False,False,high,Zigmund & Shtain,0.7844182938209492,NO_BRAND
+духовой шкаф электрический ginzzu hoe-219,Духовой шкаф электрический Ginzzu HOE-219,UNKNOWN,Ginzzu,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+вертикальный моющий пылесос dreame,вертикальный моющий пылесос dreame,NO_BRAND,Dreame,65,category_only,0.9497813538986665,1.0,84,2,True,False,True,special,Roborock,0.8995627077973329,Dreame
+игровая мышь logitech,игровая мышь logitech,NO_BRAND,Logitech,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Logitech
+apple mac ноутбук,apple mac ноутбук,NO_BRAND,Apple,65,category_only,0.9902939425487063,1.0,144,2,True,False,True,special,Krutoff,0.9805878850974126,Apple
+сушильная машина hisense,сушильная машина hisense,NO_BRAND,Hisense,65,category_only,1.0,1.0,35,1,True,False,True,special,,1.0,Hisense
+посудомоечная машина electrolux edm23101 l,Посудомоечная машина Electrolux EDM23101L,UNKNOWN,ELECTROLUX,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,Electrolux
+умная сверхъяркая лампа sber с адаптивным светом e27 a70 14 вт 1500 лм wifi,Умная сверхъяркая лампа Sber с адаптивным светом E27/A70/14 Вт/1500Лм/WiFi,Sber,Sber,53,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+кабель для зарядки,кабель для зарядки,UNKNOWN,Havit,66,ambiguous_clicks,0.4921875,0.9,3,3,False,False,False,special,Continent,0.13671875000000006,NO_BRAND
+aux сплит система инверторная,Aux сплит система инверторная,UNKNOWN,AUX,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+электроплитка настольна инфракрасная китфорт,Электроплитка настольна инфракрасная китфорт,Kitfort,Kitfort,35,alias_hint,1.0,1.0,1,1,True,True,False,high,,1.0,NO_BRAND
+моющий пылесос dreame вертикальный,моющий пылесос dreame вертикальный,NO_BRAND,Dreame,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Dreame
+кондиционер сплит система lg 12,кондиционер сплит система lg 12,LG,LG,38,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+сушильная машина electrolux,сушильная машина electrolux,NO_BRAND,Electrolux,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Electrolux
+наушники накладные jbl,наушники накладные jbl,NO_BRAND,JBL,65,category_only,1.0,1.0,12,1,True,False,True,special,,1.0,JBL
+кабель lightning apple,кабель lightning apple,NO_BRAND,Apple,65,category_only,0.6833506763787721,1.0,8,3,True,False,True,special,Rexant,0.4017273673257023,Apple
+стиральная машинка 5 кг,стиральная машинка 5 кг,UNKNOWN,Indesit,66,ambiguous_clicks,0.46624350836699363,0.9,6,4,False,False,False,special,Casarte,0.0,NO_BRAND
+ультразвуковая зубная щетка carrera,ультразвуковая зубная щетка carrera,Carrera,Carrera,14,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+автохолодильник компрессорный,автохолодильник компрессорный,UNKNOWN,Baikal-PT,66,ambiguous_clicks,0.40837547638027766,0.9,17,4,False,False,False,special,Harper,0.0819271789034507,NO_BRAND
+мфу лазерный pantum m6500 w а4 принтер сканер копир wi fi черный,"МФУ лазерный Pantum M6500W, А4 , принтер , сканер , копир , Wi-Fi , черный",Pantum,Pantum,45,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+морозильная камера atlant,морозильная камера atlant,NO_BRAND,ATLANT,65,category_only,1.0,1.0,5,1,True,False,True,special,,1.0,ATLANT
+электро бритва philips,электро бритва philips,NO_BRAND,Philips,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Philips
+очистители воздуха dyson,очистители воздуха dyson,NO_BRAND,Dyson,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Dyson
+беспроводные наушники jbl сиреневые,беспроводные наушники jbl сиреневые,JBL,JBL,32,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+встраиваемая микроволновая печь candy cmxbtg259 b,Встраиваемая микроволновая печь Candy CMXBTG259B,Candy,Candy,12,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+gartz пылесос,gartz пылесос,UNKNOWN,GARTZ,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+газовые плиты gorenje дизайнерская,газовые плиты gorenje дизайнерская,Gorenje,Gorenje,23,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+встраиваемая микроволновая midea,встраиваемая микроволновая midea,NO_BRAND,Midea,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Midea
+весы кухонные tefal,весы кухонные tefal,NO_BRAND,Tefal,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Tefal
+паровая гладильная система tefal ixeo,паровая гладильная система tefal ixeo,Tefal,Tefal,59,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+внешний аккумулятор magsafe ugreen,Внешний аккумулятор MagSafe uGreen,UNKNOWN,uGreen,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+восстановленный телевизор tcl,восстановленный телевизор tcl,NO_BRAND,TCL,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,TCL
+indesit стиральная машина,indesit стиральная машина,NO_BRAND,Indesit,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Indesit
+сплит-система newtek nt-65chd07 23 кв.м компрессор toshiba gmcc функция обогрев и охлаждение комплект,Сплит-система Newtek NT-65CHD07 /23кв.м/компрессор TOSHIBA-GMCC/Функция обогрев и охлаждение/ КОМПЛЕКТ,Toshiba,Newtek,61,alias_hint,1.0,1.0,1,1,True,True,False,high,,1.0,UNKNOWN
+стиральная машина узкая candy smart,стиральная машина узкая candy smart,Candy,Candy,12,brand_in_query,1.0,1.0,2,1,True,False,False,high,,1.0,NO_BRAND
+кофемашина vista,Кофемашина vista,UNKNOWN,Vista,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+gorenje микроволновая печь,Gorenje микроволновая печь,NO_BRAND,Gorenje,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Gorenje
+34 монитор мониторы для компьютера 34 монитор изогнутый,34 монитор мониторы для компьютера 34 монитор изогнутый,UNKNOWN,Samsung,66,ambiguous_clicks,0.41025641025641024,0.9,4,4,False,False,False,special,MSI,0.10256410256410255,NO_BRAND
+тонометр автоматический,тонометр автоматический,UNKNOWN,OMRON,66,ambiguous_clicks,0.4542857142857143,0.9,8,4,False,False,False,special,WJB,0.19714285714285712,NO_BRAND
+кресло glhf,Кресло glhf,UNKNOWN,GLHF,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+варочная панель gefest,варочная панель gefest,NO_BRAND,Gefest,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Gefest
+lg frigorifero combinato gbbs514 cpy,LG Frigorifero combinato GBBS514CPY,LG,LG,38,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+внешний аккумулятор 20000,внешний аккумулятор 20000,UNKNOWN,Xiaomi,66,ambiguous_clicks,0.33213325325165677,0.9,15,8,False,False,False,special,Baseus,0.046724220658410476,NO_BRAND
+варочная панель электрическая на 2,варочная панель электрическая на 2,UNKNOWN,Krona,66,ambiguous_clicks,0.34872126644086154,0.9,29,14,False,False,False,special,HOMSAir,0.18933342997897193,NO_BRAND
+посудомоечная машина kuppersberg,посудомоечная машина kuppersberg,NO_BRAND,Kuppersberg,65,category_only,1.0,1.0,3,1,True,False,True,special,,1.0,Kuppersberg
+посудомоечная машина electrolux,посудомоечная машина electrolux,NO_BRAND,Electrolux,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Electrolux
+вытяжка островная,вытяжка островная,UNKNOWN,HOMSAir,66,ambiguous_clicks,0.3531567549558554,0.9,7,7,False,False,False,special,Krona,0.0,NO_BRAND
+раковина кухонная врезная florentina,раковина кухонная врезная Florentina,UNKNOWN,Florentina,66,ood_brand_surface,1.0,0.9,2,1,True,False,False,special,,1.0,NO_BRAND
+беспроводной погружной блендер korting khb 0313 w,Беспроводной погружной блендер Korting KHB 0313 W,UNKNOWN,Korting,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+радар детектор,радар детектор,UNKNOWN,Intego,66,ambiguous_clicks,0.43205990689565243,0.9,16,5,False,False,False,special,SilverStone F1,0.03888696360498896,NO_BRAND
+принтер лазерный с wi,принтер лазерный с wi,UNKNOWN,DELI,66,ambiguous_clicks,0.4945173081057837,0.9,7,3,False,False,False,special,Pantum,0.07310255858955063,NO_BRAND
+вытяжка elica наклонная,вытяжка elica наклонная,UNKNOWN,Elica,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+холодильники kuppersberg стекло,холодильники kuppersberg стекло,NO_BRAND,Kuppersberg,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Kuppersberg
+смарт часы realme,смарт часы realme,NO_BRAND,realme,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,realme
+кондиционер сплит rapid,кондиционер сплит rapid,NO_BRAND,Rapid,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Rapid
+dreame пылесос вертикальный,dreame пылесос вертикальный,NO_BRAND,Dreame,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Dreame
+мойка воздуха dreame,Мойка воздуха dreame,NO_BRAND,Dreame,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Dreame
+очиститель воздуха приточный ballu,Очиститель воздуха приточный Ballu,Ballu,Ballu,6,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+электрошвабра,электрошвабра,UNKNOWN,Polaris,66,ambiguous_clicks,0.3840706590648369,0.9,8,5,False,False,False,special,VOXLEN,0.12438652026531648,NO_BRAND
+https www.mvideo.ru products vs traivaemaya mikrovolnovaya pech krona krmw20-400444039,https://www.mvideo.ru/products/vs traivaemaya-mikrovolnovaya-pech- krona-krmw20-400444039,Krona,Krona,36,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+варочная панель indesit,варочная панель indesit,NO_BRAND,Indesit,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Indesit
+кондиционер мобильный rapid,Кондиционер мобильный rapid,NO_BRAND,Rapid,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Rapid
+водонагреватель газовый thermex,водонагреватель газовый thermex,NO_BRAND,Thermex,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,UNKNOWN
+посудомоечная машина 60 см,Посудомоечная машина 60 см,UNKNOWN,Bosch,66,ambiguous_clicks,0.37019085125719475,0.9,3,3,False,False,False,special,Ardo,0.03938200545289305,NO_BRAND
+сковорода beka,сковорода beka,UNKNOWN,Beka,66,ood_brand_surface,1.0,0.9,2,1,True,False,False,special,,1.0,NO_BRAND
+колонка яндекс станция,колонка яндекс станция,NO_BRAND,Яндекс,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Яндекс
+электро самокат kugoo,электро самокат kugoo,NO_BRAND,Kugoo,65,category_only,1.0,1.0,13,1,True,False,True,special,,1.0,UNKNOWN
+стиральная lg узкая,стиральная lg узкая,NO_BRAND,LG,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,LG
+плиты gefest комбинированные,плиты gefest комбинированные,NO_BRAND,Gefest,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Gefest
+триммер deko,триммер deko,UNKNOWN,DEKO,66,ood_brand_surface,1.0,0.9,2,1,True,False,False,special,,1.0,NO_BRAND
+philips напольный пылесос powerpro expert fc9733 01 синий уцененный товар,"Philips Напольный пылесос PowerPro Expert FC9733/01, синий, Уцененный товар",Philips,Philips,46,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+варочная индукционная панель gorenje,варочная индукционная панель gorenje,NO_BRAND,Gorenje,65,category_only,1.0,1.0,10,1,True,False,True,special,,1.0,Gorenje
+овощерезке электрическая,овощерезке электрическая,UNKNOWN,Centek,66,ambiguous_clicks,0.4503784693019344,0.9,12,8,False,False,False,special,LOWENGRASS,0.31791421362489486,NO_BRAND
+кулер,кулер,NO_BRAND,ID-Cooling,65,category_only,0.3264133387629737,1.0,17,7,False,False,True,special,AEL,0.004364134382728388,UNKNOWN
+встраиваемый шкаф gorenje черный,встраиваемый шкаф gorenje черный,NO_BRAND,Gorenje,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Gorenje
+муз центр shivaki,муз центр shivaki,NO_BRAND,Shivaki,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,UNKNOWN
+встроенный духовой шкаф электрический electrolux,встроенный духовой шкаф электрический electrolux,Electrolux,Electrolux,21,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+стиральная машина electrolux,стиральная машина electrolux,NO_BRAND,Electrolux,65,category_only,1.0,1.0,3,1,True,False,True,special,,1.0,Electrolux
+индукционная плита на 2,индукционная плита на 2,UNKNOWN,Harper,66,ambiguous_clicks,0.45383703201761816,0.9,3,3,False,False,False,special,Maunfeld,0.15449771302727425,NO_BRAND
+механическая клавиатура logitech,механическая клавиатура logitech,NO_BRAND,Logitech,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Logitech
+электрическая варочная поверхность хайер,электрическая варочная поверхность хайер,Haier,Haier,27,alias_hint,1.0,1.0,1,1,True,True,False,high,,1.0,NO_BRAND
+накопительные водонагреватели 50 л плоские вертикальные,накопительные водонагреватели 50л плоские вертикальные,UNKNOWN,Haier,66,ambiguous_clicks,0.364741641337386,0.9,4,4,False,False,False,special,Hyundai,0.04559270516717323,NO_BRAND
+уцененная стиральная машина узкая carrera 573 отличный,"Уцененная стиральная машина узкая Carrera №573, отличный",Carrera,Carrera,14,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+встраиваемая посудомоечная машина hotpoint hi 5d84 dw,Встраиваемая посудомоечная машина Hotpoint HI 5D84 DW,UNKNOWN,Hotpoint,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+принтер лазерное мфу и ксероксом цветной,принтер лазерное мфу и ксероксом цветной,UNKNOWN,Pantum,66,ambiguous_clicks,0.35476517256989093,0.9,7,4,False,False,False,special,HUAWEI,0.0,NO_BRAND
+beko стиральная машина,beko стиральная машина,NO_BRAND,Beko,65,category_only,1.0,1.0,2,1,True,False,True,special,,1.0,Beko
+beko машинка стиральная,Beko машинка стиральная,NO_BRAND,Beko,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Beko
+lg стиральная машина,Lg стиральная машина,NO_BRAND,LG,65,category_only,1.0,1.0,4,1,True,False,True,special,,1.0,LG
+фен щетки rowenta,фен щетки rowenta,NO_BRAND,Rowenta,65,category_only,1.0,1.0,24,1,True,False,True,special,,1.0,Rowenta
+холодильники и многодверные hisense,холодильники и многодверные hisense,Hisense,Hisense,29,brand_in_query,1.0,1.0,7,1,True,False,False,high,,1.0,NO_BRAND
+встраиваемые газовые панели midea,встраиваемые газовые панели midea,Midea,Midea,42,brand_in_query,1.0,1.0,2,1,True,False,False,high,,1.0,NO_BRAND
+домкрат подкатной,домкрат подкатной,UNKNOWN,нет,66,ambiguous_clicks,0.3547450946420063,0.9,9,6,False,False,False,special,KINGQUEEN,0.012994325811062494,NO_BRAND
+стиральная машинка lg суперузкая,стиральная машинка lg суперузкая,LG,LG,38,brand_in_query,1.0,1.0,2,1,True,False,False,high,,1.0,NO_BRAND
+робот мойщик окон даджет w200,робот мойщик окон даджет w200,UNKNOWN,Даджет,66,ood_brand_surface,1.0,0.9,3,1,True,False,False,special,,1.0,NO_BRAND
+автомобильное зарядное устройство magssory,Автомобильное зарядное устройство Magssory,UNKNOWN,Magssory,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+стиральная машинка hisense стоимость,стиральная машинка Hisense стоимость,Hisense,Hisense,29,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+сушильная машинка gorenje,сушильная машинка gorenje,NO_BRAND,Gorenje,65,category_only,1.0,1.0,3,1,True,False,True,special,,1.0,Gorenje
+тестомес,тестомес,NO_BRAND,RAGEX,65,category_only,0.5661157024793388,1.0,6,3,False,False,True,special,Malajess,0.3181818181818182,UNKNOWN
+монитор для компьютера 27 игровой,монитор для компьютера 27 игровой,UNKNOWN,Carrera,66,ambiguous_clicks,0.4749201881997054,0.9,8,7,False,False,False,special,Samsung,0.32364931343979925,NO_BRAND
+стиральная машинка стиральная узкая candy smartpro,стиральная машинка стиральная узкая candy smartpro,Candy,Candy,12,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+сушильная машина grundig,сушильная машина grundig,NO_BRAND,Grundig,65,category_only,1.0,1.0,5,1,True,False,True,special,,1.0,Grundig
+magsave power bank,Magsave power bank,NO_BRAND,RIVACASE,65,category_only,1.0,1.0,1,1,False,False,True,special,,1.0,UNKNOWN
+стиральная машина hisense wfqp7012 vm с фронтальной загрузкой 7 кг 1200 об мин с паром инверторная,"Стиральная машина Hisense WFQP7012VM, с фронтальной загрузкой, 7кг, 1200об/мин, с паром, инверторная",Hisense,Hisense,29,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+встраиваемая свч bosch,встраиваемая свч bosch,NO_BRAND,Bosch,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Bosch
+газовая варочная 3 комфорочная панель gefest,газовая варочная 3 комфорочная панель gefest,Gefest,Gefest,22,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+фитнес браслет google,фитнес браслет google,NO_BRAND,Google,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,UNKNOWN
+пылесосы с контейнером philips,пылесосы с контейнером philips,UNKNOWN,PHILIPS,66,ood_brand_surface,0.5691699604743083,0.9,7,2,True,False,False,special,Philips,0.1383399209486167,Philips
+комбинированная газовая плита gorenje с электрической,комбинированная газовая плита gorenje с электрической,Gorenje,Gorenje,23,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+веб камера logitech,веб камера logitech,NO_BRAND,Logitech,65,category_only,1.0,1.0,6,1,True,False,True,special,,1.0,Logitech
+морозильные камеры no frost no frost,морозильные камеры no frost no frost,UNKNOWN,Indesit,66,ambiguous_clicks,0.4325634554756955,0.9,7,5,False,False,False,special,Haier,0.07817929383969865,NO_BRAND
+стиральная машина maunfeld,стиральная машина maunfeld,NO_BRAND,Maunfeld,65,category_only,1.0,1.0,3,1,True,False,True,special,,1.0,Maunfeld
+алкотестер,алкотестер,NO_BRAND,ASENS,65,category_only,0.43479979155518717,1.0,32,4,False,False,True,special,BandRate Smart,0.09220185571841759,UNKNOWN
+вытяжки кухонные kuppersberg,вытяжки кухонные kuppersberg,NO_BRAND,Kuppersberg,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Kuppersberg
+встраиваемый электрический духовой шкаф korting,встраиваемый электрический духовой шкаф korting,UNKNOWN,Korting,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+диван ikea,диван ikea,UNKNOWN,IKEA,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+электрический проточный водонагреватель с душем,электрический проточный водонагреватель с душем,UNKNOWN,Electrolux,66,ambiguous_clicks,0.27952124635846237,0.9,57,13,False,False,False,special,Thermex,0.10085809852325553,NO_BRAND
+видеозвонок,видеозвонок,UNKNOWN,Rubetek,66,ambiguous_clicks,0.4075895994378074,0.9,5,5,False,False,False,special,АвтоИмидж,0.0,NO_BRAND
+камера ezviz,камера ezviz,UNKNOWN,Ezviz,66,ood_brand_surface,1.0,0.9,3,1,True,False,False,special,,1.0,NO_BRAND
+телевизор с. яндекс станция алиса,Телевизор с. Яндекс станция алиса,Яндекс,Яндекс,64,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+стиральная машина узкая indesit,Стиральная машина узкая Indesit,NO_BRAND,Indesit,65,category_only,1.0,1.0,1,1,True,False,True,special,,1.0,Indesit
+радар детекторы neoline,радар детекторы neoline,UNKNOWN,Neoline,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+устройство aukey,устройство aukey,UNKNOWN,Aukey,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+смартфон meizu,смартфон meizu,UNKNOWN,Meizu,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+одежда,одежда,NO_BRAND,FORESTXS,65,category_only,0.32302726190069153,1.0,8,7,False,False,True,special,ZaslonArmy,0.1076757539668972,UNKNOWN
+моющий пылесос tefal,моющий пылесос tefal,NO_BRAND,Tefal,65,category_only,1.0,1.0,11,1,True,False,True,special,,1.0,Tefal
+напольный пылесос centek ct-2540 black 450 вт мощность 3 л объем пылесборника,"Напольный пылесос, CENTEK CT-2540 Black, 450Вт мощность, 3л объем пылесборника,",Centek,Centek,15,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,UNKNOWN
+погружные блендеры redmond 421,погружные блендеры redmond 421,Redmond,Redmond,50,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+игровой руль moza r3,игровой руль moza r3,UNKNOWN,Moza,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,NO_BRAND
+poco qualcomm snapdragon 8 gen,poco Qualcomm Snapdragon 8 Gen,Xiaomi,POCO,62,alias_hint,1.0,1.0,1,1,True,True,False,high,,1.0,UNKNOWN
+игровая клавиатура logitech магнитная,Игровая клавиатура Logitech магнитная,Logitech,Logitech,39,brand_in_query,1.0,1.0,1,1,True,False,False,high,,1.0,NO_BRAND
+телевизор со смартом lg 43,телевизор со смартом lg 43,UNKNOWN,Яндекс,66,ambiguous_clicks,0.49253731343283585,0.9,3,3,False,False,False,special,LG,0.16417910447761197,LG
+polar,Polar,UNKNOWN,Polar,66,ood_brand_surface,1.0,0.9,1,1,True,False,False,special,,1.0,Polaris

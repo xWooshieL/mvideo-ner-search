@@ -484,7 +484,7 @@ pd.DataFrame(list(out.items()), columns=["metric", "value"])
 """))
 
 
-write_nb(OUT / "02_markov_eda.ipynb", c02)
+write_nb(OUT / "03_attr_types_eda.ipynb", c02)
 
 
 # ---------------------------------------------------------------------------
@@ -816,5 +816,5 @@ pd.DataFrame([
 ])
 """))
 
-write_nb(OUT / "03_click_eda.ipynb", c03)
+write_nb(OUT.parent / "_legacy" / "03_click_eda.ipynb", c03)
 print("done")

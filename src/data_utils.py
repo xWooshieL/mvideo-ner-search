@@ -27,17 +27,22 @@ ARTIFACTS = ARTIFACTS_DIR
 FIGURES = FIGURES_DIR
 MODELS = ROOT / "models"
 
-# --- каноническая раскладка артефактов (legacy пути тоже поддерживаются) ---
+# --- каноническая раскладка артефактов ---
+# Единый источник правды: artifacts/silver/<kind>/ (датасет + превью + метрики).
+# Словари — в artifacts/dicts/, gold — в artifacts/gold/, сводные таблицы — в artifacts/metrics/.
 DICTS_DIR = ARTIFACTS_DIR / "dicts"
 SILVER_DIR = ARTIFACTS_DIR / "silver"
 SILVER_NER_BIO = SILVER_DIR / "ner_bio"
 SILVER_ATTR_TYPE = SILVER_DIR / "attr_type"
 SILVER_BRAND_CLF = SILVER_DIR / "brand_clf"
+GOLD_DIR = ARTIFACTS_DIR / "gold"
+METRICS_DIR = ARTIFACTS_DIR / "metrics"
 
-# метрики/joblib типизатора и brand clf остаются рядом с «рантаймом»
-ATTR_TYPE_DIR = ARTIFACTS_DIR / "attr_type"
-BRAND_CLF_DIR = ARTIFACTS_DIR / "brand_clf"
-NER_DIR_LEGACY = ARTIFACTS_DIR / "ner"
+# Раньше метрики/policy типизатора и brand clf лежали в плоских artifacts/<kind>/.
+# Теперь эти константы указывают на каноническую silver-раскладку — один источник правды.
+ATTR_TYPE_DIR = SILVER_ATTR_TYPE
+BRAND_CLF_DIR = SILVER_BRAND_CLF
+NER_DIR_LEGACY = SILVER_NER_BIO
 
 DICT_FILENAMES = (
     "brands.txt",
@@ -81,9 +86,8 @@ def ensure_dirs() -> None:
         SILVER_NER_BIO,
         SILVER_ATTR_TYPE,
         SILVER_BRAND_CLF,
-        ATTR_TYPE_DIR,
-        BRAND_CLF_DIR,
-        NER_DIR_LEGACY,
+        GOLD_DIR,
+        METRICS_DIR,
     ):
         p.mkdir(parents=True, exist_ok=True)
 
@@ -205,6 +209,18 @@ def sync_artifact_layout(*, dry_run: bool = False) -> dict[str, list[str]]:
         _copy(BRAND_CLF_DIR / name, SILVER_BRAND_CLF / name, "brand_clf")
 
     return report
+
+
+def save_metric_table(df: pd.DataFrame, name: str) -> Path:
+    """Сохраняет сводную таблицу метрик в artifacts/metrics/<name> (для презентаций)."""
+    METRICS_DIR.mkdir(parents=True, exist_ok=True)
+    path = METRICS_DIR / name
+    if name.endswith(".csv"):
+        df.to_csv(path, index=False)
+    else:
+        df.to_parquet(path, index=False)
+    print(f"Метрика сохранена: {path}")
+    return path
 
 
 def parquet_num_rows(path: Path | str) -> int:

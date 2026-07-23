@@ -1,8 +1,0 @@
-metric,value
-queries_sampled,25000.0
-queries_with_ATTR,3863.0
-multi_ATTR_queries,413.0
-silver_rows_raw,4364.0
-silver_rows_aug,908.0
-n_types,24.0
-share_y_other,0.2461

@@ -1,0 +1,43 @@
+{
+  "source": "data/gold/bio_liza.jsonl",
+  "annotator": "Лиза",
+  "n_queries": 200,
+  "entity_B_counts": {
+    "CATEGORY": 153,
+    "BRAND": 106,
+    "ATTR": 91,
+    "MODEL": 74
+  },
+  "attr_subtype_counts": {
+    "type": 43,
+    "memory_storage": 22,
+    "purpose": 13,
+    "size": 4,
+    "volume": 4,
+    "color": 4,
+    "game": 4,
+    "weight": 3,
+    "function": 2,
+    "depth": 2,
+    "chip": 2,
+    "material": 2,
+    "heigh": 2,
+    "delivery": 2,
+    "speed": 2,
+    "food": 1,
+    "sim": 1,
+    "used": 1,
+    "counts": 1,
+    "gas": 1,
+    "release date": 1,
+    "country": 1,
+    "floor": 1,
+    "style": 1,
+    "new": 1,
+    "width": 1,
+    "length": 1
+  },
+  "tokens_p50": 3,
+  "tokens_p90": 5,
+  "note": "MVP hold-out gold (single annotator); indicative, not final. Full gold: 3x1500 in progress."
+}

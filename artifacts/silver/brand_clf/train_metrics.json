@@ -1,0 +1,314 @@
+{
+  "best_model": "sgd_char",
+  "n_train": 22879,
+  "n_val": 5717,
+  "n_classes": 67,
+  "thresholds": {
+    "TAU_ACCEPT": 0.42,
+    "TAU_MARGIN": 0.08,
+    "TAU_NO_BRAND": 0.35,
+    "TAU_UNKNOWN": 0.3,
+    "REQUIRE_BRAND_EVIDENCE": true
+  },
+  "summary": [
+    {
+      "model": "sgd_char",
+      "raw_accuracy": 0.9450760888577926,
+      "raw_f1_macro": 0.940385272121523,
+      "raw_f1_micro": 0.9450760888577926,
+      "raw_f1_weighted": 0.9447811272899976,
+      "rej_accuracy": 0.9466503410879832,
+      "rej_f1_macro": 0.941289979321366,
+      "rej_f1_micro": 0.9466503410879832,
+      "f1_NO_BRAND": 0.8793610760823876,
+      "f1_UNKNOWN": 0.8796536796536797,
+      "false_brand_cat": 0.09608843537414966
+    },
+    {
+      "model": "logreg_char_bal",
+      "raw_accuracy": 0.9274094804967641,
+      "raw_f1_macro": 0.9356353365661662,
+      "raw_f1_micro": 0.9274094804967641,
+      "raw_f1_weighted": 0.9257841052668723,
+      "rej_accuracy": 0.8654888927759314,
+      "rej_f1_macro": 0.9277312678562708,
+      "rej_f1_micro": 0.8654888927759314,
+      "f1_NO_BRAND": 0.8228200371057514,
+      "f1_UNKNOWN": 0.8269073010664479,
+      "false_brand_cat": 0.16326530612244897
+    },
+    {
+      "model": "logreg_wordchar",
+      "raw_accuracy": 0.9438516704565332,
+      "raw_f1_macro": 0.9290336059596289,
+      "raw_f1_micro": 0.9438516704565332,
+      "raw_f1_weighted": 0.9434971543137979,
+      "rej_accuracy": 0.9377295784502362,
+      "rej_f1_macro": 0.9107218096537169,
+      "rej_f1_micro": 0.9377295784502362,
+      "f1_NO_BRAND": 0.8790755262071812,
+      "f1_UNKNOWN": 0.8729472774416595,
+      "false_brand_cat": 0.0782312925170068
+    },
+    {
+      "model": "logreg_char",
+      "raw_accuracy": 0.9331817386741298,
+      "raw_f1_macro": 0.9116341951427854,
+      "raw_f1_micro": 0.9331817386741298,
+      "raw_f1_weighted": 0.932977156440739,
+      "rej_accuracy": 0.9200629700892077,
+      "rej_f1_macro": 0.8524501562477456,
+      "rej_f1_micro": 0.9200629700892077,
+      "f1_NO_BRAND": 0.8631749898497767,
+      "f1_UNKNOWN": 0.8524590163934426,
+      "false_brand_cat": 0.08163265306122448
+    }
+  ],
+  "best_raw": {
+    "accuracy": 0.9450760888577926,
+    "f1_macro": 0.940385272121523,
+    "f1_micro": 0.9450760888577926,
+    "f1_weighted": 0.9447811272899976
+  },
+  "best_reject": {
+    "accuracy": 0.9466503410879832,
+    "f1_macro": 0.941289979321366,
+    "f1_micro": 0.9466503410879832,
+    "f1_weighted": 0.9464517972307916
+  },
+  "best_subset_raw": {
+    "n_category_only_val": 1176,
+    "false_brand_rate_category_only": 0.09608843537414966,
+    "f1_NO_BRAND": 0.8793610760823876,
+    "f1_UNKNOWN": 0.8796536796536797,
+    "support_NO_BRAND": 1176,
+    "support_UNKNOWN": 615
+  },
+  "best_subset_reject": {
+    "n_category_only_val": 1176,
+    "false_brand_rate_category_only": 0.07482993197278912,
+    "f1_NO_BRAND": 0.8851239669421488,
+    "f1_UNKNOWN": 0.8796536796536797,
+    "support_NO_BRAND": 1176,
+    "support_UNKNOWN": 615
+  },
+  "worst_classes": [
+    {
+      "class": "PlayStation",
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1": 0.6666666666666666,
+      "support": 4
+    },
+    {
+      "class": "Grundig",
+      "precision": 0.8333333333333334,
+      "recall": 0.7142857142857143,
+      "f1": 0.7692307692307693,
+      "support": 7
+    },
+    {
+      "class": "Electrolux",
+      "precision": 0.75,
+      "recall": 0.9,
+      "f1": 0.8181818181818182,
+      "support": 20
+    },
+    {
+      "class": "Rapid",
+      "precision": 0.7142857142857143,
+      "recall": 1.0,
+      "f1": 0.8333333333333334,
+      "support": 5
+    },
+    {
+      "class": "TalleR",
+      "precision": 0.8333333333333334,
+      "recall": 0.8333333333333334,
+      "f1": 0.8333333333333334,
+      "support": 6
+    },
+    {
+      "class": "Oasis",
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1": 0.8571428571428571,
+      "support": 4
+    },
+    {
+      "class": "Candy",
+      "precision": 0.8709677419354839,
+      "recall": 0.84375,
+      "f1": 0.8571428571428571,
+      "support": 32
+    },
+    {
+      "class": "Centek",
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1": 0.8571428571428571,
+      "support": 12
+    },
+    {
+      "class": "NO_BRAND",
+      "precision": 0.8694929343308395,
+      "recall": 0.8894557823129252,
+      "f1": 0.8793610760823876,
+      "support": 1176
+    },
+    {
+      "class": "UNKNOWN",
+      "precision": 0.9407407407407408,
+      "recall": 0.8260162601626017,
+      "f1": 0.8796536796536797,
+      "support": 615
+    },
+    {
+      "class": "Ballu",
+      "precision": 0.9166666666666666,
+      "recall": 0.8461538461538461,
+      "f1": 0.88,
+      "support": 13
+    },
+    {
+      "class": "Sber",
+      "precision": 0.9285714285714286,
+      "recall": 0.8666666666666667,
+      "f1": 0.896551724137931,
+      "support": 15
+    },
+    {
+      "class": "Kuppersberg",
+      "precision": 0.813953488372093,
+      "recall": 1.0,
+      "f1": 0.8974358974358975,
+      "support": 35
+    },
+    {
+      "class": "Beko",
+      "precision": 0.8918918918918919,
+      "recall": 0.9166666666666666,
+      "f1": 0.9041095890410958,
+      "support": 36
+    },
+    {
+      "class": "Logitech",
+      "precision": 0.8611111111111112,
+      "recall": 0.96875,
+      "f1": 0.9117647058823529,
+      "support": 32
+    }
+  ],
+  "best_classes": [
+    {
+      "class": "Infinix",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 23
+    },
+    {
+      "class": "Thunderobot",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 14
+    },
+    {
+      "class": "Canon",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 26
+    },
+    {
+      "class": "Tecno",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 35
+    },
+    {
+      "class": "Samsung",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 647
+    },
+    {
+      "class": "BQ",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 6
+    },
+    {
+      "class": "Atvel",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 7
+    },
+    {
+      "class": "HUAWEI",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 255
+    },
+    {
+      "class": "HONOR",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 141
+    },
+    {
+      "class": "Ariston",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 7
+    },
+    {
+      "class": "DeLonghi",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 31
+    },
+    {
+      "class": "Scarlett",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 4
+    },
+    {
+      "class": "Moulinex",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    {
+      "class": "Brayer",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 11
+    },
+    {
+      "class": "Haier",
+      "precision": 1.0,
+      "recall": 0.9950980392156863,
+      "f1": 0.9975429975429976,
+      "support": 204
+    }
+  ],
+  "silver_stats_ref": {
+    "no_brand_share": 0.2048494983277592,
+    "unknown_share": 0.10712792642140469
+  },
+  "n_errors_val": 314
+}

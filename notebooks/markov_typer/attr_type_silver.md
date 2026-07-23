@@ -1,7 +1,7 @@
 # ATTR type silver — схема и договорённости
 
 Документ к ноутбуку [`02_attr_type_silver.ipynb`](./02_attr_type_silver.ipynb)  
-и артефактам `artifacts/attr_type/`.
+и артефактам `artifacts/silver/attr_type/`.
 
 ---
 

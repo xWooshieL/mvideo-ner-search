@@ -1,0 +1,62 @@
+{
+  "example_query": "ноутбук asus 16 г",
+  "entities": {
+    "CATEGORY": "ноутбук",
+    "BRAND": "asus",
+    "ATTR_span": "16 г"
+  },
+  "feature_columns": {
+    "span_text": {
+      "value": "16 г",
+      "how": "TF-IDF char_wb(2–5) and/or word n-grams ONLY on this string",
+      "why": "тип единицы живёт в самом span; не смешиваем 16 г с другими ATTR",
+      "example_char_ngrams": [
+        " 1",
+        "16",
+        "6 ",
+        " г",
+        "г "
+      ]
+    },
+    "context_text": {
+      "value": "asus ноутбук",
+      "how": "отдельный TF-IDF char по brand+category",
+      "why": "подсказка домена (ноутбук → память вероятнее веса)"
+    },
+    "query_masked": {
+      "value": "ноутбук asus <ATTR>",
+      "how": "word TF-IDF; все ATTR заменены на <ATTR>",
+      "why": "левый/правый контекст без чужих единиц (гб/дюйм не протекают)"
+    }
+  },
+  "prediction": {
+    "label": "UNKNOWN",
+    "raw_pred": "UNKNOWN",
+    "confidence": 0.5026109326948663,
+    "rejected": true,
+    "reason": "low_confidence",
+    "top": [
+      [
+        "UNKNOWN",
+        0.5026109326948663
+      ],
+      [
+        "memory_storage",
+        0.36581774498697955
+      ],
+      [
+        "weight",
+        0.03315927805660731
+      ],
+      [
+        "frequency",
+        0.018560072274272865
+      ],
+      [
+        "size",
+        0.014831649602946235
+      ]
+    ],
+    "min_confidence": 0.55
+  }
+}

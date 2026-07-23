@@ -17,6 +17,7 @@ from src.data_utils import (
     ARTIFACTS_DIR,
     DARK_SLATE,
     FIGURES_DIR,
+    METRICS_DIR,
     MVIDEO_RED,
     apply_plot_style,
     ensure_dirs,
@@ -334,7 +335,7 @@ def main() -> None:
             "gold_tokenize_align": tok_ok,
             "weak_gold_f1": round(f1, 4),
         },
-        "ner_eda_stats.json",
+        METRICS_DIR / "ner_eda_stats.json",
     )
 
     # report

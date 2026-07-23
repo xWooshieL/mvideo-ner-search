@@ -19,10 +19,10 @@ print(r.text_norm, r.model_spans, r.protected_spans)
 - [`silver_clf_readme.md`](./silver_clf_readme.md) — договорённости, OOD, confidence, подводные камни
 
 Артефакты:
-- `artifacts/model_phrases.txt` — линейки/модели (`g pro x se`, …)
-- `artifacts/protected_brands.txt` — бренды с «ложным» цветом (`красный октябрь`)
-- `artifacts/brand_clf/silver_brand_{train,val,all}.parquet` — silver query→brand (+ specials)
-- `artifacts/brand_clf/inference_policy.json` — cascade и пороги τ для clf
+- `artifacts/dicts/model_phrases.txt` — линейки/модели (`g pro x se`, …)
+- `artifacts/dicts/protected_brands.txt` — бренды с «ложным» цветом (`красный октябрь`)
+- `artifacts/silver/brand_clf/silver_brand_{train,val,all}.parquet` — silver query→brand (+ specials)
+- `artifacts/silver/brand_clf/inference_policy.json` — cascade и пороги τ для clf
 
 ---
 

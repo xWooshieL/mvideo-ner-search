@@ -175,7 +175,7 @@ def write_report(md_path: Path, metrics: dict, summary: pd.DataFrame, best_tbl: 
         "# Brand classifier — отчёт обучения",
         "",
         f"Ноутбук: [`01_classifier_train.ipynb`](./01_classifier_train.ipynb)  ",
-        f"Silver: `artifacts/brand_clf/silver_brand_*.parquet` (прогон `03`)  ",
+        f"Silver: `artifacts/silver/brand_clf/silver_brand_*.parquet` (прогон `03`)  ",
         f"Лучшая модель: **`{best}`** → `models/brand_clf.joblib`",
         "",
         "## 1. Постановка",
@@ -246,7 +246,7 @@ def write_report(md_path: Path, metrics: dict, summary: pd.DataFrame, best_tbl: 
         )
     lines += [
         "",
-        "Полные CSV: `artifacts/brand_clf/train_runs/per_class_f1__*.csv`.",
+        "Полные CSV: `artifacts/silver/brand_clf/train_runs/per_class_f1__*.csv`.",
         "",
         "## 5. Reject-policy",
         "",
@@ -284,8 +284,8 @@ def write_report(md_path: Path, metrics: dict, summary: pd.DataFrame, best_tbl: 
         "| Путь |",
         "|---|",
         "| `models/brand_clf.joblib` |",
-        "| `artifacts/brand_clf/train_runs/metrics.json` |",
-        "| `artifacts/brand_clf/train_runs/models_summary.csv` |",
+        "| `artifacts/silver/brand_clf/train_runs/metrics.json` |",
+        "| `artifacts/silver/brand_clf/train_runs/models_summary.csv` |",
         "| `figures/brand_clf/01_confusion_best.png` |",
         "| `figures/brand_clf/02_models_compare.png` |",
         "",
@@ -302,7 +302,9 @@ def main() -> None:
     ensure_dirs()
     apply_plot_style()
 
-    DATA = ARTIFACTS_DIR / "brand_clf"
+    from src.data_utils import BRAND_CLF_DIR
+
+    DATA = BRAND_CLF_DIR
     FIG = FIGURES_DIR / "brand_clf"
     OUT = DATA / "train_runs"
     FIG.mkdir(parents=True, exist_ok=True)

@@ -13,7 +13,7 @@
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776ab?style=for-the-badge&logo=python)
 
 ![NER](https://img.shields.io/badge/NLP-NER_%2B_CRF_%2B_Markov-1c1c1e)
-![Классификатор](https://img.shields.io/badge/бренд--классификатор-macro--F1_0.95-18794e)
+![Классификатор](https://img.shields.io/badge/бренд--классификатор-macro--F1_0.94-18794e)
 ![SLA](https://img.shields.io/badge/извлечение_фактов-1--2_мс-success)
 ![Сборка](https://img.shields.io/badge/сборка-CMake_%2B_MSVC-orange)
 ![Установщик](https://img.shields.io/badge/установщик-Inno_Setup_6-8b5cf6)
@@ -81,7 +81,7 @@
 | **Правила и словари** | явные бренды, «16 гб», линейки моделей | 7 словарей из каталога + майнинг |
 | **CRF** | морфология, порядок слов, границы спанов | слабая (silver) BIO-разметка |
 | **Классификатор бренда** | бренд не написан в тексте (73% кликов!) | silver из кликов: 67 классов, включая NO_BRAND и UNKNOWN |
-| **Марковский типизатор** | тип атрибута: «16 гб» → память | частоты биграмм от регулярок-учителей |
+| **Типизатор атрибутов** | тип ATTR: «16 гб» → память, «для смузи» → назначение | TF-IDF по спану + reject; марковская цепь как baseline |
 
 ### Классификатор бренда: 4 модели, честные отказы
 
@@ -99,18 +99,35 @@ cpp/
 
 src/
 ├── ner/                  # ядро NER (Python)
-│   ├── labeling.py       #   слабая разметка: 7 словарей + 30 регулярок + лемматизация
+│   ├── labeling.py       #   слабая разметка: словари + регулярки + лемматизация + типы ATTR
+│   ├── attr_type_clf.py  #   типизатор атрибутов (TF-IDF + reject)
 │   ├── model_crf.py      #   CRF sequence labeling
-│   └── markov_typer.py   #   марковский типизатор атрибутов
+│   ├── metrics.py        #   entity P/R/F1, token accuracy
+│   └── markov_typer.py   #   марковский baseline типизатора
 ├── preprocessing/        # единый препроцессинг (расклейка, сепараторы, MODEL-спаны)
+├── data_utils.py         # загрузка данных + каноническая раскладка artifacts
 └── service/              # extractor + FastAPI-сервис
 
-artifacts/                # словари (BRANDS, MODELS, COLORS, FEATURES, …) + brand_clf
-models/                   # обученные модели (CRF, brand_clf, markov_typer)
-notebooks/                # EDA + обучение классификатора бренда
+artifacts/                # НЕ-бинарные артефакты пайплайна (parquet/joblib в .gitignore)
+├── dicts/                #   словари: brands, categories, model_phrases, protected_brands
+├── silver/               #   silver-датасеты по задачам (превью + метрики + policy)
+│   ├── ner_bio/          #     BIO для CRF (+ crf_train_metrics.json)
+│   ├── attr_type/        #     спаны ATTR для типизатора (+ prod_* метрики, inference_policy)
+│   └── brand_clf/        #     query→brand (+ train_metrics, label_map, inference_policy)
+├── gold/                 #   эталон: bio_liza.jsonl + gold_stats.json (для честных метрик)
+└── metrics/              #   сводные таблицы для презентаций (gold_metrics_*, model_comparison)
+
+models/                   # ТОЛЬКО 3 прод-модели: ner_crf.pkl, brand_clf.joblib, attr_type_clf.joblib
+notebooks/
+├── complex_eda/          # 3 сводных EDA-ноутбука (данные+методы, тег MODEL, типы ATTR) + большой README
+├── preprocessing/        # препроцессинг + сборка brand silver
+├── crf_ner_classifier/   # CRF: EDA силвера + обучение + отчёты
+├── brand_classifier_train/  # классификатор бренда
+├── markov_typer/         # типизатор атрибутов (silver + прод-обучение)
+└── _legacy/              # архив ранних ноутбуков (не поддерживаются)
 installer/                # Inno Setup: два установщика
 docs/                     # презентации Дней 1–3 (XeLaTeX, фирменный стиль)
-figures/                  # 40+ графиков + скриншоты приложений
+figures/                  # графики + скриншоты приложений
 ```
 
 ## 🛠 Стек
@@ -301,43 +318,82 @@ Python-пайплайн:
 ```bash
 pip install -r requirements.txt
 
-# извлечение фактов
+# извлечение фактов (грузит models/ner_crf.pkl + brand_clf.joblib + словари)
 python -c "
 from src.service.extractor import QueryEntityExtractor
 ex = QueryEntityExtractor.from_artifacts()
 print(ex.extract('пылесос dyson v15'))
 "
 
-# слабая разметка на 7 словарях
+# слабая разметка правилами (labeling.py)
 python -c "
 from src.ner.labeling import WeakLabeler
-wl = WeakLabeler.from_dir('artifacts')
+from src.data_utils import brands_path, categories_path, model_phrases_path
+wl = WeakLabeler.from_files(brands_path(), categories_path(), models_path=model_phrases_path())
 print(wl.label_query('телевизор samsung 55 дюймов чёрный'))
 "
 ```
 
+### Воспроизведение NER-пайплайна (silver → модели → метрики)
+
+```bash
+# 1. словари (brands/categories/model_phrases уже лежат в artifacts/dicts/)
+python scripts/build_dictionaries.py --data data/query_clicks.parquet   # опционально пересобрать
+
+# 2. бренд: silver из кликов → обучение
+python notebooks/preprocessing/_run_03.py            # -> artifacts/silver/brand_clf/
+python notebooks/brand_classifier_train/_run_01.py   # -> models/brand_clf.joblib
+
+# 3. типизатор атрибутов: silver → прод-модель
+python notebooks/markov_typer/_run_02.py             # -> artifacts/silver/attr_type/
+python notebooks/markov_typer/_run_04_prod.py        # -> models/attr_type_clf.joblib
+
+# 4. CRF: silver BIO (с тегом MODEL) → обучение
+python notebooks/crf_ner_classifier/_run_01.py       # -> artifacts/silver/ner_bio/
+python notebooks/crf_ner_classifier/_run_02.py       # -> models/ner_crf.pkl
+
+# 5. проверки и честные метрики на gold
+python notebooks/crf_ner_classifier/_check_silver.py
+python scripts/eval_on_gold.py                       # -> artifacts/metrics/
+```
+
 ## 📊 Метрики
 
-> Числа на silver-валидации — проверка «повторила ли модель правила», поэтому оптимистичны.
-> Честную оценку даст ручная золотая разметка (собираем приложением, 3×1500 запросов).
+> **Честность прежде всего.** Silver-валидация — это проверка «повторила ли модель правила-учителя»,
+> поэтому числа завышены. Единственная честная оценка — на **gold** (`artifacts/gold/bio_liza.jsonl`,
+> 200 запросов, разметчик Лиза). Все таблицы воспроизводятся `python scripts/eval_on_gold.py`
+> и лежат в `artifacts/metrics/`. Полный gold (3×1500) собирается приложением.
+
+**NER по сущностям (entity-F1 на gold), `artifacts/metrics/gold_metrics_ner.csv`:**
+
+| Модуль | BRAND | CATEGORY | MODEL | ATTR | micro-F1 |
+|---|---:|---:|---:|---:|---:|
+| Правила (`labeling.py`) | 0,83 | 0,60 | 0,22 | 0,36 | **0,57** |
+| CRF | 0,80 | 0,64 | 0,26 | 0,33 | **0,58** |
+
+CRF на silver-валидации: token accuracy **0,86**, entity micro-F1 **0,85** (оптимистично, для сравнения).
+
+**Каскадные модели, `artifacts/metrics/model_comparison.csv`:**
 
 | Компонент | Метрика | Значение |
 |---|---|---|
-| Классификатор бренда (LogReg слова+симв.) | macro-F1 | **0,950** |
-| Классификатор бренда | ложный бренд на категориях | **6,9%** |
-| Классификатор бренда | F1 NO_BRAND / UNKNOWN | 0,88 / 0,86 |
-| CRF на слабой разметке | точность по токенам | 0,91 |
-| CRF | F1 по сущностям | 0,875 |
-| Марковский типизатор | точность против правил | 0,62 (36% — честное «не знаю») |
+| Классификатор бренда (`sgd_char`, прод) | macro-F1 (silver-val) | **0,940** |
+| Классификатор бренда | F1 NO_BRAND / UNKNOWN | 0,88 / 0,88 |
+| Классификатор бренда | ложный бренд на категориях | 9,6% |
+| Типизатор атрибутов (`sgd_span_ctx_masked`, прод) | macro-F1 (silver-val) | **0,947** |
+| Типизатор атрибутов | согласие с gold (teacher / clf) | 0,68 / 0,52 |
 | C++ движок | извлечение фактов | 1–2 мс |
+
+> У классификатора бренда пока **нет** brand-level gold — приведён только silver-val.
+> На gold ATTR-спанах доминирует подтип `type` (43/91), поэтому teacher-правила согласуются лучше clf.
 
 ## 🗺 Roadmap
 
 | Этап | Что планируется |
 |---|---|
-| Золотая разметка | 3×1500 запросов командой через приложение, честный тест и калибровка порогов |
-| CRF v2 | переобучение на разметке с тегом MODEL, сверка с золотой |
-| RNN-типизатор | лёгкая BiLSTM для спанов, где цепь говорит «не знаю» (36%) |
+| Золотая разметка | 3×1500 запросов командой через приложение; сейчас есть срез 200 (Лиза) — честный тест и калибровка порогов |
+| CRF v2 | ✅ silver с тегом MODEL и сверка с gold сделаны; дальше — расширение silver и per-tag тюнинг (MODEL/ATTR recall низкий) |
+| RNN-типизатор | лёгкая BiLSTM для спанов, где TF-IDF/цепь не уверены (reject) |
 | Модель 1/0 | бустинг на ручных парах запрос↔карточка, чистка кликового шума |
 | macOS-сборка | код и CMake готовы (`scripts/build-macos.sh`) — осталось прогнать на реальном Маке и подписать |
 | EV code-signing сертификат | сейчас установщики подписаны self-signed сертификатом; платный сертификат от доверенного CA убрал бы предупреждение SmartScreen у всех, не только у команды |

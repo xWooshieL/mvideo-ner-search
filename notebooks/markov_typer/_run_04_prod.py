@@ -23,6 +23,7 @@ from sklearn.pipeline import FeatureUnion, Pipeline
 from src.data_utils import (
     DARK_SLATE,
     FIGURES_DIR,
+    METRICS_DIR,
     MODELS,
     MVIDEO_RED,
     apply_plot_style,
@@ -627,7 +628,7 @@ def main() -> None:
         "# ATTR type classifier — prod report",
         "",
         f"Модель: **`{best_name}`** → `models/attr_type_clf.joblib`  ",
-        f"Policy: `artifacts/attr_type/inference_policy.json` (τ=`{tau}`)  ",
+        f"Policy: `artifacts/silver/attr_type/inference_policy.json` (τ=`{tau}`)  ",
         f"Sanity: **{int(sanity_df.ok.sum())}/{len(sanity_df)}** кейсов  ",
         gold_agree_line,
         "",
@@ -751,7 +752,7 @@ def main() -> None:
     (OUT / "prod_metrics.json").write_text(
         json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    save_stats({"attr_type_prod": metrics}, name="attr_type_prod_metrics.json")
+    save_stats({"attr_type_prod": metrics}, METRICS_DIR / "attr_type_prod_metrics.json")
     log(f"DONE report={REPORT}")
 
 

@@ -4,12 +4,17 @@ data/raw/
 *.parquet
 *.pkl
 *.pickle
-!models/*.pkl
-!models/*.joblib
+*.joblib
 *.zip
 presentation.pdf
-*.joblib
-*.pkl
+
+# Keep ONLY the 3 core MVP models (cascade: CRF NER + brand clf + attr typer).
+# Everything else under models/ and every artifacts/*.joblib stays local. See models/README.md.
+!models/ner_crf.pkl
+!models/brand_clf.joblib
+!models/attr_type_clf.joblib
+# local-only baselines / experiment dumps under models/
+models/*.json
 
 # Python
 __pycache__/

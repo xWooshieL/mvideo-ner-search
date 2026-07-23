@@ -14,6 +14,7 @@ import pandas as pd
 
 from src.data_utils import (
     ARTIFACTS_DIR,
+    METRICS_DIR,
     ensure_dirs,
     load_query_clicks,
     save_stats,
@@ -286,7 +287,7 @@ def main() -> None:
     )
     overview.to_csv(out / "attr_type_silver_overview.csv", index=False)
     overview.to_csv(SILVER_ATTR_TYPE / "attr_type_silver_overview.csv", index=False)
-    save_stats({"attr_type_silver": meta}, name="attr_type_silver.json")
+    save_stats({"attr_type_silver": meta}, METRICS_DIR / "attr_type_silver.json")
 
     # required columns check
     need = [
