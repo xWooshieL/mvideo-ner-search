@@ -2,12 +2,12 @@
   "seed": 42,
   "max_queries": 5000,
   "n_silver": 5000,
-  "n_with_entity": 4344,
+  "n_with_entity": 4463,
   "entity_counts": {
-    "BRAND": 2446,
-    "CATEGORY": 3560,
-    "MODEL": 663,
-    "ATTR": 783
+    "BRAND": 2551,
+    "CATEGORY": 3769,
+    "MODEL": 645,
+    "ATTR": 772
   },
   "gold_n": 200,
   "gold_split_align": 200,
@@ -27,5 +27,6 @@
     "f1": 0.566
   },
   "models_path": "D:\\Projects-26-06-2026\\mvideo-ner-search\\artifacts\\dicts\\model_phrases.txt",
-  "note": "CRF features are handcrafted (not TF-IDF); silver is weak teacher"
+  "n_spell_fixed": 767,
+  "note": "CRF features are handcrafted (not TF-IDF); silver is weak teacher; SpellFixer before WeakLabeler"
 }

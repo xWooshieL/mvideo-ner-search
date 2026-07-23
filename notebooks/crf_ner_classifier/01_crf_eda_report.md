@@ -18,16 +18,16 @@
 ## Silver slice
 
 - Queries: **5,000** (cap `5000`)
-- Rows: **5,000**, with ≥1 entity: **4,344** (86.9%)
+- Rows: **5,000**, with ≥1 entity: **4,463** (89.3%)
 - Dicts: brands=1609, cats=1431, models=6130
-- `models_path` ON → MODEL B-counts: **663**; legacy without models rarely emits MODEL (hits on 4k subsample: 0)
+- `models_path` ON → MODEL B-counts: **645**; legacy without models rarely emits MODEL (hits on 4k subsample: 0)
 
 | entity | B-* count |
 |---|---:|
-| BRAND | 2446 |
-| CATEGORY | 3560 |
-| MODEL | 663 |
-| ATTR | 783 |
+| BRAND | 2551 |
+| CATEGORY | 3769 |
+| MODEL | 645 |
+| ATTR | 772 |
 
 ![entities](../../figures/ner/01_entity_counts.png)
 

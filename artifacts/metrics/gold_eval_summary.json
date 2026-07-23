@@ -2,14 +2,14 @@
   "gold_queries": 200,
   "ner": {
     "rules_regex": {
-      "micro_precision": 0.6730769230769231,
-      "micro_recall": 0.49528301886792453,
-      "micro_f1": 0.5706521739130436
+      "micro_precision": 0.6688102893890675,
+      "micro_recall": 0.49056603773584906,
+      "micro_f1": 0.5659863945578232
     },
     "crf": {
-      "micro_precision": 0.6676829268292683,
-      "micro_recall": 0.5165094339622641,
-      "micro_f1": 0.5824468085106382
+      "micro_precision": 0.6819571865443425,
+      "micro_recall": 0.5259433962264151,
+      "micro_f1": 0.5938748335552597
     }
   },
   "attr_type": {
