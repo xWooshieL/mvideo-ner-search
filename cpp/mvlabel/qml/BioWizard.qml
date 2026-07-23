@@ -11,7 +11,9 @@ Item {
     id: wizard
 
     // ---- состояние
-    property int pos: LabelStore.firstUnlabeledBio()
+    // pos задаём один раз при старте (не binding) — иначе после save/bioSaved
+    // QML может снова вычислить firstUnlabeledBio() и откатить на «дыру» в истории
+    property int pos: 0
     property int stage: 0            // 0 = BIO, 1 = тип, 2 = подтип
     property int cursor: 0           // активный блок (этап 0) или группа (этапы 1/2)
     property int subChoice: 0
@@ -40,6 +42,7 @@ Item {
         qsTr("Жанр или тематика для игр, книг, фильмов: хоррор, стратегия. Ставим редко — только для медиа-товаров.")
     ]
 
+    // 1–8 — частые подтипы; 9=other — сам пишешь код (purpose / feature / material / …)
     readonly property var subtypes: [
         { code: "memory_storage", ru: qsTr("память / накопитель"), desc: qsTr("объём памяти: 16 гб, 512 gb, 1 тб") },
         { code: "size", ru: qsTr("размер / диагональ"), desc: qsTr("габариты и диагонали: 55 дюймов, 60 см") },
@@ -49,10 +52,8 @@ Item {
         { code: "volume", ru: qsTr("объём"), desc: qsTr("1 л, 500 мл") },
         { code: "power", ru: qsTr("мощность"), desc: qsTr("2000 вт, 1.5 квт") },
         { code: "resolution", ru: qsTr("разрешение"), desc: qsTr("4k, full hd, 1920x1080") },
-        { code: "purpose", ru: qsTr("назначение"), desc: qsTr("для чего: для дачи, для детей, для пыли") },
-        { code: "feature", ru: qsTr("фича / конструкция"), desc: qsTr("контейнер, мешок, робот, складной…") },
-        { code: "material", ru: qsTr("материал"), desc: qsTr("из чего: стекло, пластик, металл, дерево") },
-        { code: "other", ru: qsTr("другое (ввести вручную)"), desc: qsTr("если ничего не подошло — свой код латиницей") }
+        { code: "other", ru: qsTr("другое (ввести вручную)"),
+          desc: qsTr("напиши сам: purpose (для чего), feature (фича/контейнер…), material (из чего), или свой код") }
     ]
 
     // сущности из BIO: B открывает группу, соседний I продолжает её
@@ -137,6 +138,7 @@ Item {
     }
 
     Component.onCompleted: {
+        pos = LabelStore.firstUnlabeledBio()
         loadQuery()
         applyDemo()
     }
@@ -376,11 +378,6 @@ Item {
                 const idx = event.key - Qt.Key_1
                 if (idx < subtypes.length) { subChoice = idx; subEnter() }
             }
-            else if (event.key === Qt.Key_0 && subtypes.length > 9) {
-                // 0 → 10-й пункт (purpose)
-                subChoice = 9
-                subEnter()
-            }
             else if (event.key === Qt.Key_Up) subChoice = (subChoice - 1 + subtypes.length) % subtypes.length
             else if (event.key === Qt.Key_Down) subChoice = (subChoice + 1) % subtypes.length
             else if (event.key === Qt.Key_Left) { if (cursor > 0) { cursor--; subChoice = 0 } }
@@ -440,11 +437,14 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            // фоновая история — блюрим, пока открыт мастер
+            // фоновая история — блюрим, пока открыт мастер.
+            // ВАЖНО: enabled=false, иначе клики «мимо» карточки мастера
+            // пробивают блюр и прыгают на старые запросы из истории.
             AppCard {
                 id: backdrop
                 anchors.fill: parent
                 color: Theme.surfaceAlt
+                enabled: !wizard.wizardOpen
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -568,10 +568,20 @@ Item {
                 }
             }
 
+            // перехват кликов по пустому месту вокруг карточки (когда мастер открыт)
+            MouseArea {
+                anchors.fill: parent
+                visible: wizard.wizardOpen
+                z: 1
+                acceptedButtons: Qt.AllButtons
+                onClicked: wizard.forceActiveFocus()
+            }
+
             // передний план — мастер
             Rectangle {
                 id: front
                 visible: wizard.wizardOpen
+                z: 2
                 anchors.centerIn: parent
                 width: Math.min(parent.width - 40, 920)
                 height: Math.min(parent.height - 24, frontCol.implicitHeight + 44)
@@ -802,14 +812,10 @@ Item {
                                 Text {
                                     required property int index
                                     Layout.fillWidth: true
-                                    text: {
-                                        const key = index < 9 ? String(index + 1)
-                                                              : (index === 9 ? "0" : "·")
-                                        return (index === wizard.subChoice ? "▶ " : "   ")
-                                              + key + " · " + wizard.subtypes[index].ru
-                                              + " (" + wizard.subtypes[index].code + ") — "
-                                              + wizard.subtypes[index].desc
-                                    }
+                                    text: (index === wizard.subChoice ? "▶ " : "   ")
+                                          + (index + 1) + " · " + wizard.subtypes[index].ru
+                                          + " (" + wizard.subtypes[index].code + ") — "
+                                          + wizard.subtypes[index].desc
                                     font.pixelSize: Theme.fontSmall
                                     font.family: Theme.fontFamily
                                     font.weight: index === wizard.subChoice ? Font.Bold : Font.Normal
@@ -824,7 +830,7 @@ Item {
                         id: manualField
                         Layout.fillWidth: true
                         visible: false
-                        placeholderText: qsTr("Введите свой подтип и нажмите Enter…")
+                        placeholderText: qsTr("например: purpose / feature / material — Enter")
                         font.pixelSize: Theme.fontBody
                         font.family: Theme.fontFamily
                         color: Theme.text
@@ -845,7 +851,7 @@ Item {
                               ? qsTr("B/и · I/ш · O/щ — тег · ←/→ — блоки · Backspace — снять и назад · Enter — дальше")
                               : wizard.stage === 1
                               ? qsTr("1–5 — тип сущности · ↑/↓ — выбор · ←/→ — сущности · Enter — дальше · Backspace — назад")
-                              : qsTr("1–9 · 0=purpose · ↑/↓ — feature/material/other · Enter · Backspace")
+                              : qsTr("1–8 — подтип · 9=other (purpose/feature/material…) · Enter · Backspace")
                         font.pixelSize: 10
                         font.family: Theme.fontFamily
                         color: Theme.textTertiary
