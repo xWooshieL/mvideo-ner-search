@@ -17,18 +17,6 @@ Rectangle {
         color: Theme.border
     }
 
-    DragHandler {
-        target: null
-        onActiveChanged: {
-            if (active)
-                titleBar.targetWindow.startSystemMove()
-        }
-    }
-
-    TapHandler {
-        onDoubleTapped: titleBar.toggleMaximize()
-    }
-
     function toggleMaximize() {
         if (typeof targetWindow.toggleMaximizeAnimated === "function")
             targetWindow.toggleMaximizeAnimated()
@@ -38,34 +26,57 @@ Rectangle {
             targetWindow.showMaximized()
     }
 
-    Row {
+    // зона перетаскивания/даблклика — ТОЛЬКО до начала кнопок справа, чтобы
+    // DragHandler не перехватывал клики по кнопкам (иначе "развернуть" срабатывало через раз)
+    Item {
+        id: dragRegion
         anchors.left: parent.left
-        anchors.leftMargin: 12
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 9
+        anchors.right: buttonsRow.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
 
-        Image {
-            source: Theme.logoMarkSource
-            width: 20
-            height: 20
-            sourceSize.width: 40
-            sourceSize.height: 40
-            fillMode: Image.PreserveAspectFit
-            anchors.verticalCenter: parent.verticalCenter
-            asynchronous: false
+        DragHandler {
+            target: null
+            onActiveChanged: {
+                if (active)
+                    titleBar.targetWindow.startSystemMove()
+            }
         }
 
-        Text {
-            text: titleBar.targetWindow.title
-            font.pixelSize: 12
-            font.family: Theme.fontFamily
-            font.weight: Font.Medium
-            color: Theme.textSecondary
+        TapHandler {
+            onDoubleTapped: titleBar.toggleMaximize()
+        }
+
+        Row {
+            anchors.left: parent.left
+            anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter
+            spacing: 9
+
+            Image {
+                source: Theme.logoMarkSource
+                width: 20
+                height: 20
+                sourceSize.width: 40
+                sourceSize.height: 40
+                fillMode: Image.PreserveAspectFit
+                anchors.verticalCenter: parent.verticalCenter
+                asynchronous: false
+            }
+
+            Text {
+                text: titleBar.targetWindow.title
+                font.pixelSize: 12
+                font.family: Theme.fontFamily
+                font.weight: Font.Medium
+                color: Theme.textSecondary
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
     }
 
     Row {
+        id: buttonsRow
         anchors.right: parent.right
         anchors.top: parent.top
         height: parent.height
