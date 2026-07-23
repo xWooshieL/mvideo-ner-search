@@ -49,7 +49,10 @@ Item {
         { code: "volume", ru: qsTr("объём"), desc: qsTr("1 л, 500 мл") },
         { code: "power", ru: qsTr("мощность"), desc: qsTr("2000 вт, 1.5 квт") },
         { code: "resolution", ru: qsTr("разрешение"), desc: qsTr("4k, full hd, 1920x1080") },
-        { code: "other", ru: qsTr("другое (ввести вручную)"), desc: qsTr("если ни один подтип не подходит") }
+        { code: "purpose", ru: qsTr("назначение"), desc: qsTr("для чего: для дачи, для детей, для пыли") },
+        { code: "feature", ru: qsTr("фича / конструкция"), desc: qsTr("контейнер, мешок, робот, складной…") },
+        { code: "material", ru: qsTr("материал"), desc: qsTr("из чего: стекло, пластик, металл, дерево") },
+        { code: "other", ru: qsTr("другое (ввести вручную)"), desc: qsTr("если ничего не подошло — свой код латиницей") }
     ]
 
     // сущности из BIO: B открывает группу, соседний I продолжает её
@@ -372,6 +375,11 @@ Item {
             if (event.key >= Qt.Key_1 && event.key <= Qt.Key_9) {
                 const idx = event.key - Qt.Key_1
                 if (idx < subtypes.length) { subChoice = idx; subEnter() }
+            }
+            else if (event.key === Qt.Key_0 && subtypes.length > 9) {
+                // 0 → 10-й пункт (purpose)
+                subChoice = 9
+                subEnter()
             }
             else if (event.key === Qt.Key_Up) subChoice = (subChoice - 1 + subtypes.length) % subtypes.length
             else if (event.key === Qt.Key_Down) subChoice = (subChoice + 1) % subtypes.length
@@ -794,9 +802,14 @@ Item {
                                 Text {
                                     required property int index
                                     Layout.fillWidth: true
-                                    text: (index === wizard.subChoice ? "▶ " : "   ")
-                                          + (index + 1) + " · " + wizard.subtypes[index].ru
-                                          + " (" + wizard.subtypes[index].code + ") — " + wizard.subtypes[index].desc
+                                    text: {
+                                        const key = index < 9 ? String(index + 1)
+                                                              : (index === 9 ? "0" : "·")
+                                        return (index === wizard.subChoice ? "▶ " : "   ")
+                                              + key + " · " + wizard.subtypes[index].ru
+                                              + " (" + wizard.subtypes[index].code + ") — "
+                                              + wizard.subtypes[index].desc
+                                    }
                                     font.pixelSize: Theme.fontSmall
                                     font.family: Theme.fontFamily
                                     font.weight: index === wizard.subChoice ? Font.Bold : Font.Normal
@@ -832,7 +845,7 @@ Item {
                               ? qsTr("B/и · I/ш · O/щ — тег · ←/→ — блоки · Backspace — снять и назад · Enter — дальше")
                               : wizard.stage === 1
                               ? qsTr("1–5 — тип сущности · ↑/↓ — выбор · ←/→ — сущности · Enter — дальше · Backspace — назад")
-                              : qsTr("1–9 или ↑/↓ — подтип · Enter — применить и дальше · Backspace — назад")
+                              : qsTr("1–9 · 0=purpose · ↑/↓ — feature/material/other · Enter · Backspace")
                         font.pixelSize: 10
                         font.family: Theme.fontFamily
                         color: Theme.textTertiary

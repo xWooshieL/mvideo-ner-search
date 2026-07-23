@@ -1,6 +1,6 @@
-; установщик М.Видео Разметка v0.1.0 — стиль как у ГК МОС
+; установщик М.Видео Разметка v0.1.1 — стиль как у ГК МОС
 #define AppName "М.Видео Разметка"
-#define AppVersion "0.1.0"
+#define AppVersion "0.1.1"
 #define AppPublisher "Команда буткемпа М.Видео"
 #define AppExeName "MvLabel.exe"
 #define DistDir "C:\mv-app\dist\mvlabel"
@@ -109,16 +109,23 @@ begin
   begin
     if UninstallDeleteLabels then
     begin
+      { legacy: рядом с exe }
       LabelsPath := ExpandConstant('{app}\labels');
+      if DirExists(LabelsPath) then
+        DelTree(LabelsPath, True, True, True);
+      { v0.1.1+: %APPDATA%\MVideo\<AppName>\labels }
+      LabelsPath := ExpandConstant('{userappdata}\MVideo\{#AppName}\labels');
       if DirExists(LabelsPath) then
         DelTree(LabelsPath, True, True, True);
     end;
 
     if UninstallDeleteSettings then
     begin
-      { mvlabel.ini живёт рядом с exe (выбор аннотатора), плюс запасной ключ реестра }
+      { mvlabel.ini: legacy рядом с exe + AppData (v0.1.1+) }
       if FileExists(ExpandConstant('{app}\mvlabel.ini')) then
         DeleteFile(ExpandConstant('{app}\mvlabel.ini'));
+      if FileExists(ExpandConstant('{userappdata}\MVideo\{#AppName}\mvlabel.ini')) then
+        DeleteFile(ExpandConstant('{userappdata}\MVideo\{#AppName}\mvlabel.ini'));
       if RegKeyExists(HKEY_CURRENT_USER, 'Software\MVideo\MvLabel') then
         RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\MVideo\MvLabel');
     end;
