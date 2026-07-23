@@ -12,7 +12,17 @@ sys.path.insert(0, str(ROOT))
 
 import pandas as pd
 
-from src.data_utils import ARTIFACTS_DIR, ensure_dirs, load_query_clicks, save_stats
+from src.data_utils import (
+    ARTIFACTS_DIR,
+    ensure_dirs,
+    load_query_clicks,
+    save_stats,
+    brands_path,
+    categories_path,
+    model_phrases_path,
+    save_silver_parquet,
+    ATTR_TYPE_DIR,
+)
 from src.ner.labeling import (
     ATTR_PATTERNS,
     WeakLabeler,
@@ -24,11 +34,11 @@ from src.preprocessing.pipeline import basic_clean, _norm_key
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
-SAMPLE_N = 80_000
-MAX_QUERIES = 8_000
+SAMPLE_N = 120_000
+MAX_QUERIES = 25_000
 SEED = 42
 MIN_SPAN_LEN = 1
-RARE_SUPPORT = 25
+RARE_SUPPORT = 15
 
 UNIT_AUG = {
     "гб": ["gb", "кб", "kb"],
@@ -95,7 +105,7 @@ def mask_all_entities(text: str, ents: list[dict]) -> str:
 
 def aug_span_text(span_text: str, y: str) -> list[tuple[str, bool]]:
     out = [(span_text, False)]
-    if y in {"other", "color"}:
+    if y in {"other", "color", "type", "purpose"}:
         return out
     parts = span_text.split()
     if len(parts) < 2:
@@ -156,14 +166,14 @@ def build_rows_for_query(query: str, labeler: WeakLabeler) -> list[dict]:
 
 def main() -> None:
     ensure_dirs()
-    out = ROOT / "artifacts" / "attr_type"
+    out = ATTR_TYPE_DIR  # metrics/meta рядом с рантаймом
     out.mkdir(parents=True, exist_ok=True)
 
     log("load WeakLabeler")
     labeler = WeakLabeler.from_files(
-        ARTIFACTS_DIR / "brands.txt",
-        ARTIFACTS_DIR / "categories.txt",
-        models_path=ARTIFACTS_DIR / "model_phrases.txt",
+        brands_path(),
+        categories_path(),
+        models_path=model_phrases_path() if model_phrases_path().exists() else None,
     )
     log(
         f"dicts brands={len(labeler.brands)} cats={len(labeler.categories)} "
@@ -262,12 +272,20 @@ def main() -> None:
         "smoke": True,
     }
 
-    silver.to_parquet(out / "attr_type_silver.parquet", index=False)
-    raw.to_parquet(out / "attr_type_silver_raw.parquet", index=False)
+    save_silver_parquet(silver, "attr_type", "attr_type_silver.parquet")
+    save_silver_parquet(raw, "attr_type", "attr_type_silver_raw.parquet")
+    # meta/overview — в runtime dir + silver (mirror via write both)
     (out / "attr_type_silver_meta.json").write_text(
         json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
     )
+    from src.data_utils import SILVER_ATTR_TYPE
+
+    SILVER_ATTR_TYPE.mkdir(parents=True, exist_ok=True)
+    (SILVER_ATTR_TYPE / "attr_type_silver_meta.json").write_text(
+        json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     overview.to_csv(out / "attr_type_silver_overview.csv", index=False)
+    overview.to_csv(SILVER_ATTR_TYPE / "attr_type_silver_overview.csv", index=False)
     save_stats({"attr_type_silver": meta}, name="attr_type_silver.json")
 
     # required columns check

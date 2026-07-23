@@ -26,9 +26,13 @@ morph_tagger = NewsMorphTagger(_emb)
 NUM = r"(?:(?:от\s*)?\d+(?:[.,/]\d+)?\s*(?:-|до|—)\s*)?\d+(?:[.,/]\d+)?"
 
 ATTR_PATTERNS: List[Tuple[re.Pattern, str]] = [
-    # Память (оперативная / накопители)
-    (re.compile(rf"\b({NUM})\s*(?:gb|гб|гиг(?:ов)?|tb|тб|терабайт|mb|мб)\b", re.I), "memory_storage"),
-    # Габариты (ВхШхГ или ДxШ) - здесь оставляем свою логику из-за крестиков и звездочек
+    # Память (оперативная / накопители) — полные единицы
+    (re.compile(rf"\b({NUM})\s*(?:gb|гб|гиг(?:ов)?|tb|тб|терабайт|mb|мб|kb|кб)\b", re.I), "memory_storage"),
+    # Усечённое «16 г» / «256 g» в поисковых запросах ≈ гб (типичные объёмы RAM/SSD)
+    (re.compile(r"\b(8|16|32|64|128|256|512|1024|2048)\s*[гg]\b", re.I), "memory_storage"),
+    # Точное разрешение — ДО габаритов, иначе 1920x1080 уходит в dimensions
+    (re.compile(r"\b(\d{3,5})\s*[xх×*]\s*(\d{3,5})\s*(?:пикс|pix|p)?\b", re.I), "resolution_exact"),
+    # Габариты (ВхШхГ или ДxШ)
     (re.compile(r"\b(\d+(?:[.,]\d+)?)\s*[xх×*]\s*(\d+(?:[.,]\d+)?)(?:\s*[xх×*]\s*(\d+(?:[.,]\d+)?))?\b", re.I),
      "dimensions"),
     # Размеры и диагонали экрана
@@ -39,22 +43,20 @@ ATTR_PATTERNS: List[Tuple[re.Pattern, str]] = [
     (re.compile(rf"\b({NUM})\s*(?:а|a|ампер)\b", re.I), "current"),
     # Площадь обогрева
     (re.compile(rf"\b({NUM})\s*(?:м2|m2|кв\.?\s*м|квадрат(?:ов)?)\b", re.I), "area"),
-    # Вес
-    (re.compile(rf"\b({NUM})\s*(?:кг|kg|г|g|грамм)\b", re.I), "weight"),
+    # Вес — без голого «г»/«g» (иначе 16 г / 5 g / 256 g шумят)
+    (re.compile(rf"\b({NUM})\s*(?:кг|kg|грамм(?:а|ов)?)\b", re.I), "weight"),
     # Объем
     (re.compile(rf"\b({NUM})\s*(?:л|l|литр(?:а|ов)?|мл|ml)\b", re.I), "volume"),
     # Частота
     (re.compile(rf"\b({NUM})\s*(?:гц|hz|кгц|khz|мгц|mhz)\b", re.I), "frequency"),
     # Шум и чувствительность
     (re.compile(rf"\b({NUM})\s*(?:дб|db)\b", re.I), "noise_level"),
-    # Кратность увеличения. УЛУЧШЕНО: ловит "до 500 крат" (микроскопы/бинокли)
+    # Кратность увеличения
     (re.compile(rf"\b({NUM})\s*(?:xх|крат)\b", re.I), "magnification"),
     # Расход / Скорость
     (re.compile(rf"\b({NUM})\s*(?:г/мин|g/min|л/мин|l/min)\b", re.I), "flow_rate"),
-    # Разрешение экрана (Стандарты)
+    # Разрешение экрана (стандарты)
     (re.compile(r"\b(4k|4к|8k|8к|2k|2к|1080p|720p|1440p|uhd|full\s*hd|fhd|hd)\b", re.I), "resolution_standard"),
-    # Точное разрешение экрана
-    (re.compile(r"\b(\d{3,5})\s*[xх×*]\s*(\d{3,5})\s*(?:пикс|pix|p)?\b", re.I), "resolution_exact"),
     # Степень защиты
     (re.compile(r"\b(IP\s*[0-6X][0-9X])\b", re.I), "ip_rating"),
     # Технологии связи и порты
@@ -70,19 +72,19 @@ ATTR_PATTERNS: List[Tuple[re.Pattern, str]] = [
     (re.compile(rf"\b({NUM})\s*(?:шт\.?|штук[иа]?)\b", re.I), "quantity"),
     # Возрастные ограничения
     (re.compile(r"\b(0|6|12|16|18)\s*\+\b", re.I), "age_restriction"),
-    # Ресурс расходников (например, картриджи: 42100 стр)
+    # Ресурс расходников
     (re.compile(rf"\b({NUM})\s*(?:стр\.?|страниц(?:ы)?)\b", re.I), "pages_yield"),
-    # Гарантия и срок службы (15 лет, 10 месяцев, 2 недели)
+    # Гарантия и срок службы
     (re.compile(rf"\b({NUM})\s*(?:год[а]?|лет|мес(?:яц(?:ев|а)?)?|недел[иь])\b", re.I), "warranty_period"),
-    # Сопротивление (аудио, наушники: 32 Ом)
+    # Сопротивление
     (re.compile(rf"\b({NUM})\s*(?:ом|ohm)\b", re.I), "impedance"),
-    # Скорость вращения (вентиляторы, машинки для катышков: 8000 об/мин)
+    # Скорость вращения
     (re.compile(rf"\b({NUM})\s*(?:об/мин|rpm)\b", re.I), "rpm"),
-    # Разрешение матриц камер/микроскопов (12 МПикс)
+    # Разрешение матриц
     (re.compile(rf"\b({NUM})\s*(?:мпикс|mpix|мп|mp)\b", re.I), "megapixels"),
-    # Производительность / Воздухообмен (вытяжки: 900 м3/ч)
+    # Производительность / Воздухообмен
     (re.compile(rf"\b({NUM})\s*(?:м3/ч|m3/h|м³/ч)\b", re.I), "airflow_capacity"),
-    # Плотность (холсты, бумага: 280 г/м2)
+    # Плотность
     (re.compile(rf"\b({NUM})\s*(?:г/м2|g/m2|г/м²)\b", re.I), "density"),
 ]
 
@@ -103,6 +105,7 @@ COLORS = {
     "коричневый", "коричневая", "коричневое",
     "бежевый", "бежевая", "бежевое",
     "желтый", "жёлтый", "желтая", "жёлтая", "желтое", "жёлтое",
+    "золотистый", "золотистая", "золотистое",
 
     # Популярные технологические / дизайнерские цвета из каталогов (добавлены медный и шоколадный)
     "титановый", "титан", "графитовый", "графит", "мокрый асфальт",
@@ -221,6 +224,85 @@ CATEGORY_SEEDS = {
     "расческа", "массажная щетка", "мотыга", "укрывной материал", "держатель"
 }
 
+# --- ATTR type / purpose (lexical; app gold уже размечает эти сабтипы) ---
+# Леммы Natasha + сырые формы; матч по токену/фразе после lemmatize.
+TYPE_SEEDS: Set[str] = {
+    # connectivity form-factor (Natasha: беспроводные → беспроводный)
+    "беспроводный", "беспроводной", "беспроводные", "беспроводная", "беспроводное",
+    "проводный", "проводной", "проводные", "проводная",
+    "накладный", "накладной", "накладные", "вкладыш", "вкладыши",
+    # smart / product kind
+    "смарт", "smart", "android", "сотовый", "сотовая",
+    # energy / install
+    "газовый", "газовая", "газовые", "газовое",
+    "электрический", "электрическая", "электрические", "электрическое",
+    "индукционный", "индукционная", "индукционные",
+    "встраиваемый", "встраиваемая", "встраиваемые", "встраемый", "встраемая",
+    "напольный", "напольная", "напольные",
+    "настенный", "настенная",
+    # size/form adjectives used as type in app
+    "узкий", "узкая", "узкие", "широкий", "широкая",
+    "масляный", "масляная", "лазерный", "лазерная", "цветной", "цветная",
+    "строительный", "строительная", "автомобильный", "автомобильная",
+    "планетарный", "планетарная", "вертикальный", "вертикальная",
+    "ретро", "ларь", "разветвитель",
+    "кухонный", "кухонная",
+    "тестомесильный", "тестомесильная",
+    "электроподжиг", "электроподжогом",
+    "smart tv", "smarttv",
+}
+
+PURPOSE_SEEDS: Set[str] = {
+    "спорт", "спорта", "кухня", "кухни",
+    "смузи", "принтер", "принтера",
+    "окно", "окон", "мойки", "мойки окон",
+    "телефон", "телефона",
+    "сушильный", "сушильных", "машин", "сушильных машин",
+    "плита", "плиты", "индукционной", "индукционной плиты",
+    "часы", "смарт часы",
+    "компьютер", "компьютера",
+}
+
+# «для …» — весь хвост после «для» как purpose-span при детекции
+PURPOSE_FOR_RE = re.compile(
+    r"\bдля\s+([А-Яа-яA-Za-z0-9][А-Яа-яA-Za-z0-9\s\-]{0,40})",
+    re.I,
+)
+
+# App gold subtype → teacher canon (eval; jsonl не переписываем)
+GOLD_TO_CANON: Dict[str, str] = {
+    "type": "type",
+    "gas": "type",
+    "floor": "type",
+    "style": "type",
+    "function": "type",
+    "purpose": "purpose",
+    "food": "purpose",
+    "depth": "size",
+    "width": "size",
+    "heigh": "size",
+    "length": "size",
+    "counts": "quantity",
+    "material": "other",
+    "chip": "other",
+    "sim": "other",
+    "game": "other",
+    "used": "other",
+    "new": "other",
+    "country": "other",
+    "release date": "other",
+    "delivery": "other",
+    "speed": "other",
+}
+
+
+def gold_subtype_to_canon(subtype: str) -> str:
+    """Сводит app gold subtype к канону teacher. Неизвестное → as-is."""
+    if not subtype:
+        return "other"
+    s = subtype.strip().lower()
+    return GOLD_TO_CANON.get(s, s)
+
 
 def _split_glued(text: str) -> str:
     """Расклеивает число и короткую единицу: «16гб» -> «16 гб»."""
@@ -298,6 +380,19 @@ class WeakLabeler:
     _genre_phrases: List[List[str]] = field(default_factory=list, repr=False)  # НОВОЕ
     _person_phrases: List[List[str]] = field(default_factory=list, repr=False)
     _model_phrases: List[List[str]] = field(default_factory=list, repr=False)
+    _type_phrases: List[List[str]] = field(default_factory=list, repr=False)
+    _purpose_phrases: List[List[str]] = field(default_factory=list, repr=False)
+
+    def __post_init__(self) -> None:
+        if not self._type_phrases or not self._purpose_phrases:
+            type_phrases = [p.split() for p in TYPE_SEEDS if p]
+            purpose_phrases = [p.split() for p in PURPOSE_SEEDS if p]
+            type_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
+            purpose_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
+            if not self._type_phrases:
+                self._type_phrases = type_phrases
+            if not self._purpose_phrases:
+                self._purpose_phrases = purpose_phrases
 
     @classmethod
     def from_files(
@@ -409,18 +504,24 @@ class WeakLabeler:
         genre_phrases = [p.split() for p in self.genres if p]  # НОВОЕ
         person_phrases = [p.split() for p in self.persons if p]  # НОВОЕ
         model_phrases = [p.split() for p in self.models if p]
+        type_phrases = [p.split() for p in TYPE_SEEDS if p]
+        purpose_phrases = [p.split() for p in PURPOSE_SEEDS if p]
 
         brand_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
         cat_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
         genre_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))  # НОВОЕ
         person_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))  # НОВОЕ
         model_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
+        type_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
+        purpose_phrases.sort(key=lambda x: (-len(x), -sum(len(t) for t in x)))
 
         self._brand_phrases = brand_phrases
         self._category_phrases = cat_phrases
         self._genre_phrases = genre_phrases  # НОВОЕ
         self._person_phrases = person_phrases  # НОВОЕ
         self._model_phrases = model_phrases
+        self._type_phrases = type_phrases
+        self._purpose_phrases = purpose_phrases
 
     def label_query(self, query: str) -> List[Tuple[str, str]]:
         """Лемматизирует через Natasha для матчинга словарей, возвращает исходные токены + BIO."""
@@ -455,9 +556,32 @@ class WeakLabeler:
             if lt in self.colors or lt.replace("ё", "е") in self.colors:
                 tags[i] = "B-ATTR"
         # 8) Regex attributes — по тому же тексту, что и tokenize
-        self._apply_attr_patterns(_split_glued(query), tokens, tags)
+        norm_q = _split_glued(query)
+        self._apply_attr_patterns(norm_q, tokens, tags)
+        # 9) purpose («для …») затем type/purpose seeds — только на оставшихся O
+        self._apply_purpose_for(norm_q, tokens, tags)
+        self._apply_phrases(lower_toks, tags, self._purpose_phrases, "ATTR")
+        self._apply_phrases(lower_toks, tags, self._type_phrases, "ATTR")
 
         return [(tokens[i][0], tags[i]) for i in range(len(tokens))]
+
+    def _apply_purpose_for(
+            self,
+            query: str,
+            tokens: List[Tuple[str, int, int]],
+            tags: List[str],
+    ) -> None:
+        """Помечает хвост после «для» как ATTR (purpose), не трогая уже занятые токены."""
+        for m in PURPOSE_FOR_RE.finditer(query):
+            start, end = m.start(1), m.end(1)
+            first = True
+            for i, (_tok, s, e) in enumerate(tokens):
+                if e <= start or s >= end:
+                    continue
+                if tags[i] != "O":
+                    continue
+                tags[i] = "B-ATTR" if first else "I-ATTR"
+                first = False
 
     def _apply_phrases(
             self,
@@ -587,48 +711,76 @@ def entities_to_structured(
     }
 
 
-def _guess_attr_type(text: str) -> str:
-<<<<<<< HEAD
-    """Тип ATTR-span: COLORS → color, иначе первый матч ATTR_PATTERNS, иначе other.
-
-    Имена типов совпадают с группами в ATTR_PATTERNS (memory_storage, size, …).
-    """
-=======
->>>>>>> d5a17b6a80ab1343385d9e0272deb8cbec6a72ec
+def _token_norms(text: str) -> List[str]:
+    """Леммы/нормы токенов span для lexical ATTR."""
     t = text.lower().replace("ё", "е").strip()
+    if not t:
+        return []
+    lemmas = lemmatize_text(t)
+    if lemmas:
+        return lemmas
+    return [_normalize(x) for x in t.split() if x]
 
-    # цвет может прийти словоформой («белую») — сверяем и по лемме
+
+def _looks_like_purpose(text: str) -> bool:
+    t = text.lower().replace("ё", "е").strip()
+    if not t:
+        return False
+    if PURPOSE_FOR_RE.search(t) or t.startswith("для "):
+        return True
+    norms = _token_norms(t)
+    joined = " ".join(norms)
+    if joined in PURPOSE_SEEDS or t in PURPOSE_SEEDS:
+        return True
+    # multiword seed as raw (мойки окон / сушильных машин)
+    if any(s in t for s in PURPOSE_SEEDS if " " in s):
+        return True
+    if all(n in PURPOSE_SEEDS for n in norms) and norms:
+        return True
+    if len(norms) == 1 and norms[0] in PURPOSE_SEEDS:
+        return True
+    return False
+
+
+def _looks_like_type(text: str) -> bool:
+    t = text.lower().replace("ё", "е").strip()
+    if not t:
+        return False
+    if t in TYPE_SEEDS or t.replace(" ", "") in {"smarttv"}:
+        return True
+    norms = _token_norms(t)
+    joined = " ".join(norms)
+    if joined in TYPE_SEEDS:
+        return True
+    # каждый токен — type seed (напр. «лазерный цветной»)
+    if norms and all(n in TYPE_SEEDS for n in norms):
+        return True
+    # первый токен type-модификатор (узкая / беспроводные / смарт)
+    if norms and norms[0] in TYPE_SEEDS:
+        return True
+    return False
+
+
+def _guess_attr_type(text: str) -> str:
+    """Тип ATTR-span: color → units → purpose → type → other.
+
+    Имена unit-типов совпадают с ATTR_PATTERNS; type/purpose — lexical (app gold).
+    """
+    t = text.lower().replace("ё", "е").strip()
+    if not t:
+        return "other"
+
     if t in COLORS or " ".join(lemmatize_text(t)) in COLORS:
         return "color"
 
-    if re.search(r"\d+\s*(gb|гб|гиг|mb|мб)", t):
-        return "memory"
-    if re.search(r"\d+\s*(tb|тб|терабайт)", t):
-        return "storage"
-    if re.search(r"\d+\s*(кг|kg|г|g|грамм)", t):
-        return "weight"
-    if re.search(r"\d+\s*(л|l|литр|мл|ml)", t):
-        return "volume"
-    if re.search(r"\d+\s*(мм|mm|см|cm|м|m|дюйм|inch|\")", t):
-        return "size"
-    if re.search(r"[xх×*]", t):
-        return "dimensions"
-    if re.search(r"\d+\s*(вт|w|ватт|квт|kw)", t):
-        return "power"
-    if re.search(r"\d+\s*(в|v|вольт)", t):
-        return "voltage"
-    if re.search(r"\d+\s*(а|a|ампер)", t):
-        return "current"
-    if re.search(r"\d+\s*(гц|hz|кгц|khz|мгц|mhz)", t):
-        return "frequency"
-    if re.search(r"\d+\s*(дб|db)", t):
-        return "noise_level"
-    if re.search(r"\d+\s*(ом|ohm)", t):
-        return "impedance"
-    if re.search(r"(4k|8k|2k|1080p|720p|1440p|uhd|fhd|hd)", t):
-        return "resolution"
-    if re.search(r"(wi-?fi|bluetooth|bt|nfc|5g|4g|lte|3g|gps|usb|hdmi|vga)", t):
-        return "connectivity"
+    for pattern, name in ATTR_PATTERNS:
+        if pattern.search(t):
+            return name
+
+    if _looks_like_purpose(t):
+        return "purpose"
+    if _looks_like_type(t):
+        return "type"
     return "other"
 
 

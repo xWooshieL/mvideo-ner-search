@@ -1,15 +1,17 @@
 # Markov ATTR typer
 
-Типизация span `B/I-ATTR` → `memory_storage` / `size` / `color` / …  
-Baseline Markov: [`src/ner/markov_typer.py`](../../src/ner/markov_typer.py).  
-Учитель типов: [`src/ner/labeling.py`](../../src/ner/labeling.py) (`ATTR_PATTERNS` + `WeakLabeler`).
+Типизация span `B/I-ATTR` → `memory_storage` / `size` / …  
+Учитель: [`src/ner/labeling.py`](../../src/ner/labeling.py).
 
 | Файл | |
 |---|---|
-| [`01_markov_eda.ipynb`](./01_markov_eda.ipynb) | смысл Markov, agreement с regex |
-| [`02_attr_type_silver.ipynb`](./02_attr_type_silver.ipynb) | silver + EDA на WeakLabeler |
-| [`attr_type_silver.md`](./attr_type_silver.md) | схема датасета / маски |
-| [`03_attr_type_classifier.ipynb`](./03_attr_type_classifier.ipynb) | **4 TF-IDF clf + Markov**, метрики |
-| [`attr_type_classifier.md`](./attr_type_classifier.md) | отчёт по моделям |
+| [`01_markov_eda.ipynb`](./01_markov_eda.ipynb) | смысл Markov |
+| [`02_attr_type_silver.ipynb`](./02_attr_type_silver.ipynb) | silver + EDA |
+| [`03_attr_type_classifier.ipynb`](./03_attr_type_classifier.ipynb) | **обучение prod** (4 clf + Markov, policy, sanity) |
+| [`04_attr_type_prod.ipynb`](./04_attr_type_prod.ipynb) | интерактив после обучения / разбор фич |
+| [`attr_type_prod_report.md`](./attr_type_prod_report.md) | отчёт |
 
-Дизайн clf: n-grams только на `span_text`; brand/category/masked query — отдельно.
+Прод-артефакты: `models/attr_type_clf.joblib`, `artifacts/attr_type/inference_policy.json`.  
+Silver (канон): `artifacts/silver/attr_type/` (зеркало в `artifacts/attr_type/`).  
+Словари: `artifacts/dicts/` (см. [`data/README.md`](../../data/README.md)).  
+Эквивалент CLI: `python notebooks/markov_typer/_run_04_prod.py`

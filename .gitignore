@@ -8,6 +8,8 @@ data/raw/
 !models/*.joblib
 *.zip
 presentation.pdf
+*.joblib
+*.pkl
 
 # Python
 __pycache__/

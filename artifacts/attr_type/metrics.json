@@ -1,72 +1,16 @@
 {
   "best_model": "sgd_span_ctx_masked",
-  "summary": [
-    {
-      "model": "sgd_span_ctx_masked",
-      "accuracy": 0.9766990291262136,
-      "f1_macro": 0.9432732027448292,
-      "f1_micro": 0.9766990291262136,
-      "f1_weighted": 0.9764413206674348,
-      "multi_f1_macro": 0.9307892590501285,
-      "multi_accuracy": 0.9683794466403162,
-      "f1_UNKNOWN": 0.8888888888888888
-    },
-    {
-      "model": "logreg_span_char",
-      "accuracy": 0.9572815533980582,
-      "f1_macro": 0.9086558855232043,
-      "f1_micro": 0.9572815533980582,
-      "f1_weighted": 0.9534967942893791,
-      "multi_f1_macro": 0.9146423221514698,
-      "multi_accuracy": 0.9525691699604744,
-      "f1_UNKNOWN": 0.6046511627906976
-    },
-    {
-      "model": "logreg_span_ctx",
-      "accuracy": 0.9631067961165048,
-      "f1_macro": 0.9068831472350284,
-      "f1_micro": 0.9631067961165048,
-      "f1_weighted": 0.9613323297202879,
-      "multi_f1_macro": 0.8821842910521344,
-      "multi_accuracy": 0.9446640316205533,
-      "f1_UNKNOWN": 0.7446808510638298
-    },
-    {
-      "model": "logreg_span_wordchar",
-      "accuracy": 0.9563106796116505,
-      "f1_macro": 0.8964968096391527,
-      "f1_micro": 0.9563106796116505,
-      "f1_weighted": 0.9538115937364772,
-      "multi_f1_macro": 0.8973391195084055,
-      "multi_accuracy": 0.9486166007905138,
-      "f1_UNKNOWN": 0.6170212765957447
-    },
-    {
-      "model": "markov_lookup",
-      "accuracy": 0.9368932038834952,
-      "f1_macro": 0.8946927399360133,
-      "f1_micro": 0.9368932038834952,
-      "f1_weighted": 0.9365269047989341,
-      "multi_f1_macro": 0.8991180256220134,
-      "multi_accuracy": 0.932806324110672,
-      "f1_UNKNOWN": 0.4036697247706422
-    }
-  ],
-  "best_raw": {
-    "accuracy": 0.9766990291262136,
-    "f1_macro": 0.9432732027448292,
-    "f1_micro": 0.9766990291262136,
-    "multi_f1_macro": 0.9307892590501285,
-    "f1_UNKNOWN": 0.8888888888888888
+  "model": "sgd_span_ctx_masked",
+  "model_path": "models/attr_type_clf.joblib",
+  "min_confidence": 0.55,
+  "reject_label": "UNKNOWN",
+  "features": {
+    "span_text": "TF-IDF char/word n-grams ONLY on the ATTR span",
+    "context_text": "brand + category string (separate TF-IDF)",
+    "query_masked": "query with all ATTR spans replaced by <ATTR> (word TF-IDF)"
   },
-  "markov": {
-    "accuracy": 0.9368932038834952,
-    "f1_macro": 0.8946927399360133,
-    "multi_f1_macro": 0.8991180256220134,
-    "f1_UNKNOWN": 0.4036697247706422
-  },
-  "n_train": 4119,
-  "n_val": 1030,
+  "n_train": 2010,
+  "n_val": 503,
   "classes": [
     "color",
     "connectivity",
@@ -75,6 +19,7 @@
     "frequency",
     "memory_storage",
     "power",
+    "resolution_exact",
     "resolution_standard",
     "size",
     "time",
@@ -83,8 +28,16 @@
     "weight",
     "UNKNOWN"
   ],
-  "min_class": 25,
-  "unknown_share_cap": 0.18,
-  "include_aug": true,
-  "design_note": "char n-grams on span only; brand/category/masked query separate; one row per ATTR span"
+  "val_metrics_raw": {
+    "accuracy": 0.9840954274353877,
+    "f1_macro": 0.9556087097055188,
+    "multi_f1_macro": 0.9845368306906769,
+    "f1_UNKNOWN": 0.9777777777777777
+  },
+  "val_metrics_with_reject": {
+    "tau": 0.55,
+    "accuracy": 0.9840954274353877,
+    "f1_macro": 0.9603469344437435,
+    "coverage": 0.9940357852882704
+  }
 }

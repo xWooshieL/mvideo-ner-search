@@ -1,0 +1,42 @@
+{
+  "model": "sgd_span_ctx_masked",
+  "model_path": "models/attr_type_clf.joblib",
+  "min_confidence": 0.55,
+  "reject_label": "UNKNOWN",
+  "features": {
+    "span_text": "TF-IDF char/word n-grams ONLY on the ATTR span",
+    "context_text": "brand + category string (separate TF-IDF)",
+    "query_masked": "query with all ATTR spans replaced by <ATTR> (word TF-IDF)"
+  },
+  "n_train": 2010,
+  "n_val": 503,
+  "classes": [
+    "color",
+    "connectivity",
+    "current",
+    "dimensions",
+    "frequency",
+    "memory_storage",
+    "power",
+    "resolution_exact",
+    "resolution_standard",
+    "size",
+    "time",
+    "voltage",
+    "volume",
+    "weight",
+    "UNKNOWN"
+  ],
+  "val_metrics_raw": {
+    "accuracy": 0.9840954274353877,
+    "f1_macro": 0.9556087097055188,
+    "multi_f1_macro": 0.9845368306906769,
+    "f1_UNKNOWN": 0.9777777777777777
+  },
+  "val_metrics_with_reject": {
+    "tau": 0.55,
+    "accuracy": 0.9840954274353877,
+    "f1_macro": 0.9603469344437435,
+    "coverage": 0.9940357852882704
+  }
+}

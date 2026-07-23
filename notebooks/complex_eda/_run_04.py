@@ -182,11 +182,17 @@ def main() -> None:
     MIN_COUNT = 6
     final = {p for p, c in raw.items() if accept_phrase(p, c, min_count=MIN_COUNT)} | set(MODEL_SEEDS)
     save_phrase_list(final, art / "model_phrases.txt")
-    log(f"saved model_phrases n={len(final)}")
+    dicts = art / "dicts"
+    dicts.mkdir(parents=True, exist_ok=True)
+    save_phrase_list(final, dicts / "model_phrases.txt")
+    log(f"saved model_phrases n={len(final)} (+ dicts/)")
 
-    labeler_model = WeakLabeler.from_files(
-        art / "brands.txt", art / "categories.txt", models_path=art / "model_phrases.txt"
-    )
+    from src.data_utils import brands_path, categories_path, model_phrases_path
+
+    bp = brands_path() if brands_path().exists() else art / "brands.txt"
+    cp = categories_path() if categories_path().exists() else art / "categories.txt"
+    mp = model_phrases_path() if model_phrases_path().exists() else art / "model_phrases.txt"
+    labeler_model = WeakLabeler.from_files(bp, cp, models_path=mp)
     for q in ["наушники logitech g-pro x se", "dyson v15", "samsung galaxy s24"]:
         qn = pp0(q).text_norm
         log(f"AFTER {qn} -> {labeler_model.label_query(qn)}")

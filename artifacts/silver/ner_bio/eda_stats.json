@@ -1,0 +1,18 @@
+[
+  {
+    "metric": "silver_rows",
+    "value": 12000
+  },
+  {
+    "metric": "with_entity",
+    "value": 10086
+  },
+  {
+    "metric": "gold_tokenize_align",
+    "value": 181
+  },
+  {
+    "metric": "weak_gold_f1",
+    "value": 0.566
+  }
+]

@@ -136,6 +136,14 @@ def main():
     brands_path.write_text("\n".join(brands) + "\n", encoding="utf-8")
     cats_path.write_text("\n".join(categories) + "\n", encoding="utf-8")
 
+    # канон: artifacts/dicts/ (если out == artifacts)
+    dicts = args.out / "dicts"
+    if args.out.name == "artifacts" or (args.out / "attr_type").exists() or args.out.resolve().name == "artifacts":
+        dicts.mkdir(parents=True, exist_ok=True)
+        (dicts / "brands.txt").write_text("\n".join(brands) + "\n", encoding="utf-8")
+        (dicts / "categories.txt").write_text("\n".join(categories) + "\n", encoding="utf-8")
+        print(f"Also saved → {dicts / 'brands.txt'}")
+
     print(f"Saved {len(brands)} brands → {brands_path}")
     print(f"Saved {len(categories)} categories → {cats_path}")
     print("Top brands:", brands[:15])

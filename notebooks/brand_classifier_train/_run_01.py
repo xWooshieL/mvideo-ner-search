@@ -309,10 +309,14 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     MODELS.mkdir(parents=True, exist_ok=True)
 
-    train = pd.read_parquet(DATA / "silver_brand_train.parquet")
-    val = pd.read_parquet(DATA / "silver_brand_val.parquet")
+    from src.data_utils import resolve_silver
+
+    train = pd.read_parquet(resolve_silver("brand_clf", "silver_brand_train.parquet"))
+    val = pd.read_parquet(resolve_silver("brand_clf", "silver_brand_val.parquet"))
     policy = json.loads((DATA / "inference_policy.json").read_text(encoding="utf-8"))
-    stats_silver = json.loads((DATA / "silver_brand_stats.json").read_text(encoding="utf-8"))
+    stats_silver = json.loads(
+        resolve_silver("brand_clf", "silver_brand_stats.json").read_text(encoding="utf-8")
+    )
     TAU_ACCEPT = float(policy["thresholds"]["TAU_ACCEPT"])
     TAU_MARGIN = float(policy["thresholds"]["TAU_MARGIN"])
     TAU_NO_BRAND = float(policy["thresholds"]["TAU_NO_BRAND"])

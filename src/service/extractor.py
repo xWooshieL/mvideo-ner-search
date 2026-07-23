@@ -54,11 +54,28 @@ class QueryEntityExtractor:
         artifacts_dir: Path | str = "artifacts",
         models_dir: Path | str = "models",
     ) -> "QueryEntityExtractor":
+        from src.data_utils import ARTIFACTS_DIR, brands_path, categories_path, model_phrases_path
+
         artifacts_dir = Path(artifacts_dir)
         models_dir = Path(models_dir)
+
+        def _dict(name: str) -> Path:
+            nested = artifacts_dir / "dicts" / name
+            flat = artifacts_dir / name
+            if nested.exists():
+                return nested
+            if flat.exists():
+                return flat
+            # default project layout helpers
+            if artifacts_dir.resolve() == ARTIFACTS_DIR.resolve():
+                return {"brands.txt": brands_path, "categories.txt": categories_path, "model_phrases.txt": model_phrases_path}[name]()
+            return flat
+
+        bp, cp, mp = _dict("brands.txt"), _dict("categories.txt"), _dict("model_phrases.txt")
         labeler = WeakLabeler.from_files(
-            artifacts_dir / "brands.txt",
-            artifacts_dir / "categories.txt",
+            bp,
+            cp,
+            models_path=mp if mp.exists() else None,
         )
         ner_path = models_dir / "ner_crf.pkl"
         ner = CRFNerModel.load(ner_path) if ner_path.exists() else None

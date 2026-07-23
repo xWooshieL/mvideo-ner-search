@@ -64,8 +64,15 @@ def load_click_sample(path: Path, max_rows: int) -> "object":
 
 
 def ensure_dictionaries(artifacts: Path, data: Path, max_rows: int) -> None:
-    brands = artifacts / "brands.txt"
-    cats = artifacts / "categories.txt"
+    from src.data_utils import brands_path, categories_path
+
+    brands = brands_path() if artifacts.resolve() == (ROOT / "artifacts").resolve() else artifacts / "brands.txt"
+    cats = categories_path() if artifacts.resolve() == (ROOT / "artifacts").resolve() else artifacts / "categories.txt"
+    # also accept flat legacy
+    if not brands.exists():
+        brands = artifacts / "brands.txt"
+    if not cats.exists():
+        cats = artifacts / "categories.txt"
     if brands.exists() and cats.exists():
         print("Dictionaries already exist, skipping build.")
         return
@@ -110,7 +117,15 @@ def train_classifiers(df, models: Path, figures: Path, artifacts: Path) -> dict:
     brand_df = brand_df[brand_df["brand"].isin(top_brands)]
 
     # Category proxy: first matching category keyword in query/name via labeler
-    labeler = WeakLabeler.from_files(artifacts / "brands.txt", artifacts / "categories.txt")
+    from src.data_utils import brands_path, categories_path, ARTIFACTS_DIR
+
+    if Path(artifacts).resolve() == ARTIFACTS_DIR.resolve():
+        labeler = WeakLabeler.from_files(brands_path(), categories_path())
+    else:
+        d = Path(artifacts)
+        bp = d / "dicts" / "brands.txt" if (d / "dicts" / "brands.txt").exists() else d / "brands.txt"
+        cp = d / "dicts" / "categories.txt" if (d / "dicts" / "categories.txt").exists() else d / "categories.txt"
+        labeler = WeakLabeler.from_files(bp, cp)
     cats = []
     for q in df["query"]:
         ents = bio_to_entities(labeler.label_query(q), query=q)
@@ -372,7 +387,21 @@ def main():
     df = load_click_sample(args.data, args.max_rows)
     print(f"Unique queries: {len(df)}")
 
-    labeler = WeakLabeler.from_files(args.artifacts / "brands.txt", args.artifacts / "categories.txt")
+    from src.data_utils import ARTIFACTS_DIR, brands_path, categories_path, model_phrases_path
+
+    if args.artifacts.resolve() == ARTIFACTS_DIR.resolve():
+        mp = model_phrases_path()
+        labeler = WeakLabeler.from_files(
+            brands_path(),
+            categories_path(),
+            models_path=mp if mp.exists() else None,
+        )
+    else:
+        d = args.artifacts
+        bp = d / "dicts" / "brands.txt" if (d / "dicts" / "brands.txt").exists() else d / "brands.txt"
+        cp = d / "dicts" / "categories.txt" if (d / "dicts" / "categories.txt").exists() else d / "categories.txt"
+        mp = d / "dicts" / "model_phrases.txt" if (d / "dicts" / "model_phrases.txt").exists() else d / "model_phrases.txt"
+        labeler = WeakLabeler.from_files(bp, cp, models_path=mp if mp.exists() else None)
 
     print("=== 3. Baseline classifiers ===")
     clf_metrics = train_classifiers(df, args.models, args.figures, args.artifacts)

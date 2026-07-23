@@ -269,10 +269,24 @@ class QueryPreprocessor:
 
     @classmethod
     def from_artifacts(cls, artifacts_dir: Path | str = "artifacts") -> "QueryPreprocessor":
+        from src.data_utils import ARTIFACTS_DIR, model_phrases_path, protected_brands_path
+
         d = Path(artifacts_dir)
+
+        def _p(name: str, fallback):
+            nested = d / "dicts" / name
+            flat = d / name
+            if nested.exists():
+                return nested
+            if flat.exists():
+                return flat
+            if d.resolve() == ARTIFACTS_DIR.resolve():
+                return fallback()
+            return flat
+
         return cls(
-            model_phrases=load_phrase_list(d / "model_phrases.txt"),
-            protected_brands=load_phrase_list(d / "protected_brands.txt"),
+            model_phrases=load_phrase_list(_p("model_phrases.txt", model_phrases_path)),
+            protected_brands=load_phrase_list(_p("protected_brands.txt", protected_brands_path)),
         )
 
     def __call__(self, query: str) -> PreprocessResult:

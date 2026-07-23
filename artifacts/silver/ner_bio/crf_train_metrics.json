@@ -1,0 +1,97 @@
+{
+  "silver_path": "D:\\Projects-26-06-2026\\mvideo-ner-search\\artifacts\\silver\\ner_bio\\silver_bio_slice.parquet",
+  "n_train": 3475,
+  "n_val": 869,
+  "max_iterations": 80,
+  "seed": 42,
+  "labels": [
+    "BRAND",
+    "CATEGORY",
+    "MODEL",
+    "ATTR"
+  ],
+  "silver_val": {
+    "micro": {
+      "precision": 0.8530394121576487,
+      "recall": 0.8373770491803278,
+      "f1": 0.845135671740569
+    },
+    "macro_f1": 0.8112353205466588,
+    "per_label": {
+      "ATTR": {
+        "precision": 0.8692307692307693,
+        "recall": 0.6686390532544378,
+        "f1": 0.7558528428093645,
+        "support": 169
+      },
+      "BRAND": {
+        "precision": 0.959349593495935,
+        "recall": 0.963265306122449,
+        "f1": 0.9613034623217922,
+        "support": 490
+      },
+      "CATEGORY": {
+        "precision": 0.7967914438502673,
+        "recall": 0.8209366391184573,
+        "f1": 0.8086838534599728,
+        "support": 726
+      },
+      "MODEL": {
+        "precision": 0.7559055118110236,
+        "recall": 0.6857142857142857,
+        "f1": 0.7191011235955056,
+        "support": 140
+      }
+    },
+    "token_accuracy": 0.8639272482317278
+  },
+  "gold": {
+    "micro": {
+      "precision": 0.6822429906542056,
+      "recall": 0.5165094339622641,
+      "f1": 0.5879194630872483
+    },
+    "macro_f1": 0.5117402794605699,
+    "per_label": {
+      "ATTR": {
+        "precision": 0.7037037037037037,
+        "recall": 0.2087912087912088,
+        "f1": 0.3220338983050847,
+        "support": 91
+      },
+      "BRAND": {
+        "precision": 0.8055555555555556,
+        "recall": 0.8207547169811321,
+        "f1": 0.8130841121495328,
+        "support": 106
+      },
+      "CATEGORY": {
+        "precision": 0.6226415094339622,
+        "recall": 0.6470588235294118,
+        "f1": 0.6346153846153846,
+        "support": 153
+      },
+      "MODEL": {
+        "precision": 0.5185185185185185,
+        "recall": 0.1891891891891892,
+        "f1": 0.27722772277227725,
+        "support": 74
+      }
+    },
+    "token_accuracy": 0.5822784810126582
+  },
+  "gold_meta": {
+    "n": 200,
+    "tokenize_align": 181,
+    "used": 200,
+    "skipped": 0
+  },
+  "train_entity_counts": {
+    "CATEGORY": 2834,
+    "ATTR": 613,
+    "BRAND": 1956,
+    "MODEL": 523
+  },
+  "model_path": "D:\\Projects-26-06-2026\\mvideo-ner-search\\models\\ner_crf.pkl",
+  "note": "silver-val is weak↔weak (optimistic); gold is primary for MVP"
+}

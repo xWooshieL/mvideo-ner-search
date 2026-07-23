@@ -27,6 +27,25 @@ ARTIFACTS = ARTIFACTS_DIR
 FIGURES = FIGURES_DIR
 MODELS = ROOT / "models"
 
+# --- каноническая раскладка артефактов (legacy пути тоже поддерживаются) ---
+DICTS_DIR = ARTIFACTS_DIR / "dicts"
+SILVER_DIR = ARTIFACTS_DIR / "silver"
+SILVER_NER_BIO = SILVER_DIR / "ner_bio"
+SILVER_ATTR_TYPE = SILVER_DIR / "attr_type"
+SILVER_BRAND_CLF = SILVER_DIR / "brand_clf"
+
+# метрики/joblib типизатора и brand clf остаются рядом с «рантаймом»
+ATTR_TYPE_DIR = ARTIFACTS_DIR / "attr_type"
+BRAND_CLF_DIR = ARTIFACTS_DIR / "brand_clf"
+NER_DIR_LEGACY = ARTIFACTS_DIR / "ner"
+
+DICT_FILENAMES = (
+    "brands.txt",
+    "categories.txt",
+    "model_phrases.txt",
+    "protected_brands.txt",
+)
+
 QUERY_CLICKS_PATH = DATA_DIR / "query_clicks.parquet"
 SKU_DESC_PATH = DATA_DIR / "sku_desc.parquet"
 SKUS_PKL_PATH = DATA_DIR / "skus.pkl"
@@ -52,9 +71,140 @@ DPI = 200
 
 
 def ensure_dirs() -> None:
-    """Создаёт рабочие каталоги figures/ и artifacts/."""
-    for p in (FIGURES_DIR, ARTIFACTS_DIR, MODELS, ROOT / "docs" / "figures"):
+    """Создаёт figures/, artifacts/, models/ и каноническую раскладку dicts/silver."""
+    for p in (
+        FIGURES_DIR,
+        ARTIFACTS_DIR,
+        MODELS,
+        ROOT / "docs" / "figures",
+        DICTS_DIR,
+        SILVER_NER_BIO,
+        SILVER_ATTR_TYPE,
+        SILVER_BRAND_CLF,
+        ATTR_TYPE_DIR,
+        BRAND_CLF_DIR,
+        NER_DIR_LEGACY,
+    ):
         p.mkdir(parents=True, exist_ok=True)
+
+
+def resolve_dict(name: str) -> Path:
+    """Словарь: `artifacts/dicts/<name>` → fallback `artifacts/<name>`."""
+    new = DICTS_DIR / name
+    if new.exists():
+        return new
+    return ARTIFACTS_DIR / name
+
+
+def brands_path() -> Path:
+    return resolve_dict("brands.txt")
+
+
+def categories_path() -> Path:
+    return resolve_dict("categories.txt")
+
+
+def model_phrases_path() -> Path:
+    return resolve_dict("model_phrases.txt")
+
+
+def protected_brands_path() -> Path:
+    return resolve_dict("protected_brands.txt")
+
+
+def _silver_dirs(kind: str) -> tuple[Path, Path]:
+    """(canonical, legacy) для kind: ner_bio | attr_type | brand_clf."""
+    if kind == "ner_bio":
+        return SILVER_NER_BIO, NER_DIR_LEGACY
+    if kind == "attr_type":
+        return SILVER_ATTR_TYPE, ATTR_TYPE_DIR
+    if kind == "brand_clf":
+        return SILVER_BRAND_CLF, BRAND_CLF_DIR
+    raise ValueError(f"unknown silver kind: {kind}")
+
+
+def resolve_silver(kind: str, name: str) -> Path:
+    """Файл silver: canonical → legacy. Если нет нигде — путь canonical (для записи)."""
+    canon, legacy = _silver_dirs(kind)
+    p_new, p_old = canon / name, legacy / name
+    if p_new.exists():
+        return p_new
+    if p_old.exists():
+        return p_old
+    return p_new
+
+
+def save_silver_parquet(df: pd.DataFrame, kind: str, name: str, *, mirror: bool = True) -> Path:
+    """Пишет silver parquet в canonical; при mirror=True дублирует в legacy (ничего не ломаем)."""
+    ensure_dirs()
+    canon, legacy = _silver_dirs(kind)
+    primary = canon / name
+    df.to_parquet(primary, index=False)
+    if mirror:
+        secondary = legacy / name
+        if secondary.resolve() != primary.resolve():
+            secondary.parent.mkdir(parents=True, exist_ok=True)
+            df.to_parquet(secondary, index=False)
+    return primary
+
+
+def sync_artifact_layout(*, dry_run: bool = False) -> dict[str, list[str]]:
+    """Идемпотентно копирует legacy → canonical. Исходники не удаляет."""
+    ensure_dirs()
+    report: dict[str, list[str]] = {"dicts": [], "ner_bio": [], "attr_type": [], "brand_clf": []}
+
+    def _copy(src: Path, dst: Path, bucket: str) -> None:
+        if not src.exists() or not src.is_file():
+            return
+        if dst.exists() and dst.stat().st_size == src.stat().st_size:
+            return
+        if dry_run:
+            report[bucket].append(f"would_copy {src.name} -> {dst}")
+            return
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_bytes(src.read_bytes())
+        report[bucket].append(str(dst.relative_to(ROOT)))
+
+    for name in DICT_FILENAMES:
+        _copy(ARTIFACTS_DIR / name, DICTS_DIR / name, "dicts")
+
+    ner_names = [
+        "silver_bio_slice.parquet",
+        "silver_bio_preview.parquet",
+        "silver_overview.csv",
+        "eda_meta.json",
+        "eda_stats.json",
+    ]
+    for name in ner_names:
+        _copy(NER_DIR_LEGACY / name, SILVER_NER_BIO / name, "ner_bio")
+
+    attr_silver = [
+        "attr_type_silver.parquet",
+        "attr_type_silver_raw.parquet",
+        "attr_type_silver_prod.parquet",
+        "attr_type_all.parquet",
+        "attr_type_train.parquet",
+        "attr_type_val.parquet",
+        "attr_type_train_prod.parquet",
+        "attr_type_val_prod.parquet",
+        "attr_type_silver_meta.json",
+        "attr_type_silver_overview.csv",
+    ]
+    for name in attr_silver:
+        _copy(ATTR_TYPE_DIR / name, SILVER_ATTR_TYPE / name, "attr_type")
+
+    brand_silver = [
+        "silver_brand_all.parquet",
+        "silver_brand_train.parquet",
+        "silver_brand_val.parquet",
+        "silver_brand_stats.json",
+        "silver_brand_train_preview.csv",
+        "silver_clf_readme.md",
+    ]
+    for name in brand_silver:
+        _copy(BRAND_CLF_DIR / name, SILVER_BRAND_CLF / name, "brand_clf")
+
+    return report
 
 
 def parquet_num_rows(path: Path | str) -> int:
