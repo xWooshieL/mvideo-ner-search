@@ -31,6 +31,7 @@ from src.data_utils import (
 )
 from src.ner.labeling import WeakLabeler, bio_to_entities, tokenize
 from src.preprocessing.pipeline import basic_clean, _norm_key
+from src.preprocessing.spellfix import SpellFixer
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
@@ -168,6 +169,18 @@ def main() -> None:
     )
     queries = [q for q in queries.tolist() if len(q) >= 2][:MAX_QUERIES]
     log(f"unique queries for silver slice: {len(queries)}")
+
+    # SpellFix ДО WeakLabeler/CRF: train и serve видят один и тот же «чистый» текст
+    spell = SpellFixer.from_artifacts(ARTIFACTS_DIR)
+    n_spell_fixed = 0
+    fixed_queries: list[str] = []
+    for q in queries:
+        q2, changes = spell.fix_query(q)
+        if changes:
+            n_spell_fixed += 1
+        fixed_queries.append(q2)
+    queries = fixed_queries
+    log(f"spellfix touched {n_spell_fixed}/{len(queries)} queries")
 
     # --- build silver with MODEL ---
     rows_full = []
@@ -323,7 +336,8 @@ def main() -> None:
             "f1": round(f1, 4),
         },
         "models_path": str(models_path),
-        "note": "CRF features are handcrafted (not TF-IDF); silver is weak teacher",
+        "n_spell_fixed": n_spell_fixed,
+        "note": "CRF features are handcrafted (not TF-IDF); silver is weak teacher; SpellFixer before WeakLabeler",
     }
     (OUT / "eda_meta.json").write_text(
         json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"

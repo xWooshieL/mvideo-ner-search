@@ -38,6 +38,7 @@ class QueryEntityExtractor:
         fuzzy_threshold: int = 92,
         use_fuzzy: bool = True,
         use_attr_clf: bool = True,
+        spell_fixer=None,
     ):
         self.labeler = labeler
         self.ner_model = ner_model
@@ -49,6 +50,7 @@ class QueryEntityExtractor:
         self.fuzzy_threshold = fuzzy_threshold
         self.use_fuzzy = use_fuzzy
         self.use_attr_clf = use_attr_clf and attr_type_model is not None
+        self.spell_fixer = spell_fixer
         # Prefer longer brands; drop ultra-short noisy keys except whitelist
         short_ok = {"lg", "hp", "jbl", "bq", "tcl", "msi", "bbk", "aoc"}
         self._brand_list = sorted(
@@ -120,6 +122,14 @@ class QueryEntityExtractor:
                 if ln.strip()
             }
 
+        spell_fixer = None
+        try:
+            from src.preprocessing.spellfix import SpellFixer
+
+            spell_fixer = SpellFixer.from_artifacts(artifacts_dir)
+        except Exception:
+            spell_fixer = None
+
         return cls(
             labeler=labeler,
             ner_model=ner,
@@ -128,6 +138,7 @@ class QueryEntityExtractor:
             attr_type_model=attr_pipe,
             attr_type_policy=attr_policy,
             model_phrases=model_phrases,
+            spell_fixer=spell_fixer,
         )
 
     def extract(self, query: str) -> Dict[str, Any]:
@@ -143,6 +154,11 @@ class QueryEntityExtractor:
                 "latency_ms": 0.0,
                 "source": "empty",
             }
+
+        query_raw = query
+        spell_changes: List[Dict[str, Any]] = []
+        if self.spell_fixer is not None:
+            query, spell_changes = self.spell_fixer.fix_query(query)
 
         # Pass 1: dictionary weak labels (exact match — very fast)
         dict_tags = self.labeler.label_query(query)
@@ -208,7 +224,7 @@ class QueryEntityExtractor:
             )
 
         latency_ms = (time.perf_counter() - t0) * 1000.0
-        return {
+        out = {
             "query": query,
             "entities": entities,
             "brand": structured["brand"],
@@ -217,14 +233,19 @@ class QueryEntityExtractor:
             "attributes": attributes,
             "latency_ms": round(latency_ms, 3),
         }
+        if spell_changes:
+            out["query_raw"] = query_raw
+            out["spell_fixes"] = spell_changes
+        return out
 
     def extract_debug(self, query: str) -> Dict[str, Any]:
         """Same as extract, plus BIO pipelines for UI debugging."""
         t0 = time.perf_counter()
         query = (query or "").strip()
         base = self.extract(query)
-        dict_bio = self.labeler.label_query(query) if query else []
-        crf_bio = self.ner_model.predict_query(query) if (query and self.ner_model) else []
+        q = base.get("query") or query
+        dict_bio = self.labeler.label_query(q) if q else []
+        crf_bio = self.ner_model.predict_query(q) if (q and self.ner_model) else []
         base["debug"] = {
             "dict_bio": [{"token": t, "tag": tag} for t, tag in dict_bio],
             "crf_bio": [{"token": t, "tag": tag} for t, tag in crf_bio],
@@ -232,6 +253,7 @@ class QueryEntityExtractor:
             "has_brand_clf": self.brand_classifier is not None,
             "has_category_clf": self.category_classifier is not None,
             "has_attr_clf": self.use_attr_clf,
+            "has_spellfix": self.spell_fixer is not None,
             "n_brands_dict": len(self.labeler.brands),
             "n_categories_dict": len(self.labeler.categories),
             "n_models_dict": len(self.labeler.models),

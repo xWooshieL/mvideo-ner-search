@@ -16,6 +16,12 @@ from .pipeline import (
     save_phrase_list,
     split_glued_alnum,
 )
+from .spellfix import (
+    SpellFixer,
+    keyboard_adjacent,
+    similarity_score,
+    weighted_edit_distance,
+)
 
 __all__ = [
     "PreprocessResult",
@@ -24,4 +30,8 @@ __all__ = [
     "load_phrase_list",
     "save_phrase_list",
     "split_glued_alnum",
+    "SpellFixer",
+    "weighted_edit_distance",
+    "similarity_score",
+    "keyboard_adjacent",
 ]
