@@ -17,8 +17,10 @@ ApplicationWindow {
     color: "transparent"
     flags: Qt.Window | Qt.FramelessWindowHint
 
-    property bool frameMaximized: false
-    property rect normalGeometry: Qt.rect(x, y, width, height)
+    // frameMaximized живёт от РЕАЛЬНОГО visibility окна, а не от вручную посчитанной
+    // геометрии — раньше "разворот" сам считал screen.availableGeometry и ехал криво
+    // на некоторых DPI/мониторах. showMaximized()/showNormal() отдаём ОС — надёжно всегда.
+    readonly property bool frameMaximized: visibility === Window.Maximized
 
     Component.onCompleted: {
         const area = screen ? screen.availableGeometry : Qt.rect(0, 0, 1920, 1080)
@@ -27,16 +29,26 @@ ApplicationWindow {
     }
 
     function toggleMaximizeAnimated() {
-        if (frameMaximized) {
-            frameMaximized = false
-            x = normalGeometry.x; y = normalGeometry.y
-            width = normalGeometry.width; height = normalGeometry.height
-        } else {
-            normalGeometry = Qt.rect(x, y, width, height)
-            const area = screen.availableGeometry
-            frameMaximized = true
-            x = area.x; y = area.y
-            width = area.width; height = area.height
+        maximizeAnimation.restart()
+    }
+
+    SequentialAnimation {
+        id: maximizeAnimation
+        ParallelAnimation {
+            NumberAnimation { target: windowFrame; property: "opacity"; to: 0; duration: 130; easing.type: Easing.InCubic }
+            NumberAnimation { target: windowFrame; property: "scale"; to: 0.97; duration: 150; easing.type: Easing.InOutCubic }
+        }
+        ScriptAction {
+            script: {
+                if (window.visibility === Window.Maximized)
+                    window.showNormal()
+                else
+                    window.showMaximized()
+            }
+        }
+        ParallelAnimation {
+            NumberAnimation { target: windowFrame; property: "opacity"; to: 1; duration: 200; easing.type: Easing.OutCubic }
+            NumberAnimation { target: windowFrame; property: "scale"; to: 1; duration: 220; easing.type: Easing.OutCubic }
         }
     }
 

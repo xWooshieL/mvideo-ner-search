@@ -6,7 +6,7 @@
 
 **Извлечение структурированных фактов из поисковых запросов за миллисекунды**
 
-![Версия](https://img.shields.io/badge/версия-0.1.0-f20601?style=for-the-badge)
+![Версия](https://img.shields.io/badge/версия-0.1.2-f20601?style=for-the-badge)
 ![Платформа](https://img.shields.io/badge/Windows-10%2F11-0078d4?style=for-the-badge&logo=windows)
 ![Qt](https://img.shields.io/badge/Qt-6.8-41cd52?style=for-the-badge&logo=qt)
 ![C++](https://img.shields.io/badge/C%2B%2B-17-00599c?style=for-the-badge&logo=cplusplus)
@@ -260,7 +260,19 @@ open dist-macos/*.app
 
 **Git сам по себе установленные приложения не обновляет.** Нужна пересборка и раздача новых артефактов.
 
-**macOS (на Маке):**
+**macOS — обновить разметку БЕЗ потери labels (для участницы со старой версией):**
+```bash
+cd mvideo-ner-search
+git pull
+./scripts/build-macos.sh "$(brew --prefix qt)"          # или скачай .dmg/.app из Releases
+chmod +x scripts/update-macos-label.sh
+./scripts/update-macos-label.sh                         # ставит dist-macos/MvLabel.app
+# или: ./scripts/update-macos-label.sh ~/Downloads/MvLabel.dmg
+```
+Скрипт делает бэкап на Desktop, закрывает старое приложение, заменяет `/Applications/MvLabel.app`.
+**Разметка не внутри .app** — она в `~/Library/Application Support/MVideo/.../labels/`, поэтому замена бандла её не трогает. С v0.1.1 то же на Windows: labels в `%APPDATA%\MVideo\...`, при обновлении Setup.exe прогресс сохраняется (есть миграция со старой папки рядом с exe).
+
+**macOS (полная пересборка обоих приложений):**
 ```bash
 cd mvideo-ner-search
 git pull
@@ -278,11 +290,11 @@ cd cpp/mvlabel;  cmake --build build --config Release; cd ../..
 cd installer
 iscc setup_mvsearch.iss
 iscc setup_mvlabel.iss
-# готовые Setup.exe — в installer/Output (или куда пишет iscc)
+# готовые Setup.exe — в installer/output
 # выложить в GitHub Releases, чтобы команда скачала заново
 ```
 
-Коротко: `git push` → на машине сборки `git pull` → собрать → отдать новые Setup.exe / .dmg. Уже установленные копии сами не подтянутся.
+Коротко: `git push` → на машине сборки `git pull` → собрать → отдать новые Setup.exe / .dmg. Уже установленные копии сами не подтянутся. Для macOS-разметки используй `update-macos-label.sh`, чтобы не потерять labels.
 
 Python-пайплайн:
 

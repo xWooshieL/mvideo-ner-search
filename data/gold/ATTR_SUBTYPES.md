@@ -16,7 +16,7 @@
 
 | gold (app) | canon |
 |---|---|
-| `type`, `gas`, `floor`, `style`, `function` | `type` |
+| `type`, `gas`, `floor`, `style`, `function`, `feature` | `type` |
 | `purpose`, `food` | `purpose` |
 | `depth`, `width`, `heigh`, `length` | `size` |
 | `counts` | `quantity` |

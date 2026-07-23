@@ -1,4 +1,4 @@
-// хранилище разметки: JSONL-файлы рядом с exe, аннотатор из mvlabel.ini или имени папки
+// хранилище разметки: JSONL в AppData (вне install dir), аннотатор из ini / argv / env
 #include "labelstore.h"
 
 #include <QCoreApplication>
@@ -37,26 +37,33 @@ QString LabelStore::dataDir() const
 
 QString LabelStore::labelsDir() const
 {
-    // Windows/dev: labels рядом с exe. macOS: .app read-only после подписи/дистрибуции —
-    // пишем в стандартную папку данных пользователя, чтобы разметка не терялась.
-#ifdef Q_OS_MACOS
-    QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + u"/labels"_qs;
-#else
-    QString dir = QCoreApplication::applicationDirPath() + u"/labels"_qs;
-#endif
+    // Разметка ВСЕГДА вне папки приложения — чтобы обновление .exe / .app
+    // (Inno Setup / замена бандла) не затирало уже сделанную работу.
+    // macOS: ~/Library/Application Support/MVideo/...
+    // Windows: %APPDATA%\MVideo\М.Видео Разметка\labels
+    // + миграция со старого пути рядом с exe, если там уже были файлы.
+    QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                  + u"/labels"_qs;
     QDir().mkpath(dir);
+
+    const QString legacy = QCoreApplication::applicationDirPath() + u"/labels"_qs;
+    if (QDir(legacy).exists() && legacy != dir) {
+        const QStringList files = QDir(legacy).entryList(QDir::Files);
+        for (const QString &name : files) {
+            const QString src = legacy + u"/"_qs + name;
+            const QString dst = dir + u"/"_qs + name;
+            if (!QFile::exists(dst))
+                QFile::copy(src, dst);
+        }
+    }
     return dir;
 }
 
 QString LabelStore::iniPath() const
 {
-#ifdef Q_OS_MACOS
     const QString dir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir().mkpath(dir);
     return dir + u"/mvlabel.ini"_qs;
-#else
-    return QCoreApplication::applicationDirPath() + u"/mvlabel.ini"_qs;
-#endif
 }
 
 void LabelStore::load()

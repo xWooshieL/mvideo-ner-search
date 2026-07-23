@@ -276,6 +276,7 @@ GOLD_TO_CANON: Dict[str, str] = {
     "floor": "type",
     "style": "type",
     "function": "type",
+    "feature": "type",
     "purpose": "purpose",
     "food": "purpose",
     "depth": "size",
