@@ -110,12 +110,38 @@ void SearchEngine::loadData()
         return out;
     };
 
-    for (const QString &b : readLines(dir + u"/brands.txt"_qs))
-        m_brandCanonical.insert(normalize(b), b);
-    for (const QString &c : readLines(dir + u"/categories.txt"_qs))
-        m_categories.insert(normalize(c));
+    for (const QString &b : readLines(dir + u"/brands.txt"_qs)) {
+        const QString key = normalize(b);
+        m_brandCanonical.insert(key, b);
+        if (!key.contains(u' '))
+            m_spellVocab.insert(key);
+    }
+    for (const QString &c : readLines(dir + u"/categories.txt"_qs)) {
+        const QString key = normalize(c);
+        m_categories.insert(key);
+        if (!key.contains(u' '))
+            m_spellVocab.insert(key);
+    }
     for (const QString &m : readLines(dir + u"/model_phrases.txt"_qs))
         m_modelPhrases.insert(normalize(m));
+
+    // единицы + алиасы SpellFix (spell_aliases.txt: canon\talias1,alias2)
+    for (const QString &u : {u"гб"_qs, u"gb"_qs, u"тб"_qs, u"tb"_qs, u"мб"_qs, u"mb"_qs,
+                             u"мм"_qs, u"см"_qs, u"вт"_qs, u"кг"_qs, u"л"_qs, u"мл"_qs})
+        m_spellVocab.insert(u);
+    for (const QString &line : readLines(dir + u"/spell_aliases.txt"_qs)) {
+        if (line.startsWith(u'#'))
+            continue;
+        const QStringList parts = line.split(u'\t');
+        if (parts.size() < 2)
+            continue;
+        const QString canon = normalize(parts[0]);
+        for (const QString &aliasRaw : parts[1].split(u',')) {
+            const QString alias = normalize(aliasRaw.trimmed());
+            if (!alias.isEmpty() && alias != canon)
+                m_spellAliases.insert(alias, canon);
+        }
+    }
 
     // марковский типизатор: берём argmax по каждой таблице
     QFile mf(dir + u"/markov_typer.json"_qs);
@@ -180,6 +206,174 @@ QString SearchEngine::splitGlued(const QString &text)
     return out;
 }
 
+bool SearchEngine::hasMixedScript(const QString &token)
+{
+    bool cyr = false, lat = false;
+    for (const QChar &ch : token) {
+        if (ch.isLetter()) {
+            if (ch.script() == QChar::Script_Cyrillic)
+                cyr = true;
+            else if (ch.script() == QChar::Script_Latin)
+                lat = true;
+        }
+    }
+    return cyr && lat;
+}
+
+QString SearchEngine::normalizeHomoglyphs(const QString &token) const
+{
+    if (!hasMixedScript(token))
+        return token;
+
+    static const QHash<QChar, QChar> latToCyr = {
+        {u'a', u'а'}, {u'c', u'с'}, {u'e', u'е'}, {u'o', u'о'},
+        {u'p', u'р'}, {u'x', u'х'}, {u'y', u'у'},
+        {u'A', u'А'}, {u'C', u'С'}, {u'E', u'Е'}, {u'O', u'О'},
+        {u'P', u'Р'}, {u'X', u'Х'}, {u'Y', u'У'}, {u'B', u'В'},
+        {u'H', u'Н'}, {u'K', u'К'}, {u'M', u'М'}, {u'T', u'Т'},
+    };
+    QHash<QChar, QChar> cyrToLat;
+    for (auto it = latToCyr.begin(); it != latToCyr.end(); ++it)
+        cyrToLat.insert(it.value(), it.key());
+
+    int cyrOnly = 0, latOnly = 0;
+    for (const QChar &ch : token) {
+        if (!ch.isLetter())
+            continue;
+        const bool isHomo = latToCyr.contains(ch) || cyrToLat.contains(ch);
+        if (isHomo)
+            continue;
+        if (ch.script() == QChar::Script_Cyrillic)
+            ++cyrOnly;
+        else if (ch.script() == QChar::Script_Latin)
+            ++latOnly;
+    }
+    if (cyrOnly == 0 && latOnly == 0)
+        return token;
+
+    const bool toCyr = cyrOnly >= latOnly;
+    QString out;
+    out.reserve(token.size());
+    for (const QChar &ch : token) {
+        if (toCyr && latToCyr.contains(ch))
+            out.append(latToCyr.value(ch));
+        else if (!toCyr && cyrToLat.contains(ch))
+            out.append(cyrToLat.value(ch));
+        else
+            out.append(ch);
+    }
+    return out;
+}
+
+int SearchEngine::editDistance(const QString &a, const QString &b)
+{
+    const int n = a.size(), m = b.size();
+    if (qAbs(n - m) > 2)
+        return 99;
+    QVector<int> prev(m + 1), cur(m + 1);
+    for (int j = 0; j <= m; ++j)
+        prev[j] = j;
+    for (int i = 1; i <= n; ++i) {
+        cur[0] = i;
+        for (int j = 1; j <= m; ++j) {
+            const int cost = a[i - 1] == b[j - 1] ? 0 : 1;
+            cur[j] = qMin(qMin(cur[j - 1] + 1, prev[j] + 1), prev[j - 1] + cost);
+        }
+        prev.swap(cur);
+    }
+    return prev[m];
+}
+
+QString SearchEngine::bestFuzzyCanon(const QString &token) const
+{
+    const QString t = normalize(token);
+    if (t.size() < 4 || m_spellVocab.contains(t))
+        return QString();
+    QString best;
+    int bestDist = 99;
+    for (const QString &cand : m_spellVocab) {
+        if (qAbs(cand.size() - t.size()) > 2)
+            continue;
+        const int d = editDistance(t, cand);
+        if (d < bestDist && d <= qMax(1, t.size() / 3)) {
+            bestDist = d;
+            best = cand;
+            if (d == 0)
+                break;
+        }
+    }
+    return bestDist <= 1 || (bestDist == 2 && t.size() >= 6) ? best : QString();
+}
+
+QString SearchEngine::fixTokenSpell(const QString &token) const
+{
+    const QString t0 = normalize(token);
+    if (m_spellAliases.contains(t0))
+        return m_spellAliases.value(t0);
+
+    const QString homo = normalizeHomoglyphs(token);
+    const QString homoN = normalize(homo);
+    if (m_spellAliases.contains(homoN))
+        return m_spellAliases.value(homoN);
+
+    // 16гь / 16гю → 16 гб
+    static const QRegularExpression glued(QStringLiteral("^(\\d+)([а-яёa-z]{1,5})$"),
+                                          QRegularExpression::CaseInsensitiveOption
+                                              | QRegularExpression::UseUnicodePropertiesOption);
+    const auto gm = glued.match(homoN);
+    if (gm.hasMatch()) {
+        const QString num = gm.captured(1);
+        const QString unit = gm.captured(2);
+        static const QStringList units = {
+            u"гб"_qs, u"gb"_qs, u"тб"_qs, u"tb"_qs, u"мб"_qs, u"mb"_qs,
+            u"мм"_qs, u"см"_qs, u"вт"_qs, u"кг"_qs, u"л"_qs, u"мл"_qs
+        };
+        if (units.contains(unit))
+            return num + u' ' + unit;
+        QString bestUnit;
+        int bestD = 99;
+        for (const QString &u : units) {
+            const int d = editDistance(unit, u);
+            if (d < bestD) {
+                bestD = d;
+                bestUnit = u;
+            }
+        }
+        if (bestD <= 1 && !bestUnit.isEmpty())
+            return num + u' ' + bestUnit;
+    }
+
+    const QString fuzzy = bestFuzzyCanon(homoN.isEmpty() ? token : homo);
+    if (!fuzzy.isEmpty())
+        return fuzzy;
+    return homoN != t0 ? homo : token;
+}
+
+QString SearchEngine::spellFixQuery(const QString &query) const
+{
+    if (query.isEmpty())
+        return query;
+    static const QRegularExpression wordRe(QStringLiteral("(\\w+|\\W+)"),
+                                           QRegularExpression::UseUnicodePropertiesOption);
+    QString out;
+    auto it = wordRe.globalMatch(query);
+    while (it.hasNext()) {
+        const QString part = it.next().captured(1);
+        if (part.isEmpty())
+            continue;
+        if (!part[0].isLetterOrNumber()) {
+            out += part;
+            continue;
+        }
+        if (part[0].isDigit() && part.mid(1).isEmpty()) {
+            out += part;
+            continue;
+        }
+        out += fixTokenSpell(part);
+    }
+    return out;
+}
+
 QStringList SearchEngine::tokenize(const QString &text) const
 {
     static const QRegularExpression re(QStringLiteral("[^a-zа-я0-9ё.+]+"),
@@ -217,7 +411,11 @@ QVariantMap SearchEngine::extract(const QString &query)
     QVariantMap result;
     result[u"query"_qs] = query;
 
-    const QString prepared = splitGlued(normalize(query));
+    const QString fixed = spellFixQuery(query);
+    if (fixed != query)
+        result[u"query_fixed"_qs] = fixed;
+
+    const QString prepared = splitGlued(normalize(fixed));
     const QStringList tokens = tokenize(prepared);
 
     QString brand, category, model;

@@ -28,7 +28,7 @@ if (-not $signtool) {
 }
 
 $targets = @(
-    "$ROOT\installer\output\MVideo_SmartSearch_Setup_0.1.0.exe",
+    "$ROOT\installer\output\MVideo_SmartSearch_Setup_0.4.0.exe",
     "$ROOT\installer\output\MVideo_Labeling_Setup_0.1.4.exe"
 )
 

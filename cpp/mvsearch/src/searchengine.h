@@ -44,7 +44,7 @@ public:
     int categoryCount() const { return m_categories.size(); }
     int modelPhraseCount() const { return m_modelPhrases.size(); }
     int catalogCount() const { return m_catalog.size(); }
-    QString appVersion() const { return QStringLiteral("0.1.0"); }
+    QString appVersion() const { return QStringLiteral("0.4.0"); }
 
     // извлечение фактов из запроса; возвращает объект с entities/brand/category/attributes/latency
     Q_INVOKABLE QVariantMap extract(const QString &query);
@@ -74,11 +74,21 @@ private:
     static QString splitGlued(const QString &text);
     QString markovType(const QStringList &spanTokens) const;
 
+    // SpellFix v2: гомоглифы + алиасы транслита + fuzzy по словарю + опечатки единиц
+    QString spellFixQuery(const QString &query) const;
+    QString fixTokenSpell(const QString &token) const;
+    QString normalizeHomoglyphs(const QString &token) const;
+    QString bestFuzzyCanon(const QString &token) const;
+    static int editDistance(const QString &a, const QString &b);
+    static bool hasMixedScript(const QString &token);
+
     bool m_ready = false;
 
     // канонизация брендов: нижний регистр -> каноническое имя
     QHash<QString, QString> m_brandCanonical;
     QHash<QString, QString> m_brandAliases;
+    QHash<QString, QString> m_spellAliases; // alias -> canon (сони→sony)
+    QSet<QString> m_spellVocab;            // однословные бренды/категории/единицы
     QSet<QString> m_categories;
     QSet<QString> m_modelPhrases;   // фразы линеек из майнинга
     QSet<QString> m_colors;
