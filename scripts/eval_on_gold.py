@@ -7,8 +7,9 @@ Writes presentation-ready tables to artifacts/metrics/:
   - model_comparison.csv        candidate models per task (brand / attr / crf)
   - gold_eval_summary.json      machine-readable roll-up
 
-Gold = artifacts/gold/bio_liza.jsonl (single annotator, 200 queries). Metrics are
-indicative, not final. Brand classifier has no brand-level gold yet -> silver-val only.
+Gold = data/gold/bio_liza.jsonl (canonical; mirrored under artifacts/gold/).
+Single annotator; size grows over time. Metrics are indicative, not final.
+Brand classifier has no brand-level gold yet -> silver-val only.
 """
 from __future__ import annotations
 
@@ -42,7 +43,12 @@ from src.data_utils import brands_path, categories_path, model_phrases_path  # n
 from src.ner.metrics import _get_spans  # noqa: E402
 from src.ner.model_crf import CRFNerModel  # noqa: E402
 
-GOLD = ROOT / "artifacts" / "gold" / "bio_liza.jsonl"
+# Canonical source of truth; artifacts/gold is a mirror for packaging.
+GOLD_CANDIDATES = (
+    ROOT / "data" / "gold" / "bio_liza.jsonl",
+    ROOT / "artifacts" / "gold" / "bio_liza.jsonl",
+)
+GOLD = next((p for p in GOLD_CANDIDATES if p.exists()), GOLD_CANDIDATES[0])
 NER_LABELS = ["BRAND", "CATEGORY", "MODEL", "ATTR"]
 _WS = re.compile(r"\s+")
 
@@ -51,11 +57,15 @@ def norm(s: str) -> str:
     return _WS.sub(" ", str(s).strip().lower())
 
 
-def load_gold() -> list[dict]:
+def load_gold(path: Path | None = None) -> tuple[list[dict], dict]:
+    path = path or GOLD
     rows = []
-    for line in GOLD.read_text(encoding="utf-8").splitlines():
+    n_raw = 0
+    n_skip = 0
+    for line in path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
+        n_raw += 1
         r = json.loads(line)
         q = r["query"]
         tags = r["tags"]
@@ -65,9 +75,11 @@ def load_gold() -> list[dict]:
             if len(tk) == len(tags):
                 toks = tk
             else:
+                n_skip += 1
                 continue
         rows.append({"query": q, "tokens": toks, "tags": tags, "subtypes": r.get("subtypes") or {}})
-    return rows
+    meta = {"path": str(path.as_posix()), "n_raw": n_raw, "n_usable": len(rows), "n_skipped": n_skip}
+    return rows, meta
 
 
 def span_set(tokens: list[str], tags: list[str]) -> set[tuple[str, str]]:
@@ -233,10 +245,14 @@ def model_comparison() -> pd.DataFrame:
 def main() -> None:
     METRICS_DIR.mkdir(parents=True, exist_ok=True)
     assert GOLD.exists(), GOLD
-    gold = load_gold()
-    print(f"gold queries usable: {len(gold)}")
+    gold, gold_meta = load_gold()
+    print(f"gold path: {gold_meta['path']}")
+    print(
+        f"gold queries usable: {gold_meta['n_usable']} / raw {gold_meta['n_raw']} "
+        f"(skipped {gold_meta['n_skipped']})"
+    )
 
-    summary = {"gold_queries": len(gold)}
+    summary = {"gold_queries": len(gold), "gold_meta": gold_meta}
 
     ner_tbl, ner_sum = eval_ner(gold)
     ner_tbl.to_csv(METRICS_DIR / "gold_metrics_ner.csv", index=False)
@@ -253,6 +269,13 @@ def main() -> None:
     print(rc.to_string(index=False))
 
     mc = model_comparison()
+    crf_f1 = (ner_sum.get("crf") or {}).get("micro_f1")
+    if crf_f1 is not None and not mc.empty:
+        mask = mc["task"] == "ner_crf"
+        if mask.any():
+            mc.loc[mask, "note"] = (
+                f"silver-val microF1; gold microF1={round(float(crf_f1), 4)} (n={len(gold)})"
+            )
     mc.to_csv(METRICS_DIR / "model_comparison.csv", index=False)
     print(mc.to_string(index=False))
 

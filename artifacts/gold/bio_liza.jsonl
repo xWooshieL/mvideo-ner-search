@@ -198,3 +198,626 @@
 {"annotator":"Лиза","index":197,"query":"njcnth","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T19:21:15"}
 {"annotator":"Лиза","index":198,"query":"Смарт-часы","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T19:21:33"}
 {"annotator":"Лиза","index":199,"query":"кабель hdmi 2 1 5м","subtypes":{"2":"speed","3":"speed","4":"length"},"tags":["B-CATEGORY","B-MODEL","B-ATTR","I-ATTR","B-ATTR"],"ts":"2026-07-23T19:24:18"}
+{"annotator":"Лиза","index":200,"query":"Картридж Cactus CS-LX50F5U00, черный для принтера epson","subtypes":{"3":"color","5":"purpose","6":"purpose"},"tags":["B-CATEGORY","B-BRAND","B-MODEL","B-ATTR","O","B-ATTR","I-ATTR"],"ts":"2026-07-23T19:25:44"}
+{"annotator":"Лиза","index":201,"query":"Honor magicbook","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T19:25:56"}
+{"annotator":"Лиза","index":202,"query":"телевизоры samsung 60","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-23T19:26:15"}
+{"annotator":"Лиза","index":203,"query":"триммеры rowenta","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T19:26:22"}
+{"annotator":"Лиза","index":204,"query":"телевизоры samsung смарт 32","subtypes":{"2":"type","3":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR","B-ATTR"],"ts":"2026-07-23T19:26:51"}
+{"annotator":"Лиза","index":205,"query":"Haier HW80-BP14969BS","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T19:26:58"}
+{"annotator":"Лиза","index":206,"query":"ноутбуки","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T19:27:03"}
+{"annotator":"Лиза","index":207,"query":"apple watch se 2","subtypes":{},"tags":["B-BRAND","B-CATEGORY","B-MODEL","I-MODEL"],"ts":"2026-07-23T19:27:30"}
+{"annotator":"Лиза","index":208,"query":"узкая стиральная машина атлант","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-23T19:27:53"}
+{"annotator":"Лиза","index":209,"query":"GV561D11","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T19:27:59"}
+{"annotator":"Лиза","index":210,"query":"смартфоны samsung s23","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-23T19:28:09"}
+{"annotator":"Лиза","index":211,"query":"зарядное устройство для смартфона_","subtypes":{"3":"purpose"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T19:28:28"}
+{"annotator":"Лиза","index":212,"query":"автомобильный держатель","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T19:29:24"}
+{"annotator":"Лиза","index":213,"query":"варочная газовая поверхность 4 комфорки куперсберг","subtypes":{"0":"type","1":"type","3":"type","4":"type"},"tags":["B-ATTR","B-ATTR","B-CATEGORY","B-ATTR","I-ATTR","B-BRAND"],"ts":"2026-07-23T19:32:12"}
+{"annotator":"Лиза","index":214,"query":"раковина кухонная","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-23T19:32:53"}
+{"annotator":"Лиза","index":215,"query":"вытяжки кухонные встраиваемая ширина 60 см","subtypes":{"1":"type","2":"type","3":"size","4":"size","5":"size"},"tags":["B-CATEGORY","B-ATTR","I-ATTR","B-ATTR","I-ATTR","I-ATTR"],"ts":"2026-07-23T19:34:53"}
+{"annotator":"Лиза","index":216,"query":"столы","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T19:34:59"}
+{"annotator":"Лиза","index":217,"query":"logitech g305","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T19:35:40"}
+{"annotator":"Лиза","index":218,"query":"Айфон16про","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T19:35:48"}
+{"annotator":"Лиза","index":219,"query":"плита двухконфорочная","subtypes":{"1":"type"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T19:36:01"}
+{"annotator":"Лиза","index":220,"query":"Телевизоры 55 yandex станция бейсик","subtypes":{"1":"size"},"tags":["B-CATEGORY","B-ATTR","B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T19:36:26"}
+{"annotator":"Лиза","index":221,"query":"Мультиварка-скоррварка","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T19:36:31"}
+{"annotator":"Лиза","index":222,"query":"Электрические чайники polaris","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-23T19:36:56"}
+{"annotator":"Лиза","index":223,"query":"стиральная машина lg 7","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-23T19:37:23"}
+{"annotator":"Лиза","index":224,"query":"Колонка дуо max","subtypes":{},"tags":["B-CATEGORY","B-MODEL","I-MODEL"],"ts":"2026-07-23T19:40:26"}
+{"annotator":"Лиза","index":225,"query":"Инверторный кондиционер сплит система hisense","subtypes":{"0":"type","2":"type","3":"type"},"tags":["B-ATTR","B-CATEGORY","B-ATTR","I-ATTR","B-BRAND"],"ts":"2026-07-23T19:43:04"}
+{"annotator":"Лиза","index":226,"query":"Зарядка для ноутбука hp","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","B-BRAND"],"ts":"2026-07-23T19:44:01"}
+{"annotator":"Лиза","index":227,"query":"dreame h15","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T19:44:51"}
+{"annotator":"Лиза","index":228,"query":"iphone 17 pro sim","subtypes":{"3":"type"},"tags":["B-CATEGORY","B-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-23T19:45:24"}
+{"annotator":"Лиза","index":229,"query":"триммеры","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T19:45:45"}
+{"annotator":"Лиза","index":230,"query":"вытяжки кухонные на 50 см пристенные","subtypes":{"1":"type","3":"size","4":"size","5":"type"},"tags":["B-CATEGORY","B-ATTR","O","B-ATTR","I-ATTR","B-ATTR"],"ts":"2026-07-23T19:47:02"}
+{"annotator":"Лиза","index":231,"query":"портативные консоли","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T19:47:20"}
+{"annotator":"Лиза","index":232,"query":"гель для стирки wonder lab","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","B-BRAND","I-BRAND"],"ts":"2026-07-23T19:49:53"}
+{"annotator":"Лиза","index":233,"query":"электрические щетки oral b","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY","B-BRAND","I-BRAND"],"ts":"2026-07-23T19:50:28"}
+{"annotator":"Лиза","index":234,"query":"Роутер с sim","subtypes":{"2":"type"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T19:51:09"}
+{"annotator":"Лиза","index":235,"query":"Автомагнитола 1din","subtypes":{"1":"size"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T19:52:00"}
+{"annotator":"Лиза","index":236,"query":"Зарядка на ноутбук asus","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","B-BRAND"],"ts":"2026-07-23T19:53:40"}
+{"annotator":"Лиза","index":237,"query":"Router","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T19:56:33"}
+{"annotator":"Лиза","index":238,"query":"Ноутбук digma","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T19:56:43"}
+{"annotator":"Лиза","index":239,"query":"встраиваемые посудомоечные машины 40см","subtypes":{"0":"type","3":"size"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-23T19:57:26"}
+{"annotator":"Лиза","index":240,"query":"Реалми с71","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T19:57:35"}
+{"annotator":"Лиза","index":241,"query":"стиральная машина лдж","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-23T19:57:58"}
+{"annotator":"Лиза","index":242,"query":"автоматическая кофемашина","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T19:58:11"}
+{"annotator":"Лиза","index":243,"query":"Кухонный робот","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T19:58:25"}
+{"annotator":"Лиза","index":244,"query":"напольные мобильные кондиционеры ballu","subtypes":{"0":"type","1":"type"},"tags":["B-ATTR","I-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-23T19:59:04"}
+{"annotator":"Лиза","index":245,"query":"Haier 85\" miniled","subtypes":{"1":"size"},"tags":["B-BRAND","B-ATTR","B-MODEL"],"ts":"2026-07-23T20:00:59"}
+{"annotator":"Лиза","index":246,"query":"блендер nutribullet","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:01:53"}
+{"annotator":"Лиза","index":247,"query":"3180","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T20:01:57"}
+{"annotator":"Лиза","index":248,"query":"Чехол для телефона","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T20:02:10"}
+{"annotator":"Лиза","index":249,"query":"LAZURIT мебель","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-23T20:02:36"}
+{"annotator":"Лиза","index":250,"query":"Беспроводная зарядка для телефона samsung","subtypes":{"3":"purpose"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR","B-BRAND"],"ts":"2026-07-23T20:03:27"}
+{"annotator":"Лиза","index":251,"query":"СВЧ","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T20:03:39"}
+{"annotator":"Лиза","index":252,"query":"яндекс с алисой","subtypes":{},"tags":["B-BRAND","O","B-MODEL"],"ts":"2026-07-23T20:03:52"}
+{"annotator":"Лиза","index":253,"query":"Холодильник горенье","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:04:19"}
+{"annotator":"Лиза","index":254,"query":"Сушильная машина Hisense","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:04:29"}
+{"annotator":"Лиза","index":255,"query":"Раковина над стиральной машиной 60","subtypes":{"2":"type","3":"type","4":"volume"},"tags":["B-CATEGORY","O","B-ATTR","I-ATTR","B-ATTR"],"ts":"2026-07-23T20:05:40"}
+{"annotator":"Лиза","index":256,"query":"Пэрогриль","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T20:05:50"}
+{"annotator":"Лиза","index":257,"query":"Gorenje nrk6202","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T20:05:58"}
+{"annotator":"Лиза","index":258,"query":"30070992","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T20:06:01"}
+{"annotator":"Лиза","index":259,"query":"погружные блендеры металлический","subtypes":{"0":"type","2":"type"},"tags":["B-ATTR","B-CATEGORY","B-ATTR"],"ts":"2026-07-23T20:06:37"}
+{"annotator":"Лиза","index":260,"query":"аэрогриль demiand с двумя тэнами 6 л","subtypes":{"3":"type","4":"type","5":"volume","6":"volume"},"tags":["B-CATEGORY","B-BRAND","O","B-ATTR","I-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-23T20:07:22"}
+{"annotator":"Лиза","index":261,"query":"Аэрогриль стекло","subtypes":{"1":"type"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T20:07:51"}
+{"annotator":"Лиза","index":262,"query":"Заварник","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T20:07:58"}
+{"annotator":"Лиза","index":263,"query":"Блинница","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T20:08:00"}
+{"annotator":"Лиза","index":264,"query":"тостеры и ростеры с автоматическим поднятием тостов","subtypes":{"4":"type","5":"type","6":"type"},"tags":["B-CATEGORY","O","B-CATEGORY","O","B-ATTR","I-ATTR","I-ATTR"],"ts":"2026-07-23T20:08:16"}
+{"annotator":"Лиза","index":265,"query":"электромельничка","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T20:08:20"}
+{"annotator":"Лиза","index":266,"query":"Huawei kids","subtypes":{},"tags":["B-MODEL","I-MODEL"],"ts":"2026-07-23T20:08:54"}
+{"annotator":"Лиза","index":267,"query":"Миксер moulinex","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:08:59"}
+{"annotator":"Лиза","index":268,"query":"электрогенератор газовый","subtypes":{"1":"type"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T20:09:15"}
+{"annotator":"Лиза","index":269,"query":"холодильник с конвекцией черный","subtypes":{"2":"type","3":"memory_storage"},"tags":["B-CATEGORY","O","B-ATTR","B-ATTR"],"ts":"2026-07-23T20:10:25"}
+{"annotator":"Лиза","index":270,"query":"Игровой монитор с блютузом","subtypes":{"0":"type","3":"type"},"tags":["B-ATTR","B-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T20:11:23"}
+{"annotator":"Лиза","index":271,"query":"samsung galaxy s","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T20:11:28"}
+{"annotator":"Лиза","index":272,"query":"Beko PSKS","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T20:11:36"}
+{"annotator":"Лиза","index":273,"query":"диван книжка","subtypes":{"1":"type"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T20:11:44"}
+{"annotator":"Лиза","index":274,"query":"вентилятор xiaomi","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:11:51"}
+{"annotator":"Лиза","index":275,"query":"Aula f75","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T20:13:09"}
+{"annotator":"Лиза","index":276,"query":"Насос для велосипеда","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T20:13:31"}
+{"annotator":"Лиза","index":277,"query":"сенсорный ноутбук","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T20:13:42"}
+{"annotator":"Лиза","index":278,"query":"чайник с алисой","subtypes":{"2":"type"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T20:14:40"}
+{"annotator":"Лиза","index":279,"query":"Смарт-часы Apple Watch SE 3 44мм M/L","subtypes":{"5":"size","6":"size"},"tags":["B-CATEGORY","B-BRAND","B-CATEGORY","B-MODEL","I-MODEL","B-ATTR","I-ATTR"],"ts":"2026-07-23T20:15:22"}
+{"annotator":"Лиза","index":280,"query":"400488563","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T20:15:27"}
+{"annotator":"Лиза","index":281,"query":"Lenovo LOQ 15","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T20:15:35"}
+{"annotator":"Лиза","index":282,"query":"Xbox series","subtypes":{},"tags":["B-MODEL","I-MODEL"],"ts":"2026-07-23T20:15:58"}
+{"annotator":"Лиза","index":283,"query":"инсталляция grohe","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:16:23"}
+{"annotator":"Лиза","index":284,"query":"стиралка lg","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:16:28"}
+{"annotator":"Лиза","index":285,"query":"Midea Холодильник Side By Side Midea MDRF692MIE46","subtypes":{"2":"type","3":"type","4":"type"},"tags":["B-BRAND","B-CATEGORY","B-ATTR","I-ATTR","I-ATTR","B-BRAND","B-MODEL"],"ts":"2026-07-23T20:17:15"}
+{"annotator":"Лиза","index":286,"query":"ночник космонавт","subtypes":{"1":"type"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T20:17:49"}
+{"annotator":"Лиза","index":287,"query":"Встраиваемый морозильник","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T20:17:59"}
+{"annotator":"Лиза","index":288,"query":"Отпариватель steam one","subtypes":{},"tags":["B-CATEGORY","B-BRAND","I-BRAND"],"ts":"2026-07-23T20:18:25"}
+{"annotator":"Лиза","index":289,"query":"принтер лазерный мфу","subtypes":{"1":"type","2":"type"},"tags":["B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-23T20:21:05"}
+{"annotator":"Лиза","index":290,"query":"Айрподсы","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T20:21:11"}
+{"annotator":"Лиза","index":291,"query":"Фен Дайсон","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:21:17"}
+{"annotator":"Лиза","index":292,"query":"hisense","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-23T20:21:57"}
+{"annotator":"Лиза","index":293,"query":"Samsung the frame","subtypes":{},"tags":["B-BRAND","O","B-CATEGORY"],"ts":"2026-07-23T20:22:08"}
+{"annotator":"Лиза","index":294,"query":"умная розетка яндекс","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:22:33"}
+{"annotator":"Лиза","index":295,"query":"системный блок rtx 5060 ti 16gb, 32gb","subtypes":{"0":"type","5":"memory_storage","6":"memory_storage"},"tags":["B-ATTR","B-CATEGORY","B-MODEL","I-MODEL","I-MODEL","B-ATTR","B-ATTR"],"ts":"2026-07-23T20:23:23"}
+{"annotator":"Лиза","index":296,"query":"Утюг с парогенератором tefal","subtypes":{"2":"type"},"tags":["B-CATEGORY","O","B-ATTR","B-BRAND"],"ts":"2026-07-23T20:23:44"}
+{"annotator":"Лиза","index":297,"query":"Чехол айфон 17 про мах","subtypes":{},"tags":["B-CATEGORY","B-CATEGORY","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T20:24:00"}
+{"annotator":"Лиза","index":298,"query":"Планшет Хонор","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:24:06"}
+{"annotator":"Лиза","index":299,"query":"очки","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T20:24:10"}
+{"annotator":"Лиза","index":300,"query":"Сушильная машина smeg","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:24:19"}
+{"annotator":"Лиза","index":301,"query":"Стиральная машина горенье","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-23T20:24:26"}
+{"annotator":"Лиза","index":302,"query":"Поко х7 про","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T21:11:29"}
+{"annotator":"Лиза","index":303,"query":"кондиционер сплит система haier","subtypes":{"1":"type","2":"type"},"tags":["B-CATEGORY","B-ATTR","I-ATTR","B-BRAND"],"ts":"2026-07-23T21:13:55"}
+{"annotator":"Лиза","index":304,"query":"робот пылесос теффаль","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-23T21:14:02"}
+{"annotator":"Лиза","index":305,"query":"накопительные водонагреватели 30л плоские вертикальные","subtypes":{"0":"type","2":"volume","3":"memory_storage","4":"memory_storage"},"tags":["B-ATTR","B-CATEGORY","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-23T21:14:47"}
+{"annotator":"Лиза","index":306,"query":"Электрический духовой шкаф HAIER","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-23T21:15:03"}
+{"annotator":"Лиза","index":307,"query":"Наушники apple","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T21:15:10"}
+{"annotator":"Лиза","index":308,"query":"Xiaomi 14T Pro","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T21:15:49"}
+{"annotator":"Лиза","index":309,"query":"смартфоны samsung s26 ultra 16/1tb","subtypes":{"4":"memory_storage"},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-23T21:16:09"}
+{"annotator":"Лиза","index":310,"query":"Huter","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-23T21:16:25"}
+{"annotator":"Лиза","index":311,"query":"Кухонный комбаин","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-23T21:16:32"}
+{"annotator":"Лиза","index":312,"query":"Кофемашина рожковая","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T21:23:05"}
+{"annotator":"Лиза","index":313,"query":"встраиваемая газовая панель независимая gefest пвг 2232-01 р5","subtypes":{"0":"feature","1":"feature","3":"feature"},"tags":["B-ATTR","I-ATTR","B-CATEGORY","B-ATTR","B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T21:24:11"}
+{"annotator":"Лиза","index":314,"query":"наушники игровые с микрофоном","subtypes":{"1":"feature","3":"feature"},"tags":["B-CATEGORY","B-ATTR","O","B-ATTR"],"ts":"2026-07-23T21:28:36"}
+{"annotator":"Лиза","index":315,"query":"Huawei MateBook D 14","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T21:29:03"}
+{"annotator":"Лиза","index":316,"query":"Адаптер зарядка на iphone","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","O","B-CATEGORY"],"ts":"2026-07-23T21:30:11"}
+{"annotator":"Лиза","index":317,"query":"для бассейна","subtypes":{"1":"purpose"},"tags":["O","B-ATTR"],"ts":"2026-07-23T21:32:56"}
+{"annotator":"Лиза","index":318,"query":"Телевизоры hyundai","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T21:33:01"}
+{"annotator":"Лиза","index":319,"query":"Вытяжка встраиваемая на 45","subtypes":{"1":"feature","3":"size"},"tags":["B-CATEGORY","B-ATTR","O","B-ATTR"],"ts":"2026-07-23T21:35:36"}
+{"annotator":"Лиза","index":320,"query":"Рация 2 шт","subtypes":{"1":"count","2":"count"},"tags":["B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-23T21:36:19"}
+{"annotator":"Лиза","index":321,"query":"Матрас 120х200","subtypes":{"1":"size"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T21:41:29"}
+{"annotator":"Лиза","index":322,"query":"биогумус","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T21:42:13"}
+{"annotator":"Лиза","index":323,"query":"Армед","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-23T21:42:43"}
+{"annotator":"Лиза","index":324,"query":"Ванна акриловая краска,экран 150*75","subtypes":{"1":"type","2":"memory_storage","3":"memory_storage"},"tags":["B-CATEGORY","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-23T21:48:11"}
+{"annotator":"Лиза","index":325,"query":"Чехол iPhone 16 pro","subtypes":{},"tags":["O","O","O","O"],"ts":"2026-07-23T21:48:11"}
+{"annotator":"Лиза","index":326,"query":"Интерскол ушм 125 1300","subtypes":{},"tags":["B-CATEGORY","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T21:51:03"}
+{"annotator":"Лиза","index":327,"query":"Apple macbook pro ноутбук","subtypes":{},"tags":["B-BRAND","B-CATEGORY","B-MODEL","B-CATEGORY"],"ts":"2026-07-23T21:51:27"}
+{"annotator":"Лиза","index":328,"query":"4268305","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T21:51:31"}
+{"annotator":"Лиза","index":329,"query":"t-rex","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-23T21:51:59"}
+{"annotator":"Лиза","index":330,"query":"стиральная машинка с сушкой и глажкой","subtypes":{"3":"type"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR","O","B-BRAND"],"ts":"2026-07-23T21:52:20"}
+{"annotator":"Лиза","index":331,"query":"Переходник","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T21:53:11"}
+{"annotator":"Лиза","index":332,"query":"400356184","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T21:53:14"}
+{"annotator":"Лиза","index":333,"query":"FreeClip 2","subtypes":{},"tags":["B-MODEL","I-MODEL"],"ts":"2026-07-23T21:53:19"}
+{"annotator":"Лиза","index":334,"query":"смарт часы хонор","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-23T21:57:00"}
+{"annotator":"Лиза","index":335,"query":"часы с симкой детские с прослушкой","subtypes":{"2":"type","3":"type","5":"memory_storage"},"tags":["B-CATEGORY","O","B-ATTR","I-ATTR","O","I-ATTR"],"ts":"2026-07-23T21:57:35"}
+{"annotator":"Лиза","index":336,"query":"Лазерное МФУ Pantum M6507","subtypes":{},"tags":["O","O","O","O"],"ts":"2026-07-23T21:57:35"}
+{"annotator":"Лиза","index":337,"query":"5050","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T21:57:39"}
+{"annotator":"Лиза","index":338,"query":"ASUS Zenbook 14","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T21:58:21"}
+{"annotator":"Лиза","index":339,"query":"Samsung Galaxy A15","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T21:58:26"}
+{"annotator":"Лиза","index":340,"query":"indesit iwud 4105","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T21:58:50"}
+{"annotator":"Лиза","index":341,"query":"тв 32","subtypes":{"1":"size"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T21:59:07"}
+{"annotator":"Лиза","index":342,"query":"колонка алиса лайт 2","subtypes":{},"tags":["B-CATEGORY","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T22:00:39"}
+{"annotator":"Лиза","index":343,"query":"Автомобильный пылесос","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T22:01:11"}
+{"annotator":"Лиза","index":344,"query":"Плита","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T22:01:14"}
+{"annotator":"Лиза","index":345,"query":"amazfit active 3 premium","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T22:01:45"}
+{"annotator":"Лиза","index":346,"query":"Xiaomi Watch S4","subtypes":{},"tags":["B-BRAND","B-CATEGORY","B-MODEL"],"ts":"2026-07-23T22:02:02"}
+{"annotator":"Лиза","index":347,"query":"samsung galaxy a26 5G 6/128","subtypes":{"4":"memory_storage"},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-23T22:03:04"}
+{"annotator":"Лиза","index":348,"query":"50% бонусами","subtypes":{"0":"sale","1":"sale"},"tags":["B-ATTR","I-ATTR"],"ts":"2026-07-23T22:04:04"}
+{"annotator":"Лиза","index":349,"query":"пылесос напольный с мешком samsung","subtypes":{"1":"type","3":"memory_storage","4":"memory_storage"},"tags":["B-CATEGORY","B-ATTR","O","I-ATTR","I-ATTR"],"ts":"2026-07-23T22:04:52"}
+{"annotator":"Лиза","index":350,"query":"мойка для авто","subtypes":{},"tags":["O","O","O"],"ts":"2026-07-23T22:04:52"}
+{"annotator":"Лиза","index":351,"query":"Газовая плита с газовой духовкой 50 см","subtypes":{"0":"memory_storage","3":"memory_storage","4":"memory_storage","5":"size","6":"size"},"tags":["B-ATTR","B-CATEGORY","O","B-ATTR","I-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-23T22:06:32"}
+{"annotator":"Лиза","index":352,"query":"Газовые плита","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T22:06:41"}
+{"annotator":"Лиза","index":353,"query":"кулер для телефона","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T22:07:01"}
+{"annotator":"Лиза","index":354,"query":"Принтер цветной струйный epson","subtypes":{"1":"type","2":"type"},"tags":["B-CATEGORY","B-ATTR","I-ATTR","B-BRAND"],"ts":"2026-07-23T22:09:30"}
+{"annotator":"Лиза","index":355,"query":"апл ватч","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-23T22:09:39"}
+{"annotator":"Лиза","index":356,"query":"15.6\" Ноутбук Acer Aspire 7 A715-59G-55GC","subtypes":{"0":"size"},"tags":["B-ATTR","B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T22:10:57"}
+{"annotator":"Лиза","index":357,"query":"телевизоры tcl 55","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-23T22:11:18"}
+{"annotator":"Лиза","index":358,"query":"автомобильный видеорегистратор","subtypes":{"0":"type"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T22:11:34"}
+{"annotator":"Лиза","index":359,"query":"антивибрационные подставки для стиральной машинки","subtypes":{"0":"type","3":"memory_storage","4":"memory_storage"},"tags":["B-ATTR","B-CATEGORY","O","B-ATTR","I-ATTR"],"ts":"2026-07-23T22:12:36"}
+{"annotator":"Лиза","index":360,"query":"garmin forerunner 570","subtypes":{},"tags":["O","O","O"],"ts":"2026-07-23T22:12:36"}
+{"annotator":"Лиза","index":361,"query":"Mac studio","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-23T22:13:02"}
+{"annotator":"Лиза","index":362,"query":"мфу лазерный","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T22:13:40"}
+{"annotator":"Лиза","index":363,"query":"Huawei nova 15","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T22:13:59"}
+{"annotator":"Лиза","index":364,"query":"hotpoint ariston RST702 машина","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","B-CATEGORY"],"ts":"2026-07-23T22:15:01"}
+{"annotator":"Лиза","index":365,"query":"брашинг","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T22:15:15"}
+{"annotator":"Лиза","index":366,"query":"UFC","subtypes":{},"tags":["B-GENRE"],"ts":"2026-07-23T22:18:34"}
+{"annotator":"Лиза","index":367,"query":"монитор для компьютера 31","subtypes":{"2":"purpose","3":"size"},"tags":["B-CATEGORY","O","B-ATTR","B-ATTR"],"ts":"2026-07-23T22:27:36"}
+{"annotator":"Лиза","index":368,"query":"игровой системный блок","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY"],"ts":"2026-07-23T22:28:02"}
+{"annotator":"Лиза","index":369,"query":"Стиральная машина candy smart pro inverter","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T22:28:40"}
+{"annotator":"Лиза","index":370,"query":"Телефоны кнопочные","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T22:28:58"}
+{"annotator":"Лиза","index":371,"query":"лопатки кухонные","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T22:29:09"}
+{"annotator":"Лиза","index":372,"query":"Soundcore liberty 5","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T22:29:56"}
+{"annotator":"Лиза","index":373,"query":"s27","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T22:55:51"}
+{"annotator":"Лиза","index":374,"query":"велосипеды","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T22:55:55"}
+{"annotator":"Лиза","index":375,"query":"Тв стик","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-23T22:56:26"}
+{"annotator":"Лиза","index":376,"query":"Культиватор электрический","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T22:56:47"}
+{"annotator":"Лиза","index":377,"query":"its 4200 g","subtypes":{},"tags":["B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T22:57:10"}
+{"annotator":"Лиза","index":378,"query":"ирригатор waterpik","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T22:58:36"}
+{"annotator":"Лиза","index":379,"query":"redmi watch 6","subtypes":{},"tags":["B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:00:13"}
+{"annotator":"Лиза","index":380,"query":"Dreame R10s Pro","subtypes":{},"tags":["B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:00:51"}
+{"annotator":"Лиза","index":381,"query":"Встраиваемые холодильники grundig","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:01:41"}
+{"annotator":"Лиза","index":382,"query":"Двух камерный холодильник","subtypes":{"0":"feature","1":"feature"},"tags":["B-ATTR","I-ATTR","B-CATEGORY"],"ts":"2026-07-23T23:01:53"}
+{"annotator":"Лиза","index":383,"query":"Смартфон 8 256","subtypes":{"1":"memory_storage","2":"memory_storage"},"tags":["B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-23T23:03:15"}
+{"annotator":"Лиза","index":384,"query":"ethernet кабель rj 45","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:05:01"}
+{"annotator":"Лиза","index":385,"query":"Nokia 105","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:06:06"}
+{"annotator":"Лиза","index":386,"query":"400233997","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T23:06:10"}
+{"annotator":"Лиза","index":387,"query":"часы детские е","subtypes":{"1":"feature","2":"feature"},"tags":["B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-23T23:06:27"}
+{"annotator":"Лиза","index":388,"query":"Tcl 55p7k","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:07:08"}
+{"annotator":"Лиза","index":389,"query":"Макбук эир","subtypes":{},"tags":["B-CATEGORY","B-MODEL"],"ts":"2026-07-23T23:07:17"}
+{"annotator":"Лиза","index":390,"query":"Бензопила бензиновая","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T23:07:33"}
+{"annotator":"Лиза","index":391,"query":"Телевизор tcl 43","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-23T23:08:36"}
+{"annotator":"Лиза","index":392,"query":"хуавей смартфон","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-23T23:08:44"}
+{"annotator":"Лиза","index":393,"query":"VC Redmond VH1311","subtypes":{},"tags":["O","B-BRAND","B-MODEL"],"ts":"2026-07-23T23:09:39"}
+{"annotator":"Лиза","index":394,"query":"Redmi 15 c","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:09:49"}
+{"annotator":"Лиза","index":395,"query":"17 pro max 512","subtypes":{"3":"memory_storage"},"tags":["B-MODEL","I-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-23T23:10:01"}
+{"annotator":"Лиза","index":396,"query":"пылесосы вертикальные dreame z20 aqua cycle","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR","B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:10:24"}
+{"annotator":"Лиза","index":397,"query":"Samsung a15","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:10:29"}
+{"annotator":"Лиза","index":398,"query":"Logitech G G435","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:10:56"}
+{"annotator":"Лиза","index":399,"query":"холодильник канди","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:12:35"}
+{"annotator":"Лиза","index":400,"query":"стиральная машинка автомат","subtypes":{"2":"feature"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-23T23:13:00"}
+{"annotator":"Лиза","index":401,"query":"кухонная машина redmond","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:13:14"}
+{"annotator":"Лиза","index":402,"query":"фен redmond","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:13:18"}
+{"annotator":"Лиза","index":403,"query":"Морозильная камера","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-23T23:13:24"}
+{"annotator":"Лиза","index":404,"query":"Микрофон fifine","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:13:35"}
+{"annotator":"Лиза","index":405,"query":"Айфон17про макс 256","subtypes":{"2":"memory_storage"},"tags":["B-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-23T23:13:49"}
+{"annotator":"Лиза","index":406,"query":"Beko b1rcnk332w","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:13:54"}
+{"annotator":"Лиза","index":407,"query":"эпилятор rowenta","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:14:03"}
+{"annotator":"Лиза","index":408,"query":"Huawei freeclip 2","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:14:12"}
+{"annotator":"Лиза","index":409,"query":"смартфон xiaomi 17","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-23T23:14:20"}
+{"annotator":"Лиза","index":410,"query":"Встраиваемая электрическая панель Gorenje","subtypes":{"0":"feature","1":"feature"},"tags":["B-ATTR","I-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:14:36"}
+{"annotator":"Лиза","index":411,"query":"Xiaomi пад 7","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:14:47"}
+{"annotator":"Лиза","index":412,"query":"air m2","subtypes":{},"tags":["B-MODEL","I-MODEL"],"ts":"2026-07-23T23:14:51"}
+{"annotator":"Лиза","index":413,"query":"Комплект инсталляции с унитазом","subtypes":{"3":"feature"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T23:15:05"}
+{"annotator":"Лиза","index":414,"query":"Робот пылесос dreame f10","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-23T23:15:26"}
+{"annotator":"Лиза","index":415,"query":"пылесос tefal","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:15:30"}
+{"annotator":"Лиза","index":416,"query":"Ноутбук с windows","subtypes":{"2":"feature"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T23:15:43"}
+{"annotator":"Лиза","index":417,"query":"смартфон honor magic8 pro","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:15:51"}
+{"annotator":"Лиза","index":418,"query":"Овощечистка","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T23:15:54"}
+{"annotator":"Лиза","index":419,"query":"Realme 15T","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:16:17"}
+{"annotator":"Лиза","index":420,"query":"цветной струйный мфу","subtypes":{"0":"feature","1":"feature"},"tags":["B-ATTR","I-ATTR","B-CATEGORY"],"ts":"2026-07-23T23:16:29"}
+{"annotator":"Лиза","index":421,"query":"iphone 16 pro 256 восстановленный","subtypes":{"3":"memory_storage","4":"feature"},"tags":["B-CATEGORY","B-MODEL","I-MODEL","B-ATTR","B-ATTR"],"ts":"2026-07-23T23:16:50"}
+{"annotator":"Лиза","index":422,"query":"Стиральная машина lg 7 кг","subtypes":{"3":"volume","4":"volume"},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-ATTR","I-ATTR"],"ts":"2026-07-23T23:17:34"}
+{"annotator":"Лиза","index":423,"query":"телевизор tcl 50","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-23T23:17:45"}
+{"annotator":"Лиза","index":424,"query":"Apple watch se 3 44mm","subtypes":{"4":"size"},"tags":["B-BRAND","B-CATEGORY","B-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-23T23:18:02"}
+{"annotator":"Лиза","index":425,"query":"Resident evil requiem ps5","subtypes":{},"tags":["B-GENRE","I-GENRE","I-GENRE","B-MODEL"],"ts":"2026-07-23T23:18:39"}
+{"annotator":"Лиза","index":426,"query":"Бачок водонагревательный накопительный 100 литров","subtypes":{"1":"feature","2":"feature","3":"volume","4":"volume"},"tags":["B-CATEGORY","B-ATTR","I-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-23T23:19:00"}
+{"annotator":"Лиза","index":427,"query":"nova 14i","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:20:00"}
+{"annotator":"Лиза","index":428,"query":"чехол для iphone 16 pro max","subtypes":{},"tags":["B-CATEGORY","O","B-CATEGORY","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:20:12"}
+{"annotator":"Лиза","index":429,"query":"роботы пылесосы dreame x40 ultra complete","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:21:53"}
+{"annotator":"Лиза","index":430,"query":"iphone 17 аир","subtypes":{},"tags":["B-CATEGORY","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:22:02"}
+{"annotator":"Лиза","index":431,"query":"холодильники с двумя дверями","subtypes":{"2":"feature","3":"feature"},"tags":["B-CATEGORY","O","B-ATTR","I-ATTR"],"ts":"2026-07-23T23:22:16"}
+{"annotator":"Лиза","index":432,"query":"холодильник toshiba","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:22:22"}
+{"annotator":"Лиза","index":433,"query":"Samsung a34","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:22:28"}
+{"annotator":"Лиза","index":434,"query":"samsung galaxy с 25 ultra","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:23:05"}
+{"annotator":"Лиза","index":435,"query":"HUAWEI Freebuds Pro","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:23:13"}
+{"annotator":"Лиза","index":436,"query":"30087379","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T23:23:17"}
+{"annotator":"Лиза","index":437,"query":"red square alumix","subtypes":{},"tags":["B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:23:22"}
+{"annotator":"Лиза","index":438,"query":"iphone 14 pro max 512gb","subtypes":{"4":"memory_storage"},"tags":["B-CATEGORY","B-MODEL","I-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-23T23:23:34"}
+{"annotator":"Лиза","index":439,"query":"sony wf-1000xm4","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:23:39"}
+{"annotator":"Лиза","index":440,"query":"rtx 4060 ti","subtypes":{},"tags":["B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:23:45"}
+{"annotator":"Лиза","index":441,"query":"тостеры","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T23:24:25"}
+{"annotator":"Лиза","index":442,"query":"наушники аирподсы","subtypes":{},"tags":["B-CATEGORY","B-CATEGORY"],"ts":"2026-07-23T23:24:33"}
+{"annotator":"Лиза","index":443,"query":"Холодильник двух камерный","subtypes":{"1":"feature","2":"feature"},"tags":["B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-23T23:24:46"}
+{"annotator":"Лиза","index":444,"query":"Чайник черный","subtypes":{"1":"color"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T23:25:05"}
+{"annotator":"Лиза","index":445,"query":"Швейная машина Leader TWEED","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-23T23:27:23"}
+{"annotator":"Лиза","index":446,"query":"триммер philips","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:27:28"}
+{"annotator":"Лиза","index":447,"query":"sony playstation 5","subtypes":{},"tags":["B-BRAND","B-CATEGORY","B-MODEL"],"ts":"2026-07-23T23:27:36"}
+{"annotator":"Лиза","index":448,"query":"стиральная машинка с вертикальной haier","subtypes":{"3":"feature"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR","B-BRAND"],"ts":"2026-07-23T23:27:49"}
+{"annotator":"Лиза","index":449,"query":"Клавиатура acer","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:27:54"}
+{"annotator":"Лиза","index":450,"query":"Наушники apple проводные","subtypes":{"2":"feature"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-23T23:28:06"}
+{"annotator":"Лиза","index":451,"query":"планшет huawei matepad 12x 12 256","subtypes":{"5":"memory_storage"},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-23T23:29:00"}
+{"annotator":"Лиза","index":452,"query":"Телевизор Яндекс 55","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-23T23:29:10"}
+{"annotator":"Лиза","index":453,"query":"Фен для волос профессиональный babyliss","subtypes":{"2":"purpose","3":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","I-ATTR","B-BRAND"],"ts":"2026-07-23T23:29:42"}
+{"annotator":"Лиза","index":454,"query":"внешний жесткий диск 2 тб hdd","subtypes":{"0":"feature","3":"memory_storage","4":"memory_storage","5":"feature"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY","B-ATTR","I-ATTR","B-ATTR"],"ts":"2026-07-23T23:30:46"}
+{"annotator":"Лиза","index":455,"query":"Faber aria","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:31:15"}
+{"annotator":"Лиза","index":456,"query":"роутер xiaomi gigabit","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-23T23:31:37"}
+{"annotator":"Лиза","index":457,"query":"Кухонная мойка","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-23T23:31:53"}
+{"annotator":"Лиза","index":458,"query":"Духовой шкаф кукерсбуш","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:32:19"}
+{"annotator":"Лиза","index":459,"query":"триммер женский","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T23:32:31"}
+{"annotator":"Лиза","index":460,"query":"Встраиваемые холодильники встроенный","subtypes":{"0":"feature","2":"feature"},"tags":["B-ATTR","B-CATEGORY","B-ATTR"],"ts":"2026-07-23T23:33:01"}
+{"annotator":"Лиза","index":461,"query":"mac mini","subtypes":{},"tags":["B-CATEGORY","B-MODEL"],"ts":"2026-07-23T23:33:14"}
+{"annotator":"Лиза","index":462,"query":"чехол на айфон 12","subtypes":{},"tags":["B-CATEGORY","O","B-CATEGORY","B-MODEL"],"ts":"2026-07-23T23:33:24"}
+{"annotator":"Лиза","index":463,"query":"Провод зарядка iphone","subtypes":{},"tags":["B-CATEGORY","B-CATEGORY","B-CATEGORY"],"ts":"2026-07-23T23:33:34"}
+{"annotator":"Лиза","index":464,"query":"магнитола 2 din","subtypes":{},"tags":["B-CATEGORY","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:34:05"}
+{"annotator":"Лиза","index":465,"query":"400945797","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T23:34:08"}
+{"annotator":"Лиза","index":466,"query":"ps5 pro с дисководом","subtypes":{"3":"feature"},"tags":["B-MODEL","B-MODEL","O","B-ATTR"],"ts":"2026-07-23T23:34:26"}
+{"annotator":"Лиза","index":467,"query":"электрический духовой шкаф haier до 300 градусов","subtypes":{"0":"feature","5":"feature","6":"feature"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY","B-BRAND","O","B-ATTR","I-ATTR"],"ts":"2026-07-23T23:34:50"}
+{"annotator":"Лиза","index":468,"query":"RTX 5060","subtypes":{},"tags":["B-MODEL","I-MODEL"],"ts":"2026-07-23T23:34:55"}
+{"annotator":"Лиза","index":469,"query":"магнитолы и колонки","subtypes":{},"tags":["B-CATEGORY","O","B-BRAND"],"ts":"2026-07-23T23:34:59"}
+{"annotator":"Лиза","index":470,"query":"Саундбар","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-23T23:35:03"}
+{"annotator":"Лиза","index":471,"query":"Фен бабулипс","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:35:10"}
+{"annotator":"Лиза","index":472,"query":"Айпад а 16","subtypes":{},"tags":["B-CATEGORY","B-MODEL","I-MODEL"],"ts":"2026-07-23T23:35:16"}
+{"annotator":"Лиза","index":473,"query":"холодильник встраиваемый","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-23T23:35:24"}
+{"annotator":"Лиза","index":474,"query":"400324720","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-23T23:35:27"}
+{"annotator":"Лиза","index":475,"query":"Стиральная машинка узкая высота 70 см","subtypes":{"2":"feature","3":"size","4":"size","5":"size"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR","B-ATTR","I-ATTR","I-ATTR"],"ts":"2026-07-23T23:35:43"}
+{"annotator":"Лиза","index":476,"query":"умная колонка с алисой","subtypes":{"0":"feature","3":"feature"},"tags":["B-ATTR","B-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T23:36:02"}
+{"annotator":"Лиза","index":477,"query":"телевизор tcl 98","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-23T23:36:13"}
+{"annotator":"Лиза","index":478,"query":"Macbook Neo","subtypes":{},"tags":["B-CATEGORY","B-MODEL"],"ts":"2026-07-23T23:36:22"}
+{"annotator":"Лиза","index":479,"query":"чехол samsung s24","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-23T23:36:28"}
+{"annotator":"Лиза","index":480,"query":"ломтерезка слайсер","subtypes":{},"tags":["B-CATEGORY","B-CATEGORY"],"ts":"2026-07-23T23:36:35"}
+{"annotator":"Лиза","index":481,"query":"моющий пылесос roborock","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:37:03"}
+{"annotator":"Лиза","index":482,"query":"Animal crossing","subtypes":{},"tags":["B-GENRE","I-GENRE"],"ts":"2026-07-23T23:37:08"}
+{"annotator":"Лиза","index":483,"query":"болгарки ушм 125 аккумуляторная","subtypes":{"3":"feature"},"tags":["B-CATEGORY","B-CATEGORY","B-MODEL","B-ATTR"],"ts":"2026-07-23T23:37:34"}
+{"annotator":"Лиза","index":484,"query":"защитное стекло на samsung s26","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","O","B-BRAND","B-MODEL"],"ts":"2026-07-23T23:37:42"}
+{"annotator":"Лиза","index":485,"query":"Logitech G PRO X 2 Lightspeed","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:38:05"}
+{"annotator":"Лиза","index":486,"query":"стабилизатор ручной для смартфона","subtypes":{"1":"feature","3":"purpose"},"tags":["B-CATEGORY","B-ATTR","O","B-ATTR"],"ts":"2026-07-23T23:38:37"}
+{"annotator":"Лиза","index":487,"query":"телевизор tcl 75","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-23T23:38:47"}
+{"annotator":"Лиза","index":488,"query":"Газовая варочная поверхность gorenje","subtypes":{"0":"feature","1":"feature"},"tags":["B-ATTR","I-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:39:17"}
+{"annotator":"Лиза","index":489,"query":"телевизор Xiaomi","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:39:22"}
+{"annotator":"Лиза","index":490,"query":"iPad a16","subtypes":{},"tags":["B-CATEGORY","B-MODEL"],"ts":"2026-07-23T23:39:27"}
+{"annotator":"Лиза","index":491,"query":"Samsung WW80AG6S28AELP","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:39:31"}
+{"annotator":"Лиза","index":492,"query":"Samsung z flip 7","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-23T23:39:36"}
+{"annotator":"Лиза","index":493,"query":"массажер для ног электрический","subtypes":{"2":"purpose","3":"feature"},"tags":["B-BRAND","O","B-ATTR","B-ATTR"],"ts":"2026-07-23T23:40:04"}
+{"annotator":"Лиза","index":494,"query":"Apple адаптер","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-23T23:40:10"}
+{"annotator":"Лиза","index":495,"query":"aukey","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-23T23:40:28"}
+{"annotator":"Лиза","index":496,"query":"Artway AV-601","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:41:43"}
+{"annotator":"Лиза","index":497,"query":"станок для бритья","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-23T23:42:00"}
+{"annotator":"Лиза","index":498,"query":"Фен Carrera","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-23T23:42:08"}
+{"annotator":"Лиза","index":499,"query":"Чехол к планшету huawei","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","B-BRAND"],"ts":"2026-07-23T23:42:33"}
+{"annotator":"Лиза","index":500,"query":"Apple mini","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-23T23:42:39"}
+{"annotator":"Лиза","index":501,"query":"Ноутбук Apple MacBook Pro 14.2 (2024) M4 24/1 ТБ","subtypes":{"6":"feature","7":"memory_storage","8":"memory_storage"},"tags":["B-CATEGORY","B-BRAND","B-CATEGORY","B-MODEL","I-MODEL","I-MODEL","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-24T11:42:47"}
+{"annotator":"Лиза","index":502,"query":"Плита настольная","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T11:42:56"}
+{"annotator":"Лиза","index":503,"query":"этажерка","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T11:43:00"}
+{"annotator":"Лиза","index":504,"query":"Принтер е","subtypes":{},"tags":["B-CATEGORY","O"],"ts":"2026-07-24T11:43:24"}
+{"annotator":"Лиза","index":505,"query":"Телевизор haier 75 mini led","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR","B-MODEL","I-MODEL"],"ts":"2026-07-24T11:43:49"}
+{"annotator":"Лиза","index":506,"query":"телевизор candy 50","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-24T11:44:48"}
+{"annotator":"Лиза","index":507,"query":"айфон15про 256","subtypes":{"1":"memory_storage"},"tags":["B-MODEL","B-ATTR"],"ts":"2026-07-24T11:48:00"}
+{"annotator":"Лиза","index":508,"query":"Honor pad 9","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T11:48:29"}
+{"annotator":"Лиза","index":509,"query":"мини компьютеры","subtypes":{"0":"size"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-24T11:49:07"}
+{"annotator":"Лиза","index":510,"query":"ультрабыстрая зарядка провод тайпси-юсб 2 метра","subtypes":{"0":"speed","3":"plug","4":"size","5":"size"},"tags":["B-ATTR","B-CATEGORY","B-CATEGORY","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-24T11:50:27"}
+{"annotator":"Лиза","index":511,"query":"Виар очки","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T11:50:34"}
+{"annotator":"Лиза","index":512,"query":"Beko B5RCNK403ZXBR","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-24T11:50:43"}
+{"annotator":"Лиза","index":513,"query":"Samsung Galaxy A56 5G 8/256GB","subtypes":{"4":"memory_storage"},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-24T11:50:58"}
+{"annotator":"Лиза","index":514,"query":"концентратор usb","subtypes":{"1":"plug"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-24T11:51:11"}
+{"annotator":"Лиза","index":515,"query":"монитор для компьютера 144гц","subtypes":{"2":"purpose","3":"frequency"},"tags":["B-CATEGORY","O","B-ATTR","B-ATTR"],"ts":"2026-07-24T11:54:03"}
+{"annotator":"Лиза","index":516,"query":"Телефон xiaomi redmi note 14 pro","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T11:55:00"}
+{"annotator":"Лиза","index":517,"query":"Плита электрическая лысва","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR","B-BRAND"],"ts":"2026-07-24T11:57:23"}
+{"annotator":"Лиза","index":518,"query":"usb-c","subtypes":{"0":"plug"},"tags":["B-ATTR"],"ts":"2026-07-24T11:57:33"}
+{"annotator":"Лиза","index":519,"query":"JBLPARTYBOX110","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T11:57:38"}
+{"annotator":"Лиза","index":520,"query":"Пусковые провода","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T11:57:46"}
+{"annotator":"Лиза","index":521,"query":"Уцененный смартфон","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-24T11:58:31"}
+{"annotator":"Лиза","index":522,"query":"400410141","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T11:58:40"}
+{"annotator":"Лиза","index":523,"query":"17 про мах 512","subtypes":{"3":"memory_storage"},"tags":["B-MODEL","I-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-24T11:58:48"}
+{"annotator":"Лиза","index":524,"query":"игрушки","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T11:58:52"}
+{"annotator":"Лиза","index":525,"query":"Раковина кухонная 50*50","subtypes":{"1":"feature","2":"size"},"tags":["B-CATEGORY","B-ATTR","B-ATTR"],"ts":"2026-07-24T11:59:04"}
+{"annotator":"Лиза","index":526,"query":"раскладушка","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T12:00:34"}
+{"annotator":"Лиза","index":527,"query":"кастрюля tefal Duetto G7194455","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T12:01:14"}
+{"annotator":"Лиза","index":528,"query":"Huawei band 11 pro","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T12:01:20"}
+{"annotator":"Лиза","index":529,"query":"Sony xm6","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-24T12:02:55"}
+{"annotator":"Лиза","index":530,"query":"телевизоры без smart tv","subtypes":{"1":"feature","2":"feature","3":"feature"},"tags":["B-CATEGORY","B-ATTR","I-ATTR","I-ATTR"],"ts":"2026-07-24T12:04:19"}
+{"annotator":"Лиза","index":531,"query":"20092304","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T12:04:22"}
+{"annotator":"Лиза","index":532,"query":"Стиральная машина узкая Weissgauff WM 41106 Inverter Steam","subtypes":{"2":"feature"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR","B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T12:07:23"}
+{"annotator":"Лиза","index":533,"query":"сушильная машина черная","subtypes":{"2":"color"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-24T12:07:31"}
+{"annotator":"Лиза","index":534,"query":"телевизоры hisense 40","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-24T12:07:53"}
+{"annotator":"Лиза","index":535,"query":"Газонокосилки тихая","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-24T12:08:22"}
+{"annotator":"Лиза","index":536,"query":"Встраиваемая плоская вытяжка на кухню 55см шириной","subtypes":{"0":"feature","1":"feature","4":"purpose","5":"size","6":"size"},"tags":["B-ATTR","I-ATTR","B-CATEGORY","O","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-24T12:08:49"}
+{"annotator":"Лиза","index":537,"query":"Восстановленный телефон айфон","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","B-CATEGORY"],"ts":"2026-07-24T12:09:15"}
+{"annotator":"Лиза","index":538,"query":"Poco m7 pro","subtypes":{},"tags":["B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T12:09:22"}
+{"annotator":"Лиза","index":539,"query":"4253334","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T12:09:37"}
+{"annotator":"Лиза","index":540,"query":"tecno spark go 2","subtypes":{},"tags":["B-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T12:09:42"}
+{"annotator":"Лиза","index":541,"query":"Планшет Apple iPad 11\" (2025) 128GB","subtypes":{"5":"memory_storage"},"tags":["B-CATEGORY","B-BRAND","B-CATEGORY","B-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-24T12:09:59"}
+{"annotator":"Лиза","index":542,"query":"умные smart часы мужские","subtypes":{"0":"feature","1":"feature","3":"gender"},"tags":["B-ATTR","I-ATTR","B-CATEGORY","B-ATTR"],"ts":"2026-07-24T12:10:30"}
+{"annotator":"Лиза","index":543,"query":"Компактная посудомоечная машина","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T12:10:52"}
+{"annotator":"Лиза","index":544,"query":"пылесос Samsung","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T12:10:58"}
+{"annotator":"Лиза","index":545,"query":"встраиваемая посудомойка 45 см","subtypes":{"0":"feature","2":"size","3":"size"},"tags":["B-ATTR","B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T12:11:10"}
+{"annotator":"Лиза","index":546,"query":"смартфон текно","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T12:11:16"}
+{"annotator":"Лиза","index":547,"query":"мп3 плеер","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T12:14:17"}
+{"annotator":"Лиза","index":548,"query":"Зарядная станция для геймпада ps5","subtypes":{"3":"purpose","4":"purpose"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR","I-ATTR"],"ts":"2026-07-24T12:14:39"}
+{"annotator":"Лиза","index":549,"query":"400444459","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T12:14:53"}
+{"annotator":"Лиза","index":550,"query":"планшет apple ipad 11 2025 256gb","subtypes":{"5":"memory_storage"},"tags":["B-CATEGORY","B-BRAND","B-CATEGORY","B-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-24T12:16:09"}
+{"annotator":"Лиза","index":551,"query":"пылесос с турбощеткой","subtypes":{"2":"feature"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T12:16:18"}
+{"annotator":"Лиза","index":552,"query":"Автомобильная магнитола 1din","subtypes":{"0":"feature","2":"size"},"tags":["B-ATTR","B-CATEGORY","B-ATTR"],"ts":"2026-07-24T12:20:32"}
+{"annotator":"Лиза","index":553,"query":"бетономешалка","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T12:20:40"}
+{"annotator":"Лиза","index":554,"query":"а56","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T12:22:21"}
+{"annotator":"Лиза","index":555,"query":"400423047","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T12:22:24"}
+{"annotator":"Лиза","index":556,"query":"realme15pro 512","subtypes":{"1":"memory_storage"},"tags":["B-MODEL","B-ATTR"],"ts":"2026-07-24T12:22:33"}
+{"annotator":"Лиза","index":557,"query":"Монитор Thunderobot","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T12:22:52"}
+{"annotator":"Лиза","index":558,"query":"Варочная панель газовая 3 конфорки","subtypes":{"0":"feature","2":"feature","3":"feature","4":"feature"},"tags":["B-ATTR","B-CATEGORY","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-24T13:43:05"}
+{"annotator":"Лиза","index":559,"query":"Apple iphone 17e 256gb","subtypes":{"3":"memory_storage"},"tags":["B-MODEL","B-CATEGORY","B-MODEL","B-ATTR"],"ts":"2026-07-24T13:43:26"}
+{"annotator":"Лиза","index":560,"query":"ipad аир 13","subtypes":{},"tags":["B-CATEGORY","B-MODEL","I-MODEL"],"ts":"2026-07-24T13:43:33"}
+{"annotator":"Лиза","index":561,"query":"регистратор","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T13:43:37"}
+{"annotator":"Лиза","index":562,"query":"Детские смарт часы huawei watch kids 4 pro","subtypes":{"0":"feature","1":"feature"},"tags":["B-ATTR","B-ATTR","B-CATEGORY","B-BRAND","B-CATEGORY","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T13:44:20"}
+{"annotator":"Лиза","index":563,"query":"пылесос haier","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T13:46:11"}
+{"annotator":"Лиза","index":564,"query":"Halman","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-24T13:46:38"}
+{"annotator":"Лиза","index":565,"query":"снегоуборщики бензиновые","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-24T13:46:46"}
+{"annotator":"Лиза","index":566,"query":"Отдельностоящая посудомоечная машина 45 см","subtypes":{"0":"feature","3":"size","4":"size"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T13:47:01"}
+{"annotator":"Лиза","index":567,"query":"Кулер с чайным столиком","subtypes":{"2":"feature","3":"feature"},"tags":["B-CATEGORY","O","B-ATTR","I-ATTR"],"ts":"2026-07-24T13:47:16"}
+{"annotator":"Лиза","index":568,"query":"Rx 9070","subtypes":{},"tags":["B-MODEL","I-MODEL"],"ts":"2026-07-24T13:47:20"}
+{"annotator":"Лиза","index":569,"query":"Маленькие холодильники","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-24T13:47:42"}
+{"annotator":"Лиза","index":570,"query":"чайник электрич","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-24T13:47:48"}
+{"annotator":"Лиза","index":571,"query":"Кабель интернет 20м","subtypes":{"2":"size"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-24T13:47:56"}
+{"annotator":"Лиза","index":572,"query":"Электропечь","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T13:48:00"}
+{"annotator":"Лиза","index":573,"query":"Планшет а","subtypes":{},"tags":["B-CATEGORY","O"],"ts":"2026-07-24T13:48:06"}
+{"annotator":"Лиза","index":574,"query":"32S5K","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T13:48:09"}
+{"annotator":"Лиза","index":575,"query":"смартфоны samsung z","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T13:48:17"}
+{"annotator":"Лиза","index":576,"query":"Умное кольцо сбер","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-24T13:48:30"}
+{"annotator":"Лиза","index":577,"query":"маунфильд планетарные миксеры","subtypes":{"1":"feature"},"tags":["B-BRAND","B-ATTR","B-CATEGORY"],"ts":"2026-07-24T13:48:55"}
+{"annotator":"Лиза","index":578,"query":"лайт 2","subtypes":{},"tags":["B-MODEL","I-MODEL"],"ts":"2026-07-24T13:48:58"}
+{"annotator":"Лиза","index":579,"query":"Планшет HUAWEI MatePad 11.5\" 2025 New","subtypes":{"5":"feature"},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-24T13:49:19"}
+{"annotator":"Лиза","index":580,"query":"кондиционеры tcl","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T13:49:23"}
+{"annotator":"Лиза","index":581,"query":"фен щетка philips","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-24T13:49:33"}
+{"annotator":"Лиза","index":582,"query":"Midea MID45S550i","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-24T13:49:48"}
+{"annotator":"Лиза","index":583,"query":"Logitech Signature M650","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T13:50:27"}
+{"annotator":"Лиза","index":584,"query":"кронштейны для мониторов","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T13:50:39"}
+{"annotator":"Лиза","index":585,"query":"смартфон 12/512","subtypes":{"1":"memory_storage"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-24T13:51:39"}
+{"annotator":"Лиза","index":586,"query":"Кондиционер сплит система 9","subtypes":{"1":"feature","2":"feature"},"tags":["B-CATEGORY","B-ATTR","I-ATTR","B-MODEL"],"ts":"2026-07-24T13:53:09"}
+{"annotator":"Лиза","index":587,"query":"умные часы honor","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-24T13:54:53"}
+{"annotator":"Лиза","index":588,"query":"телефон ксиоми","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T13:54:56"}
+{"annotator":"Лиза","index":589,"query":"HUAWEI Watch GT Runner 2","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T13:55:03"}
+{"annotator":"Лиза","index":590,"query":"samsung galaxy buds 3 pro","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T13:55:08"}
+{"annotator":"Лиза","index":591,"query":"картриджи","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T13:55:11"}
+{"annotator":"Лиза","index":592,"query":"Аудио кабель 2 rca","subtypes":{"2":"plug","3":"plug"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T13:56:34"}
+{"annotator":"Лиза","index":593,"query":"canon pixma","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-24T13:58:36"}
+{"annotator":"Лиза","index":594,"query":"Гладильная система Tefal Ixeo QT2020E0, 2170Вт, складная, с паровым ударом","subtypes":{"5":"power","6":"feature","8":"feature","9":"feature"},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-MODEL","I-MODEL","B-ATTR","B-ATTR","O","B-ATTR","I-ATTR"],"ts":"2026-07-24T13:59:04"}
+{"annotator":"Лиза","index":595,"query":"чехол для планшета","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T13:59:14"}
+{"annotator":"Лиза","index":596,"query":"Игровые консоли ps 5 slim","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T13:59:44"}
+{"annotator":"Лиза","index":597,"query":"Холодильник stinol","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T13:59:57"}
+{"annotator":"Лиза","index":598,"query":"Чехол samsung s23","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T14:00:02"}
+{"annotator":"Лиза","index":599,"query":"ноутбук honor magicbook 14","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T14:12:23"}
+{"annotator":"Лиза","index":600,"query":"Samsung jet 75","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T14:12:31"}
+{"annotator":"Лиза","index":601,"query":"Xiaomi Buds 5 Pro","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T14:12:36"}
+{"annotator":"Лиза","index":602,"query":"смартфоны xiaomi redmi note 15","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T14:12:54"}
+{"annotator":"Лиза","index":603,"query":"samsung z flip 6","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T14:14:33"}
+{"annotator":"Лиза","index":604,"query":"принтер epson l3250","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T14:14:40"}
+{"annotator":"Лиза","index":605,"query":"Телевизор 70 дюйм","subtypes":{"1":"size","2":"size"},"tags":["B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T14:14:49"}
+{"annotator":"Лиза","index":606,"query":"Миксеры и блендеры ручные","subtypes":{"3":"feature"},"tags":["B-CATEGORY","O","B-CATEGORY","B-ATTR"],"ts":"2026-07-24T14:15:06"}
+{"annotator":"Лиза","index":608,"query":"накопительные водонагреватели 50л","subtypes":{"0":"feature","2":"volume"},"tags":["B-ATTR","B-CATEGORY","B-ATTR"],"ts":"2026-07-24T14:16:51"}
+{"annotator":"Лиза","index":609,"query":"стиральная машина Haier","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-24T14:17:17"}
+{"annotator":"Лиза","index":610,"query":"Телевизор сбер 50","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-24T14:17:24"}
+{"annotator":"Лиза","index":611,"query":"Xiaomi tv box s 3rd gen","subtypes":{},"tags":["B-BRAND","B-CATEGORY","I-CATEGORY","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T14:17:33"}
+{"annotator":"Лиза","index":612,"query":"электрическая бритва braun","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-24T14:18:19"}
+{"annotator":"Лиза","index":613,"query":"холодильники двухкамерные LG","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR","B-BRAND"],"ts":"2026-07-24T14:18:27"}
+{"annotator":"Лиза","index":614,"query":"Встраиваемые холодильники","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-24T14:18:33"}
+{"annotator":"Лиза","index":615,"query":"Холодильники двухкамерные maunfeld","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR","B-BRAND"],"ts":"2026-07-24T14:18:41"}
+{"annotator":"Лиза","index":616,"query":"сумка для ноутбука rivacase","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","B-BRAND"],"ts":"2026-07-24T14:19:05"}
+{"annotator":"Лиза","index":617,"query":"Инфракрасный обогреватель потолочный 15 м3","subtypes":{"0":"feature","2":"feature","3":"volume","4":"volume"},"tags":["B-ATTR","B-CATEGORY","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-24T14:19:33"}
+{"annotator":"Лиза","index":618,"query":"чайный сервиз чайный набор","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:20:00"}
+{"annotator":"Лиза","index":619,"query":"samsung galaxy s26","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T14:20:06"}
+{"annotator":"Лиза","index":620,"query":"Стиральные машины стандарт","subtypes":{"2":"feature"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-24T14:20:15"}
+{"annotator":"Лиза","index":621,"query":"вытяжки кухонные телескопическая 60","subtypes":{"1":"feature","2":"feature","3":"size"},"tags":["B-CATEGORY","B-ATTR","I-ATTR","B-ATTR"],"ts":"2026-07-24T14:21:25"}
+{"annotator":"Лиза","index":622,"query":"Плиты","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:21:29"}
+{"annotator":"Лиза","index":623,"query":"микроволновка lg черная","subtypes":{"2":"color"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-24T14:21:36"}
+{"annotator":"Лиза","index":624,"query":"Телевизор тцл","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T14:21:40"}
+{"annotator":"Лиза","index":625,"query":"Телефон инфинекс","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T14:21:44"}
+{"annotator":"Лиза","index":626,"query":"realme buds","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-24T14:22:00"}
+{"annotator":"Лиза","index":627,"query":"Чехол на samsung s 24 fe","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T14:22:18"}
+{"annotator":"Лиза","index":628,"query":"Пылесосы вертикальные grundigVCP 6230","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR","B-MODEL","I-MODEL"],"ts":"2026-07-24T14:22:28"}
+{"annotator":"Лиза","index":629,"query":"samsung s25 12 128","subtypes":{"3":"memory_storage"},"tags":["B-BRAND","B-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-24T14:22:39"}
+{"annotator":"Лиза","index":630,"query":"газовая плита 50 гефест","subtypes":{"0":"feature","2":"size"},"tags":["B-ATTR","B-CATEGORY","B-ATTR","B-BRAND"],"ts":"2026-07-24T14:24:22"}
+{"annotator":"Лиза","index":631,"query":"Электрический духовой шкаф Electrolux","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-24T14:24:32"}
+{"annotator":"Лиза","index":632,"query":"Поглотитель запаха в холодильнике","subtypes":{"3":"purpose"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T14:24:45"}
+{"annotator":"Лиза","index":633,"query":"samsung z flip 7","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T14:24:50"}
+{"annotator":"Лиза","index":634,"query":"телевизор xiaomi a pro 55","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T14:25:17"}
+{"annotator":"Лиза","index":635,"query":"50 qled","subtypes":{"0":"size","1":"feature"},"tags":["B-ATTR","B-ATTR"],"ts":"2026-07-24T14:25:46"}
+{"annotator":"Лиза","index":636,"query":"Микроволновые печи","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:25:50"}
+{"annotator":"Лиза","index":637,"query":"стиральная машинка узкая беко","subtypes":{"2":"feature"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR","B-BRAND"],"ts":"2026-07-24T14:25:59"}
+{"annotator":"Лиза","index":638,"query":"Ipad 11 2025 с ру стори","subtypes":{"4":"feature","5":"feature"},"tags":["B-CATEGORY","B-MODEL","I-MODEL","O","B-ATTR","I-ATTR"],"ts":"2026-07-24T14:27:23"}
+{"annotator":"Лиза","index":639,"query":"Кромочный фрезер","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:28:10"}
+{"annotator":"Лиза","index":640,"query":"холодильники в наличии","subtypes":{"2":"feature"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T14:31:35"}
+{"annotator":"Лиза","index":641,"query":"стиральная машинка 7 кг lg","subtypes":{"2":"weight","3":"weight"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR","I-ATTR","B-BRAND"],"ts":"2026-07-24T14:31:55"}
+{"annotator":"Лиза","index":642,"query":"маркер","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:31:59"}
+{"annotator":"Лиза","index":643,"query":"чайники xiaomi","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T14:32:03"}
+{"annotator":"Лиза","index":644,"query":"стиральная машинка 10 кг","subtypes":{"2":"weight","3":"weight"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T14:32:41"}
+{"annotator":"Лиза","index":645,"query":"мультистайлер keune","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T14:32:47"}
+{"annotator":"Лиза","index":646,"query":"перчатки","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:34:05"}
+{"annotator":"Лиза","index":647,"query":"Resident evil 7","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:34:19"}
+{"annotator":"Лиза","index":648,"query":"Встраиваемая вытяжка мидеа 75","subtypes":{"0":"feature","3":"size"},"tags":["B-ATTR","B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-24T14:35:07"}
+{"annotator":"Лиза","index":649,"query":"айфонов 12","subtypes":{},"tags":["B-CATEGORY","B-MODEL"],"ts":"2026-07-24T14:35:17"}
+{"annotator":"Лиза","index":650,"query":"морозильная камера уфа","subtypes":{"2":"country"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-24T14:36:12"}
+{"annotator":"Лиза","index":651,"query":"варочная плита","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:36:31"}
+{"annotator":"Лиза","index":652,"query":"Iphone 15pro max","subtypes":{},"tags":["B-CATEGORY","B-MODEL","I-MODEL"],"ts":"2026-07-24T14:36:40"}
+{"annotator":"Лиза","index":653,"query":"5600 5060","subtypes":{},"tags":["B-MODEL","B-MODEL"],"ts":"2026-07-24T14:36:46"}
+{"annotator":"Лиза","index":654,"query":"Dji","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-24T14:37:09"}
+{"annotator":"Лиза","index":655,"query":"смартфон infinix hot","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T14:38:23"}
+{"annotator":"Лиза","index":656,"query":"электрическая бритва panasonic","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY","B-BRAND"],"ts":"2026-07-24T14:38:34"}
+{"annotator":"Лиза","index":657,"query":"телевизор 120 гц","subtypes":{"1":"frequency","2":"frequency"},"tags":["B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T14:38:56"}
+{"annotator":"Лиза","index":658,"query":"Внешний аккумулятор","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:39:00"}
+{"annotator":"Лиза","index":659,"query":"Приёмник для цифрового телевидения Т2","subtypes":{"2":"purpose","3":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","I-ATTR","B-MODEL"],"ts":"2026-07-24T14:40:46"}
+{"annotator":"Лиза","index":660,"query":"20085570","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T14:40:50"}
+{"annotator":"Лиза","index":661,"query":"32\" Монитор Samsung Odyssey OLED G8 G81SF S32FG810SI серебристый","subtypes":{"0":"size","8":"color"},"tags":["B-ATTR","B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-24T14:41:29"}
+{"annotator":"Лиза","index":662,"query":"диск ssd внутренний","subtypes":{"2":"feature"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-24T14:43:52"}
+{"annotator":"Лиза","index":663,"query":"Пылесосы вертикальные tefal x force flex","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR","B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T14:44:05"}
+{"annotator":"Лиза","index":664,"query":"Мультистайлер","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:45:13"}
+{"annotator":"Лиза","index":665,"query":"операционная система","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:45:17"}
+{"annotator":"Лиза","index":666,"query":"стул","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:45:20"}
+{"annotator":"Лиза","index":667,"query":"телевизоры 24 на кухню","subtypes":{"1":"size","2":"feature","3":"feature"},"tags":["B-CATEGORY","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-24T14:47:05"}
+{"annotator":"Лиза","index":668,"query":"Смартфоны 1","subtypes":{},"tags":["B-CATEGORY","O"],"ts":"2026-07-24T14:48:12"}
+{"annotator":"Лиза","index":669,"query":"15 про","subtypes":{},"tags":["B-MODEL","I-MODEL"],"ts":"2026-07-24T14:48:15"}
+{"annotator":"Лиза","index":670,"query":"Яндекс станция мини 3 про","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T14:49:38"}
+{"annotator":"Лиза","index":671,"query":"игры","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:49:40"}
+{"annotator":"Лиза","index":672,"query":"Джойстик для пк","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T14:49:53"}
+{"annotator":"Лиза","index":673,"query":"usb хаб","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:49:59"}
+{"annotator":"Лиза","index":674,"query":"установка","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:51:13"}
+{"annotator":"Лиза","index":675,"query":"samsung watch 8","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T14:51:21"}
+{"annotator":"Лиза","index":676,"query":"Планшет игровой","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:51:25"}
+{"annotator":"Лиза","index":677,"query":"Внутренние ssd накопители 512","subtypes":{"3":"memory_storage"},"tags":["I-CATEGORY","I-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-24T14:51:38"}
+{"annotator":"Лиза","index":678,"query":"бейсик","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:51:40"}
+{"annotator":"Лиза","index":679,"query":"жесткий диск hdd 1тб","subtypes":{"3":"memory_storage"},"tags":["B-CATEGORY","I-CATEGORY","B-CATEGORY","B-ATTR"],"ts":"2026-07-24T14:52:08"}
+{"annotator":"Лиза","index":680,"query":"Самсунг телефон","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-24T14:52:12"}
+{"annotator":"Лиза","index":681,"query":"зарядное устройство 45w","subtypes":{"2":"power"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-24T14:52:25"}
+{"annotator":"Лиза","index":682,"query":"Steam","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:54:13"}
+{"annotator":"Лиза","index":683,"query":"Холодильники двухкамерные bosch","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR","B-BRAND"],"ts":"2026-07-24T14:54:22"}
+{"annotator":"Лиза","index":684,"query":"планшет с клавиатурой сим картой","subtypes":{"2":"feature","3":"feature","4":"feature"},"tags":["B-CATEGORY","O","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-24T14:54:40"}
+{"annotator":"Лиза","index":685,"query":"Айрогрил","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T14:55:44"}
+{"annotator":"Лиза","index":686,"query":"Телевизоры 75 дюймов","subtypes":{"1":"size","2":"size"},"tags":["B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T14:55:51"}
+{"annotator":"Лиза","index":687,"query":"Монитор 27 240гц","subtypes":{"1":"size","2":"frequency"},"tags":["B-CATEGORY","B-ATTR","B-ATTR"],"ts":"2026-07-24T14:56:18"}
+{"annotator":"Лиза","index":688,"query":"Samsung WW80AG6S28AELD","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-24T14:56:22"}
+{"annotator":"Лиза","index":689,"query":"Расческа выпрямитель","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T14:56:26"}
+{"annotator":"Лиза","index":690,"query":"Мясорубки со скидками","subtypes":{"2":"sales"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T14:56:37"}
+{"annotator":"Лиза","index":691,"query":"встраиваемая варочная панель индукционная с встроенной вытяжкой","subtypes":{"0":"feature","1":"feature","3":"feature","5":"feature","6":"feature"},"tags":["B-ATTR","I-ATTR","B-CATEGORY","B-ATTR","O","B-ATTR","I-ATTR"],"ts":"2026-07-24T14:56:57"}
+{"annotator":"Лиза","index":692,"query":"сковорода tefal","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T14:57:03"}
+{"annotator":"Лиза","index":693,"query":"редмонд","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-24T14:57:05"}
+{"annotator":"Лиза","index":694,"query":"планшет huawei matepad 12x","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T14:57:12"}
+{"annotator":"Лиза","index":695,"query":"Электрические чайники стеклянный tefal","subtypes":{"0":"feature","2":"material"},"tags":["B-ATTR","B-CATEGORY","B-ATTR","B-BRAND"],"ts":"2026-07-24T15:03:30"}
+{"annotator":"Лиза","index":696,"query":"Водонагреватель накопительный 30л плоский","subtypes":{"1":"feature","2":"volume","3":"feature"},"tags":["B-CATEGORY","B-ATTR","B-ATTR","B-ATTR"],"ts":"2026-07-24T15:03:50"}
+{"annotator":"Лиза","index":697,"query":"iphone17 pro max 256 silver","subtypes":{"3":"memory_storage","4":"color"},"tags":["B-CATEGORY","B-MODEL","I-MODEL","B-ATTR","B-ATTR"],"ts":"2026-07-24T15:04:37"}
+{"annotator":"Лиза","index":698,"query":"Насадки для кухонного комбайна kenwood","subtypes":{"2":"purpose","3":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","I-ATTR","B-BRAND"],"ts":"2026-07-24T15:04:58"}
+{"annotator":"Лиза","index":699,"query":"Планшет с sim картой","subtypes":{"2":"feature","3":"feature"},"tags":["B-CATEGORY","O","B-ATTR","I-ATTR"],"ts":"2026-07-24T15:05:39"}
+{"annotator":"Лиза","index":700,"query":"защитное стекло для iphone 16","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","O","B-CATEGORY","B-MODEL"],"ts":"2026-07-24T15:13:41"}
+{"annotator":"Лиза","index":701,"query":"термокружка","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T15:13:45"}
+{"annotator":"Лиза","index":702,"query":"установка кондиционера","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T15:13:53"}
+{"annotator":"Лиза","index":703,"query":"iphone 13 восстановленный","subtypes":{"2":"feature"},"tags":["B-CATEGORY","B-MODEL","B-ATTR"],"ts":"2026-07-24T15:14:50"}
+{"annotator":"Лиза","index":704,"query":"Кабель type c","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T15:14:59"}
+{"annotator":"Лиза","index":705,"query":"вытяжки кухонные встраиваемая 70","subtypes":{"1":"feature","2":"feature","3":"size"},"tags":["B-CATEGORY","B-ATTR","I-ATTR","B-ATTR"],"ts":"2026-07-24T15:15:32"}
+{"annotator":"Лиза","index":706,"query":"фены babyliss","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T15:16:02"}
+{"annotator":"Лиза","index":707,"query":"Фен-щетка Rowenta","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T15:17:00"}
+{"annotator":"Лиза","index":708,"query":"смартфоны samsung galaxy z fold6","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T15:17:42"}
+{"annotator":"Лиза","index":709,"query":"Moser","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-24T15:18:41"}
+{"annotator":"Лиза","index":710,"query":"Яндекс хаб","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-24T15:18:49"}
+{"annotator":"Лиза","index":711,"query":"отпариватель tefal dt8135","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T15:19:01"}
+{"annotator":"Лиза","index":712,"query":"телевизоры tcl 65","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-24T15:19:11"}
+{"annotator":"Лиза","index":713,"query":"honor magic book x16","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T15:19:16"}
+{"annotator":"Лиза","index":714,"query":"смартфоны samsung flip","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T15:19:22"}
+{"annotator":"Лиза","index":715,"query":"зарядная станция для геймпада ps5","subtypes":{"3":"purpose","4":"purpose"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR","I-ATTR"],"ts":"2026-07-24T15:20:28"}
+{"annotator":"Лиза","index":716,"query":"Ноутбук Huawei","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T15:20:36"}
+{"annotator":"Лиза","index":717,"query":"Электрическая мини печь менее 10 л","subtypes":{"0":"feature","1":"feature","3":"volume","4":"volume","5":"volume"},"tags":["B-ATTR","B-ATTR","B-CATEGORY","B-ATTR","I-ATTR","I-ATTR"],"ts":"2026-07-24T15:21:03"}
+{"annotator":"Лиза","index":718,"query":"легкий ноутбук","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-24T15:22:04"}
+{"annotator":"Лиза","index":719,"query":"инфиникс","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-24T15:22:16"}
+{"annotator":"Лиза","index":720,"query":"Морозильный ларь 2 метра","subtypes":{"2":"size","3":"size"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T15:23:29"}
+{"annotator":"Лиза","index":721,"query":"lenovo thinkbook 16","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T15:23:34"}
+{"annotator":"Лиза","index":722,"query":"духовой шкаф hansa","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-24T15:23:48"}
+{"annotator":"Лиза","index":723,"query":"ssd накопители m2","subtypes":{"2":"feature"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR"],"ts":"2026-07-24T15:24:34"}
+{"annotator":"Лиза","index":724,"query":"Лопатка tefal","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T15:25:49"}
+{"annotator":"Лиза","index":725,"query":"пульт сбер","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T15:25:52"}
+{"annotator":"Лиза","index":726,"query":"телевизор hi","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T15:25:55"}
+{"annotator":"Лиза","index":727,"query":"Самсунг планшет","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-24T15:25:58"}
+{"annotator":"Лиза","index":728,"query":"apple mac ноутбук neo","subtypes":{},"tags":["B-BRAND","B-CATEGORY","B-CATEGORY","B-MODEL"],"ts":"2026-07-24T15:26:07"}
+{"annotator":"Лиза","index":729,"query":"playstation 5 pro","subtypes":{},"tags":["B-CATEGORY","B-MODEL","I-MODEL"],"ts":"2026-07-24T15:26:12"}
+{"annotator":"Лиза","index":730,"query":"Samsung 55 дюймов","subtypes":{"1":"size","2":"size"},"tags":["B-BRAND","B-ATTR","I-ATTR"],"ts":"2026-07-24T15:26:21"}
+{"annotator":"Лиза","index":731,"query":"Midea MF200W90WBS/W-RU","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-24T15:26:26"}
+{"annotator":"Лиза","index":732,"query":"vekmnbdfhrf","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T15:26:57"}
+{"annotator":"Лиза","index":733,"query":"Зашитное стекло samsung s22","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T15:27:04"}
+{"annotator":"Лиза","index":734,"query":"Видеорегистратор 3 в 1","subtypes":{"1":"feature","2":"feature","3":"feature"},"tags":["B-CATEGORY","B-ATTR","I-ATTR","I-ATTR"],"ts":"2026-07-24T15:27:14"}
+{"annotator":"Лиза","index":735,"query":"робот пылесос xiaomi robot vacuum s40 pro","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-CATEGORY","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T16:28:08"}
+{"annotator":"Лиза","index":736,"query":"варочная газовая панель 2 комфорочная","subtypes":{"0":"feature","1":"feature","3":"feature","4":"feature"},"tags":["B-ATTR","B-ATTR","B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T16:28:36"}
+{"annotator":"Лиза","index":737,"query":"телевизоры 27 дюйм","subtypes":{"1":"size","2":"size"},"tags":["B-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T16:28:50"}
+{"annotator":"Лиза","index":738,"query":"Беспроводное зарядное устройство Ugreen 2 в 1","subtypes":{"0":"feature","4":"feature","5":"feature","6":"feature"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY","B-BRAND","B-ATTR","I-ATTR","I-ATTR"],"ts":"2026-07-24T16:29:18"}
+{"annotator":"Лиза","index":739,"query":"Google pixel 9","subtypes":{},"tags":["B-BRAND","B-CATEGORY","B-MODEL"],"ts":"2026-07-24T16:29:33"}
+{"annotator":"Лиза","index":740,"query":"встраиваемые микроволновые печи 25 литров","subtypes":{"0":"feature","3":"volume","4":"volume"},"tags":["B-ATTR","B-CATEGORY","I-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T16:29:53"}
+{"annotator":"Лиза","index":741,"query":"Realme 16 Pro","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T16:29:59"}
+{"annotator":"Лиза","index":742,"query":"чехол iphone 15","subtypes":{},"tags":["B-CATEGORY","B-CATEGORY","B-MODEL"],"ts":"2026-07-24T16:30:10"}
+{"annotator":"Лиза","index":743,"query":"Умная светодиодная лента яндекс с алисой","subtypes":{"0":"feature","1":"feature","5":"feature"},"tags":["B-ATTR","B-ATTR","B-CATEGORY","B-BRAND","O","B-ATTR"],"ts":"2026-07-24T16:30:29"}
+{"annotator":"Лиза","index":744,"query":"Стрит","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T16:30:33"}
+{"annotator":"Лиза","index":745,"query":"dreame d20","subtypes":{},"tags":["B-BRAND","B-MODEL"],"ts":"2026-07-24T16:30:38"}
+{"annotator":"Лиза","index":746,"query":"фен стайлер","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:30:48"}
+{"annotator":"Лиза","index":747,"query":"защитные стекла для iphone 17","subtypes":{"3":"purpose","4":"purpose"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR","I-ATTR"],"ts":"2026-07-24T16:31:01"}
+{"annotator":"Лиза","index":748,"query":"провод для айфона","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T16:31:17"}
+{"annotator":"Лиза","index":749,"query":"Хлебопечка с замесом","subtypes":{"2":"feature"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T16:31:27"}
+{"annotator":"Лиза","index":750,"query":"робот пылесос dreame l40s","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T16:31:36"}
+{"annotator":"Лиза","index":751,"query":"Indesit BWSA 5109 WW","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T16:31:44"}
+{"annotator":"Лиза","index":752,"query":"indesit msc 615","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T16:31:52"}
+{"annotator":"Лиза","index":753,"query":"400561632","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T16:31:55"}
+{"annotator":"Лиза","index":754,"query":"холодильник красный","subtypes":{"1":"color"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-24T16:32:00"}
+{"annotator":"Лиза","index":755,"query":"телевизор xiaomi 43","subtypes":{"2":"size"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-24T16:32:15"}
+{"annotator":"Лиза","index":756,"query":"Apple планшет","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-24T16:32:19"}
+{"annotator":"Лиза","index":757,"query":"крепления телевизора","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T16:32:31"}
+{"annotator":"Лиза","index":758,"query":"беспроводная мышь acer","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:32:38"}
+{"annotator":"Лиза","index":759,"query":"Аирподс 4","subtypes":{},"tags":["B-CATEGORY","B-MODEL"],"ts":"2026-07-24T16:32:42"}
+{"annotator":"Лиза","index":760,"query":"Sony playstation 5 slim 1tb","subtypes":{"4":"memory_storage"},"tags":["B-BRAND","B-CATEGORY","B-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-24T16:33:01"}
+{"annotator":"Лиза","index":761,"query":"кресла кровати","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T16:33:06"}
+{"annotator":"Лиза","index":762,"query":"dvd-r диск","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T16:33:11"}
+{"annotator":"Лиза","index":763,"query":"megagogo","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-24T16:34:16"}
+{"annotator":"Лиза","index":764,"query":"Электрическая варочная поверхность","subtypes":{"0":"feature","1":"feature"},"tags":["B-ATTR","B-ATTR","B-CATEGORY"],"ts":"2026-07-24T16:34:32"}
+{"annotator":"Лиза","index":765,"query":"наушники игровые logitech","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR","B-BRAND"],"ts":"2026-07-24T16:34:42"}
+{"annotator":"Лиза","index":766,"query":"Электрическая мини печь с конфорками","subtypes":{"0":"feature","1":"feature","4":"feature"},"tags":["B-ATTR","B-ATTR","B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T16:35:01"}
+{"annotator":"Лиза","index":767,"query":"смартфон samsung galaxy s25 512gb ultra","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T16:35:23"}
+{"annotator":"Лиза","index":768,"query":"Сетевой адаптер для ноутбука","subtypes":{"3":"purpose"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T16:35:40"}
+{"annotator":"Лиза","index":769,"query":"Холодильники lg","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:35:49"}
+{"annotator":"Лиза","index":770,"query":"щетки babyliss","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:36:07"}
+{"annotator":"Лиза","index":771,"query":"стиральная машина lg 6кг","subtypes":{"3":"weight"},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-24T16:36:20"}
+{"annotator":"Лиза","index":772,"query":"Зеркало для макияжа","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T16:36:33"}
+{"annotator":"Лиза","index":773,"query":"Зарядка самсунг 60w","subtypes":{"2":"power"},"tags":["B-CATEGORY","B-BRAND","B-ATTR"],"ts":"2026-07-24T16:36:47"}
+{"annotator":"Лиза","index":774,"query":"huawei matebook 16","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T16:36:55"}
+{"annotator":"Лиза","index":775,"query":"Фильтр аквафор кристал","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T16:37:34"}
+{"annotator":"Лиза","index":776,"query":"Пылесос sumsung","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:37:37"}
+{"annotator":"Лиза","index":777,"query":"Pura","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-24T16:37:40"}
+{"annotator":"Лиза","index":778,"query":"стиральная машинка с обработкой паром","subtypes":{"3":"feature","4":"feature"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR","I-ATTR"],"ts":"2026-07-24T16:38:10"}
+{"annotator":"Лиза","index":779,"query":"кофеварка электрическая турка","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR","B-BRAND"],"ts":"2026-07-24T16:38:25"}
+{"annotator":"Лиза","index":780,"query":"Шнур apple","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:38:30"}
+{"annotator":"Лиза","index":781,"query":"Тонометр OMRON M3 Comfort автомат (hem-7155-alru)","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T16:38:41"}
+{"annotator":"Лиза","index":782,"query":"xp pen","subtypes":{},"tags":["B-BRAND","I-BRAND"],"ts":"2026-07-24T16:39:11"}
+{"annotator":"Лиза","index":783,"query":"чехол Смартфон Samsung Galaxy A17","subtypes":{},"tags":["B-CATEGORY","B-CATEGORY","B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T16:39:19"}
+{"annotator":"Лиза","index":784,"query":"айфон 14 256","subtypes":{"2":"memory_storage"},"tags":["B-CATEGORY","B-MODEL","B-ATTR"],"ts":"2026-07-24T16:39:27"}
+{"annotator":"Лиза","index":785,"query":"смартфоны apple","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:39:33"}
+{"annotator":"Лиза","index":786,"query":"Wollmer W600 Ultrabot","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T16:40:53"}
+{"annotator":"Лиза","index":787,"query":"20083684","subtypes":{},"tags":["B-MODEL"],"ts":"2026-07-24T16:40:55"}
+{"annotator":"Лиза","index":788,"query":"кондиционер в квартиру","subtypes":{"2":"feature"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T16:41:10"}
+{"annotator":"Лиза","index":789,"query":"pulsar","subtypes":{},"tags":["B-BRAND"],"ts":"2026-07-24T16:41:20"}
+{"annotator":"Лиза","index":790,"query":"швабры","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T16:41:23"}
+{"annotator":"Лиза","index":791,"query":"пылесборники сменный","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-24T16:41:32"}
+{"annotator":"Лиза","index":792,"query":"чехол samsung s26","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T16:41:38"}
+{"annotator":"Лиза","index":793,"query":"пульт для телевизора haier","subtypes":{"2":"purpose"},"tags":["B-CATEGORY","O","B-ATTR","B-BRAND"],"ts":"2026-07-24T16:41:55"}
+{"annotator":"Лиза","index":794,"query":"Huawei matepad 11 5","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T16:42:03"}
+{"annotator":"Лиза","index":795,"query":"Ноутбук digma pro","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T16:42:30"}
+{"annotator":"Лиза","index":796,"query":"Фен для волос профессиональный","subtypes":{"2":"purpose","3":"feature"},"tags":["B-CATEGORY","O","B-ATTR","B-ATTR"],"ts":"2026-07-24T16:42:51"}
+{"annotator":"Лиза","index":797,"query":"Мак бук аир 13 м5 512 гб","subtypes":{"4":"feature","5":"memory_storage","6":"memory_storage"},"tags":["B-CATEGORY","I-CATEGORY","B-MODEL","I-MODEL","B-ATTR","B-ATTR","I-ATTR"],"ts":"2026-07-24T16:43:18"}
+{"annotator":"Лиза","index":798,"query":"ноутбук echips","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:43:31"}
+{"annotator":"Лиза","index":799,"query":"планшет лте","subtypes":{},"tags":["B-CATEGORY","O"],"ts":"2026-07-24T16:43:35"}
+{"annotator":"Лиза","index":800,"query":"Айфон 16 256 гб","subtypes":{"2":"memory_storage","3":"memory_storage"},"tags":["B-CATEGORY","B-MODEL","B-ATTR","I-ATTR"],"ts":"2026-07-24T16:43:54"}
+{"annotator":"Лиза","index":801,"query":"iphone 17e 512","subtypes":{"2":"memory_storage"},"tags":["B-CATEGORY","B-MODEL","B-ATTR"],"ts":"2026-07-24T16:44:03"}
+{"annotator":"Лиза","index":802,"query":"Смартфоны xiaomi redmi","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL"],"ts":"2026-07-24T16:44:19"}
+{"annotator":"Лиза","index":803,"query":"Logitech g pro x superlight 2","subtypes":{},"tags":["B-BRAND","B-MODEL","I-MODEL","I-MODEL","I-MODEL","I-MODEL"],"ts":"2026-07-24T16:44:30"}
+{"annotator":"Лиза","index":804,"query":"Чайник электро","subtypes":{"1":"feature"},"tags":["B-CATEGORY","B-ATTR"],"ts":"2026-07-24T16:44:39"}
+{"annotator":"Лиза","index":805,"query":"Портативная колонка Xiaomi Sound Party, черный","subtypes":{"0":"feature","5":"color"},"tags":["B-ATTR","B-CATEGORY","B-BRAND","B-MODEL","I-MODEL","B-ATTR"],"ts":"2026-07-24T16:44:56"}
+{"annotator":"Лиза","index":806,"query":"Сушильные машины 9 кг","subtypes":{"2":"weight","3":"weight"},"tags":["B-CATEGORY","I-CATEGORY","B-ATTR","I-ATTR"],"ts":"2026-07-24T16:45:10"}
+{"annotator":"Лиза","index":807,"query":"HyperX Cloud Alpha Wireless","subtypes":{},"tags":["B-MODEL","I-MODEL","I-MODEL","B-BRAND"],"ts":"2026-07-24T16:45:45"}
+{"annotator":"Лиза","index":808,"query":"Стиральная машина Хайер 8 кг","subtypes":{"3":"weight","4":"weight"},"tags":["B-CATEGORY","I-CATEGORY","B-BRAND","B-ATTR","I-ATTR"],"ts":"2026-07-24T16:45:54"}
+{"annotator":"Лиза","index":809,"query":"tp link","subtypes":{},"tags":["B-BRAND","I-BRAND"],"ts":"2026-07-24T16:46:16"}
+{"annotator":"Лиза","index":810,"query":"машинка сушка","subtypes":{},"tags":["B-CATEGORY","I-CATEGORY"],"ts":"2026-07-24T16:46:21"}
+{"annotator":"Лиза","index":811,"query":"Моноблок msi","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:46:29"}
+{"annotator":"Лиза","index":812,"query":"Телевизоры 55 samsung smart","subtypes":{"1":"size","3":"feature"},"tags":["B-CATEGORY","B-ATTR","B-BRAND","B-ATTR"],"ts":"2026-07-24T16:46:42"}
+{"annotator":"Лиза","index":813,"query":"Планшет honor pad 9","subtypes":{},"tags":["B-CATEGORY","B-BRAND","B-MODEL","I-MODEL"],"ts":"2026-07-24T16:47:08"}
+{"annotator":"Лиза","index":814,"query":"Стиральная машинка с сушкой узкая candy","subtypes":{"3":"feature","4":"feature"},"tags":["B-CATEGORY","I-CATEGORY","O","B-ATTR","B-ATTR","B-BRAND"],"ts":"2026-07-24T16:47:23"}
+{"annotator":"Лиза","index":815,"query":"Мультистайлер dreame","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:47:28"}
+{"annotator":"Лиза","index":816,"query":"Настольная электрическая настольная плита","subtypes":{"0":"feature","1":"feature","2":"feature"},"tags":["B-ATTR","B-ATTR","B-ATTR","B-CATEGORY"],"ts":"2026-07-24T16:47:43"}
+{"annotator":"Лиза","index":817,"query":"Фигурка","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T16:47:46"}
+{"annotator":"Лиза","index":818,"query":"Поаншет самсунг","subtypes":{},"tags":["B-CATEGORY","B-BRAND"],"ts":"2026-07-24T16:47:51"}
+{"annotator":"Лиза","index":819,"query":"палесос","subtypes":{},"tags":["B-CATEGORY"],"ts":"2026-07-24T16:47:55"}
+{"annotator":"Лиза","index":820,"query":"кофемашина с автоматическим","subtypes":{"2":"feature"},"tags":["B-CATEGORY","O","B-ATTR"],"ts":"2026-07-24T16:48:10"}
+{"annotator":"Лиза","index":821,"query":"one blade","subtypes":{},"tags":["B-MODEL","I-MODEL"],"ts":"2026-07-24T16:48:33"}
+{"annotator":"Лиза","index":822,"query":"oneplus watch","subtypes":{},"tags":["B-BRAND","B-CATEGORY"],"ts":"2026-07-24T16:48:42"}
+{"annotator":"Лиза","index":823,"query":"газовая поверхность","subtypes":{"0":"feature"},"tags":["B-ATTR","B-CATEGORY"],"ts":"2026-07-24T16:48:49"}

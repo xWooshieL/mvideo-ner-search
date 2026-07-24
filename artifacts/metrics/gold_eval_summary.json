@@ -1,20 +1,26 @@
 {
-  "gold_queries": 200,
+  "gold_queries": 823,
+  "gold_meta": {
+    "path": "D:/Projects-26-06-2026/mvideo-ner-search/data/gold/bio_liza.jsonl",
+    "n_raw": 823,
+    "n_usable": 823,
+    "n_skipped": 0
+  },
   "ner": {
     "rules_regex": {
-      "micro_precision": 0.6688102893890675,
-      "micro_recall": 0.49056603773584906,
-      "micro_f1": 0.5659863945578232
+      "micro_precision": 0.6459968602825745,
+      "micro_recall": 0.4541942604856512,
+      "micro_f1": 0.5333765392093324
     },
     "crf": {
-      "micro_precision": 0.6717325227963525,
-      "micro_recall": 0.5212264150943396,
-      "micro_f1": 0.5869853917662683
+      "micro_precision": 0.6353550295857988,
+      "micro_recall": 0.47406181015452536,
+      "micro_f1": 0.5429835651074589
     }
   },
   "attr_type": {
-    "n_gold_attr_spans": 91,
-    "teacher_agree": 0.6813,
-    "clf_agree": 0.5165
+    "n_gold_attr_spans": 452,
+    "teacher_agree": 0.4336,
+    "clf_agree": 0.5354
   }
 }

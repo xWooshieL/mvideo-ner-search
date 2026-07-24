@@ -74,3 +74,26 @@ Gold entity F1 per tag:
 | MODEL | 0.2642 |
 | ATTR | 0.3548 |
 
+## 2026-07-24 17:32 — `gold-n823`
+
+**Note:** Re-eval spellfix-v2 CRF on expanded gold data/gold/bio_liza.jsonl (823 vs prior 200). No retrain.
+
+| метрика | значение |
+|---|---:|
+| silver-val micro-F1 | 0.8564 |
+| silver-val tokAcc | 0.8759 |
+| **gold micro-F1** | 0.5430 |
+| gold P / R | 0.6354 / 0.4741 |
+| rules gold micro-F1 | 0.5334 |
+| n_train / n_val | 3578 / 895 |
+| spellfix touched | 896 / 5000 |
+
+Gold entity F1 per tag:
+
+| tag | F1 |
+|---|---:|
+| BRAND | 0.7944 |
+| CATEGORY | 0.5953 |
+| MODEL | 0.2278 |
+| ATTR | 0.2945 |
+
