@@ -1,6 +1,6 @@
 ; установщик М.Видео Умный поиск v0.1.0 — стиль как у ГК МОС
 #define AppName "М.Видео Умный поиск"
-#define AppVersion "0.1.0"
+#define AppVersion "0.4.0"
 #define AppPublisher "Команда буткемпа М.Видео"
 #define AppExeName "MvSearch.exe"
 #define DistDir "C:\mv-app\dist\mvsearch"

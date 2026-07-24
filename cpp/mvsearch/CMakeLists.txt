@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(MvSearchApp VERSION 0.1.0 LANGUAGES CXX)
+project(MvSearchApp VERSION 0.4.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -81,16 +81,26 @@ if(NOT MV_REPO_ROOT)
     set(MV_REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 endif()
 set(MV_DATA_CANDIDATES
+    "${MV_REPO_ROOT}/artifacts/dicts/brands.txt"
     "${MV_REPO_ROOT}/artifacts/brands.txt"
+    "${MV_REPO_ROOT}/artifacts/dicts/categories.txt"
     "${MV_REPO_ROOT}/artifacts/categories.txt"
+    "${MV_REPO_ROOT}/artifacts/dicts/model_phrases.txt"
     "${MV_REPO_ROOT}/artifacts/model_phrases.txt"
+    "${MV_REPO_ROOT}/artifacts/dicts/spell_aliases.txt"
     "${MV_REPO_ROOT}/models/markov_typer.json"
     "${MV_REPO_ROOT}/apps/mvp/catalog.json"
 )
 set(MV_DATA_FILES "")
+set(MV_SEEN_NAMES "")
 foreach(f ${MV_DATA_CANDIDATES})
     if(EXISTS "${f}")
-        list(APPEND MV_DATA_FILES "${f}")
+        get_filename_component(_bn "${f}" NAME)
+        list(FIND MV_SEEN_NAMES "${_bn}" _idx)
+        if(_idx EQUAL -1)
+            list(APPEND MV_SEEN_NAMES "${_bn}")
+            list(APPEND MV_DATA_FILES "${f}")
+        endif()
     endif()
 endforeach()
 
