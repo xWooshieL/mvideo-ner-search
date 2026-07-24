@@ -1,0 +1,128 @@
+% ============================================================
+% ДЕНЬ 05 · FASTAPI
+% ============================================================
+\begin{frame}[t]
+\slidehead{день 05 · fastapi}{HTTP API и CLI для того же каскада}
+\pinknote{ОДИН EXTRACTOR}{Qt .exe, FastAPI и CLI ходят в одну логику: SpellFix $\to$ правила $\to$ CRF $\to$ brand/ATTR. Меняем слой один раз — проверяем тремя способами.}
+\vspace{6pt}\par
+\begin{columns}[T]
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont FastAPI (\texttt{src/service})}\par\vspace{4pt}
+{\smalltext
+\numdot{1}\ \texttt{POST /extract} — JSON фактов для интеграции.\par\vspace{3pt}
+\numdot{2}\ \texttt{POST /extract/debug} — BIO-пайплайны для лаборатории.\par\vspace{3pt}
+\numdot{3}\ \texttt{GET /health} — готовность моделей и словарей.\par\vspace{3pt}
+\numdot{4}\ Веб-UI из \texttt{web/} на том же порту.}
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont CLI}\par\vspace{4pt}
+{\smalltext
+\numdot{1}\ \texttt{python -m src.cli.cli "запрос"} — smoke-тест каскада.\par\vspace{3pt}
+\numdot{2}\ Режим \texttt{-i} / \texttt{--demo} для демо без UI.\par\vspace{3pt}
+\numdot{3}\ Тот же \texttt{QueryEntityExtractor.from\_artifacts}.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% ДЕНЬ 05 · GOLD + ДООБУЧЕНИЕ
+% ============================================================
+\begin{frame}[t]
+\slidehead{день 05 · gold}{Дообучение на золотой разметке}
+\conclusion{Уже размечено \textbf{более 500 товаров} под gold. GLiNER fine-tune на gold+silver: micro-F1 \textbf{0{,}39 $\to$ 0{,}74} на gold-val.}
+\vspace{6pt}\par
+\begin{columns}[T]
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Что сделали}\par\vspace{4pt}
+{\smalltext
+\numdot{1}\ Gold держим как held-out: не мешаем с silver-учителем.\par\vspace{4pt}
+\numdot{2}\ Fine-tune GLiNER (\texttt{urchade/gliner\_multi-v2.1}) на 154 gold + silver.\par\vspace{4pt}
+\numdot{3}\ Порог откалиброван ($\approx$0{,}35) — default 0{,}5 резал верные спаны.\par\vspace{4pt}
+\numdot{4}\ Разметка — в MvLabel (три аккаунта команды).}
+\column{0.48\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.95\textwidth,height=4.5cm,keepaspectratio]{02_finetune_f1.png}
+\end{columns}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% ДЕНЬ 05 · ЧЕСТНЫЙ ИНФЕРЕНС НА GOLD
+% ============================================================
+\begin{frame}[t]
+\slidehead{день 05 · gold eval}{Честный инференс на gold: 823 запроса}
+\pinknote{ЧТО СДЕЛАЛИ}{Прогнали текущий каскад на расширенном gold (\texttt{bio\_liza.jsonl}, n=823) без дообучения. Это не silver-val: здесь видно реальный потолок.}
+\vspace{4pt}\par
+{\renewcommand{\arraystretch}{1.2}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|L{3.4cm}|C{2.0cm}|C{2.0cm}|C{2.0cm}|C{2.0cm}|}
+\hline
+\theadl{Слой} & \thead{micro-F1} & \thead{BRAND} & \thead{CATEGORY} & \thead{ATTR}\\
+\hline
+\tcelll{rules (словари)} & \tcellc{0{,}533} & \tcellc{0{,}81} & \tcellc{0{,}58} & \tcellc{0{,}28}\\
+\hline
+\tcelll{\hb{CRF (прод)}} & \tcellc{\hnum{0{,}543}} & \tcellc{0{,}79} & \tcellc{0{,}60} & \tcellc{0{,}29}\\
+\hline
+\end{tabular}}
+\vspace{5pt}\par
+{\fontsize{7.2}{9.4}\selectfont
+\numdot{1}\ На полном gold CRF чуть выше правил (0{,}533 $\to$ 0{,}543): бренд держится, MODEL и ATTR всё ещё слабые.\par\vspace{2.5pt}
+\numdot{2}\ Согласие типов атрибутов с gold: teacher 0{,}43, классификатор 0{,}54 — запасной слой ATTR полезен, но gold ещё шумный.\par\vspace{2.5pt}
+\numdot{3}\ Раньше на срезе $\sim$200 запросов gold micro-F1 выглядел $\sim$0{,}59; на 823 честнее и жёстче — решения принимаем по этой цифре.}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% ДЕНЬ 05 · LATENCY
+% ============================================================
+\begin{frame}[t]
+\slidehead{день 05 · latency}{Скорость каскада: где укладываемся в SLA}
+\pinknote{ОРИЕНТИР}{Прод-Qt / rules+CRF — десятки мс. GLiNER как хвост — $\sim$250~мс/запрос: поэтому в прод только с гейтом, не на каждый запрос.}
+\vspace{6pt}\par
+{\renewcommand{\arraystretch}{1.28}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|L{4.2cm}|C{2.2cm}|C{2.2cm}|C{2.6cm}|}
+\hline
+\theadl{Стадия (gold, n=181)} & \thead{F1} & \thead{latency} & \theadl{где}\\
+\hline
+\tcelll{rules (словари)} & \tcellc{0{,}604} & \tcellc{\hnum{21 мс}} & \tcelll{голова}\\
+\hline
+\tcelll{rules + CRF} & \tcellc{0{,}609} & \tcellc{\hnum{15 мс}} & \tcelll{прод-каскад}\\
+\hline
+\tcelll{+ GLiNER (хвост)} & \tcellc{0{,}640} & \tcellc{249 мс} & \tcelll{эксперимент}\\
+\hline
+\tcelll{C++ MvSearch .exe} & \tcellc{---} & \tcellc{\hnum{1--2 мс}} & \tcelll{десктоп}\\
+\hline
+\end{tabular}}
+\vspace{8pt}\par
+{\smalltext
+\numdot{1}\ На \textbf{broken\_queries} CRF даёт главный прирост (0{,}58$\to$0{,}85) при $\sim$23~мс — устойчивость к шуму без трансформера.\par\vspace{3pt}
+\numdot{2}\ GLiNER zero-shot / FT: $\sim$190--210~мс на запрос — ок для офлайн-хвоста, не для SLA $<$100~мс на всём трафике.}
+\slidefoot
+\end{frame}
+
+% ============================================================
+% ДЕНЬ 05 · РЕПОЗИТОРИЙ
+% ============================================================
+\begin{frame}[t]
+\slidehead{день 05 · репозиторий}{Код, релизы и презентации}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\graynote{GITHUB}{Весь пайплайн в одном репозитории:}
+\vspace{6pt}\par
+\begin{tikzpicture}
+\node[fill=cardbg, rounded corners=4pt, inner sep=10pt, text width=\dimexpr\textwidth-20pt\relax]{%
+  {\InterSemi\fontsize{10}{13}\selectfont\color{mvred}\texttt{github.com/xWooshieL/}\\[2pt]
+  {\color{mvred}\texttt{mvideo-ner-search}}}\\[8pt]
+  {\fontsize{8}{11}\selectfont\color{mvdark}
+  Releases: \texttt{v0.4.0-final}\\[2pt]
+  SmartSearch Setup 0.4.0 + Labeling 0.1.4\\[2pt]
+  + итоговая презентация}
+};
+\end{tikzpicture}
+\column{0.46\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Что внутри}\par\vspace{5pt}
+{\smalltext
+\numdot{1}\ C++/Qt приложения + Inno Setup.\par\vspace{4pt}
+\numdot{2}\ Python: CRF, brand\_clf, SpellFix, FastAPI, CLI.\par\vspace{4pt}
+\numdot{3}\ Ноутбуки: EDA, GLiNER, general\_study.\par\vspace{4pt}
+\numdot{4}\ Журнал экспериментов со снимками метрик и broken-кейсами.}
+\end{columns}
+\slidefoot
+\end{frame}

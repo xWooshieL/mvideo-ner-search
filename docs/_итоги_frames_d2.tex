@@ -1,0 +1,300 @@
+\begin{frame}[t]
+\slidehead{качество данных · обзор}{Что нашли, когда прочитали данные руками}
+\begin{columns}[T]
+\column{0.5\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.90\textwidth]{eda_dq_completeness.png}
+\column{0.47\textwidth}
+\conclusion{Датасет собирал человек — в нём есть системные дыры и ошибки. Их надо чистить до обучения, иначе модель учится на мусоре.}
+\vspace{6pt}\par
+{\smalltext
+\numdot{1}\ Только \textbf{72\%} кликов имеют полную карточку (бренд + название + цена).\par\vspace{4pt}
+\numdot{2}\ У \textbf{22\%} карточка вообще не подтянулась — пусты и бренд, и название (join не срослось при сборке).\par\vspace{4pt}
+\numdot{3}\ Формальных \texttt{NaN} нет — дыры спрятаны в пустых строках \texttt{""}, их легко не заметить.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{качество данных · перепутанные колонки}{Артикул уехал в поле бренда}
+\conclusion{В 66 строках \textbf{бренд — это просто число}. В 98,5\% случаев это артикул из середины названия, попавший не в ту колонку.}
+\vspace{8pt}\par
+{\renewcommand{\arraystretch}{1.4}\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|L{7.4cm}|C{2.3cm}|C{2.5cm}|}
+\hline
+\theadl{Название товара (sku\_name)} & \thead{Поле «бренд»} & \thead{Реальность}\\
+\hline
+\tcelll{Вентилятор напольный \hb{27942} GL 8112} & \tcellc{\hb{27942}} & \tacc{артикул}\\
+\hline
+\tcelll{Камера видеонаблюдения \hb{360} V380 Pro APP} & \tcellc{\hb{360}} & \tacc{артикул}\\
+\hline
+\tcelll{Туфли женские \hb{0} Туфли} & \tcellc{\hb{0}} & \tacc{заглушка}\\
+\hline
+\tcelll{Бритва \hb{4088} Extra Smooth Embrace} & \tcellc{\hb{4088}} & \tacc{артикул}\\
+\hline
+\end{tabular}}
+\vspace{6pt}\par
+{\smalltext\color{mvgray} Правило для нас: числовой \texttt{sku\_brand\_name} — не бренд, а шум. Реальный бренд ищем в тексте названия либо считаем, что его нет.}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{качество данных · транслит}{Транслит, смесь языков и омоглифы}
+\begin{columns}[T]
+\column{0.52\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.98\textwidth]{eda_dq_issues.png}
+\column{0.45\textwidth}
+\conclusion{\textbf{35\%} уникальных запросов — смесь кириллицы и латиницы. Модель обязана быть устойчива к раскладке.}
+\vspace{5pt}\par
+{\renewcommand{\arraystretch}{1.05}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|L{2.3cm}|L{3.9cm}|}
+\hline
+\theadl{Тип} & \theadl{Пример из данных}\\
+\hline
+\tcelll{\hb{Смесь}} & \tcelll{«iPhone 17 про Макс», «bosh лодильник»}\\
+\hline
+\tcelll{\hb{Транслит}} & \tcelll{«noutbuk», «televizor», «Stiralnay»}\\
+\hline
+\tcelll{\hb{Омоглиф}} & \tcelll{«Ресантa» (а — кир.), «Фаzа»}\\
+\hline
+\tcelll{\hb{Раскладка}} & \tcelll{«dfhjxyfz» {\color{mvred}$\to$} «варочная»}\\
+\hline
+\end{tabular}}
+\end{columns}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{качество данных · забытая раскладка}{Печатали по-русски в EN-раскладке}
+\conclusion{Нашли \textbf{80+} запросов вида «dfhjxyfz gfytkm» — это «варочная панель», набранное в латинской раскладке. Поиск обязан их авто-исправлять.}
+\vspace{-2pt}\par
+{\fontsize{6.0}{7.8}\selectfont\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.15}
+\begin{columns}[T]
+\column{0.49\textwidth}
+\begin{tabular}{@{}L{3.0cm}@{\ }L{3.4cm}@{}}
+\dqhead{Ввели (EN)} & \dqhead{Хотели найти}\\[2pt]
+\dqorig{lkz djkjc aty gkjqrf gkjqrf} & {для волос фен плойка плойка} \\
+\dqorig{pfhzlyst ecnhjqcndf lkz frrevekjnjhjd fdnj} & {зарядные устройства для аккумулоторов авто} \\
+\dqorig{dfhjxyfz gfytkm ,tkjt cntrkh} & {варочная панель белое стеклр} \\
+\dqorig{dbltjrfvthf lkz gjvtotybz} & {видеокамера для помещения} \\
+\dqorig{dcnhfbdftvfz cnbhfkmyfz vfibyf} & {встраиваемая стиральная машина} \\
+\dqorig{le[jdjq irfa 'ktrnhbxtcrbq} & {духовой шкаф электрический} \\
+\dqorig{pfhzlyjt ecnhjqcndj czjvb} & {зарядное устройство сяоми} \\
+\dqorig{rf,tkm lkz rkfdbfnehs} & {кабель для клавиатуры} \\
+\dqorig{gsktcjc dthnbrfkmysq ghjdjlyjq} & {пылесос вертикальный проводной} \\
+\dqorig{nhbvvth lkz yjcf} & {триммер для носа} \\
+\dqorig{'ktrnhbxtcrfz gkbnf akfvf} & {электрическая плита флама} \\
+\dqorig{,tujdfz ljhj;rf} & {беговая дорожка} \\
+\dqorig{,tcghjdjlyjq gsktcjc} & {беспроводной пылесос} \\
+\end{tabular}
+\column{0.49\textwidth}
+\begin{tabular}{@{}L{3.0cm}@{\ }L{3.4cm}@{}}
+\dqhead{Ввели (EN)} & \dqhead{Хотели найти}\\[2pt]
+\dqorig{dtynbkznjh yfcnjkmysq} & {вентилятор настольный} \\
+\dqorig{dthnbrfkmysq gsktcjc} & {вертикальный пылесос} \\
+\dqorig{dcnhfbbdftvsq [jkjlbkmybr} & {встраииваемый холодильник} \\
+\dqorig{dcnhjtyyfz gjceljvjqrf} & {встроенная посудомойка} \\
+\dqorig{dcnhjtyysq [jkjlbkmybr} & {встроенный холодильник} \\
+\dqorig{ufpjdfz gkbnf} & {газовая плита} \\
+\dqorig{ufqrjdthn htldthu} & {гайковерт редверг} \\
+\dqorig{ukflbkmyfz ljcrf} & {гладильная доска} \\
+\dqorig{lhtkm ,eh} & {дрель бур} \\
+\dqorig{pfdfhjxysq xfqybr} & {заварочный чайник} \\
+\dqorig{pfhzlyjt ecnhjqcndj} & {зарядное устройство} \\
+\dqorig{buhjdjt rhtckj} & {игровое кресло} \\
+\dqorig{buhjdjq hekm} & {игровой руль} \\
+\dqorig{rkfdbfnehf ,tkfz} & {клавиатура белая} \\
+\end{tabular}
+\end{columns}}
+\vspace{3pt}\par
+{\smalltext\color{mvgray} Детект дешёвый — одна таблица QWERTY$\leftrightarrow$ЙЦУКЕН, ловится в «голове» каскада рядом с regex.}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{качество данных · дубли и меры}{Дубли брендов и что мы с этим делаем}
+\begin{columns}[T]
+\column{0.5\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Один бренд — много написаний}\par\vspace{5pt}
+{\renewcommand{\arraystretch}{1.3}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|L{3.0cm}|L{3.4cm}|}
+\hline
+\theadl{Проблема} & \theadl{Пример}\\
+\hline
+\tcelll{Регистр} & \tcelll{APPLE / Apple, honor / HONOR}\\
+\hline
+\tcelll{Перевод} & \tcelll{Stinol / Стинол, KION / КИОН}\\
+\hline
+\tcelll{Дубли строк} & \tcelll{один клик записан по 2--3 раза}\\
+\hline
+\end{tabular}}
+\vspace{5pt}\par
+{\smalltext\color{mvgray} 205 групп брендов различаются лишь регистром/пробелами, $\sim$209 групп — кандидаты на омоглифы.}
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Меры (слой нормализации)}\par\vspace{6pt}
+{\smalltext
+\numdot{1}\ Приводим бренды к канону: регистр, транслит, схлопывание дублей (\textbf{Стинол}=\textbf{Stinol}).\par\vspace{5pt}
+\numdot{2}\ Фильтруем мусор до обучения: пустые карточки и цена $\le$0 — вон или в отдельную метку.\par\vspace{5pt}
+\numdot{3}\ Позиция \texttt{= 0} — это «нет данных», не топ выдачи; не используем как сигнал.\par\vspace{5pt}
+\numdot{4}\ Это прямой аргумент за \textbf{H5}: одним regex единообразие не навести.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{постановка · переосмысление}{Задача — не «обычный NER»}
+\conclusion{Главная цель — максимизировать покрытие edge-cases, а не выбить красивый F1 на простых запросах.}
+\vspace{12pt}\par
+\begin{columns}[T]
+\column{0.48\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Почему так}\par\vspace{6pt}
+{\smalltext
+\numdot{1}\ Голова запросов решается словарём за день — это не подвиг.\par\vspace{5pt}
+\numdot{2}\ Конверсию теряют хвосты: опечатки, редкие бренды, склейки, смесь языков.\par\vspace{5pt}
+\numdot{3}\ Ценность решения = сколько хвоста мы покрываем при SLA $<$ 100 мс.}
+\column{0.48\textwidth}
+\begin{tikzpicture}
+\node[fill=cardbg, rounded corners=3pt, inner sep=7pt, text width=\dimexpr\textwidth-14pt\relax]{
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Работаем в вероятностном пространстве}\par\vspace{5pt}
+{\smalltext\color{mvgray} Каждый слой отдаёт не только ответ, но и уверенность. Если уверенность низкая — запрос уходит на слой тяжелее. Так простое остаётся быстрым, а сложное — решаемым.}
+};
+\end{tikzpicture}
+\end{columns}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{архитектура · слои}{Три слоя: голова, середина, хвост}
+\begin{center}
+\begin{tikzpicture}[
+  lay/.style={rounded corners=3pt, inner sep=7pt, text width=3.3cm, align=left, minimum height=2.4cm},
+  arr/.style={-{Stealth[length=2.6mm]}, line width=1pt, mvgray}
+]
+  \node[lay, fill=cardbg] (l1) at (0,0)
+    {{\color{mvred}\InterBold\small ГОЛОВА}\par\vspace{3pt}
+     {\InterSemi\footnotesize regex + правила + словари}\par\vspace{4pt}
+     {\fontsize{8}{10.5}\selectfont\color{mvgray}частые и простые запросы; мгновенно, прозрачно, дёшево}};
+  \node[lay, fill=cardbg] (l2) at (5.55,0)
+    {{\color{mvred}\InterBold\small СЕРЕДИНА}\par\vspace{3pt}
+     {\InterSemi\footnotesize CRF и аналоги}\par\vspace{4pt}
+     {\fontsize{8}{10.5}\selectfont\color{mvgray}token-level: BIO и другие схемы, либо переход к span-level разметке}};
+  \node[lay, fill=mvdark] (l3) at (11.1,0)
+    {{\color{mvred}\InterBold\small ХВОСТ}\par\vspace{3pt}
+     {\color{white}\InterSemi\footnotesize трансформеры + LLM \textbf{ИЛИ} RNN}\par\vspace{4pt}
+     {\fontsize{8}{10.5}\selectfont\color{white!75!mvdark}edge-cases, которые не решаются правилами и обычной NER-моделью}};
+  \draw[arr] (l1.east) -- node[above=2.5pt, font=\fontsize{6.5}{7.5}\selectfont\color{mvgray}]{низкая увер.} (l2.west);
+  \draw[arr] (l2.east) -- node[above=2.5pt, font=\fontsize{6.5}{7.5}\selectfont\color{mvgray}]{низкая увер.} (l3.west);
+\end{tikzpicture}
+\end{center}
+\vspace{8pt}\par
+\conclusion{Каскад по уверенности: 90\% трафика решают дешёвые слои, тяжёлые модели работают только там, где реально нужны.}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{честные метрики · дымовой тест}{CRF на слабой BIO-разметке: ранний smoke-тест}
+\conclusion{Метрики на серебряных метках оптимистичны — это ориентир, а не финальная оценка. Сейчас есть gold-holdout и журнал метрик; полный gold доразмечаем приложением.}
+\vspace{8pt}\par
+\begin{columns}[T]
+\column{0.42\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Быстрый тест на выборке}\par\vspace{5pt}
+\begin{tikzpicture}[
+  st/.style={rounded corners=2pt, fill=cardbg, inner sep=6pt, text width=\dimexpr\textwidth-14pt\relax, font=\smalltext}
+]
+\node[st]{
+\begin{tabular}{@{}ll@{}}
+Token accuracy & \InterBold\color{mvred}0.89\\[3pt]
+Entity micro-F1 & \InterBold\color{mvred}0.85\\[3pt]
+F1 BRAND & \InterBold 0.95\\[3pt]
+F1 CATEGORY & \InterBold 0.78\\[3pt]
+F1 ATTR & \InterBold 0.85\\
+\end{tabular}};
+\end{tikzpicture}
+\column{0.54\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Что это значит}\par\vspace{5pt}
+{\smalltext
+\numdot{1}\ BRAND учится легко (0.95) — словарь почти решает задачу в голове каскада.\par\vspace{4pt}
+\numdot{2}\ CATEGORY слабее (0.78) — формулировки разнообразнее, тут нужен либо трансформер, либо больше слабо-размеченных данных.\par\vspace{4pt}
+\numdot{3}\ Итог: CRF — рабочая середина каскада, но категорию и хвост дотягиваем следующим слоем.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{eda · проверка гипотез}{Гипотезы: что подтвердилось}
+{\renewcommand{\arraystretch}{1.28}\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|L{6.4cm}|C{2.0cm}|C{4.0cm}|}
+\hline
+\theadl{Гипотеза} & \thead{Статус} & \theadl{Комментарий}\\
+\hline
+\tcelll{\hnum{H1.} Запросы — короткие категорийные интенты} & \tacc{Да} & \tcellc{топы — чистые категории}\\
+\hline
+\tcelll{\hnum{H2.} Клики концентрируются в топе выдачи} & \tacc{Да} & \tcellc{медиана позиции = 4}\\
+\hline
+\tcelll{\hnum{H3.} Бренд в запросе $\Rightarrow$ клик того же бренда} & \tcellc{В основном} & \tcellc{heatmap диагональна}\\
+\hline
+\tcelll{\hnum{H4.} Цена сильно влияет на позицию клика} & \tcellc{Нет} & \tcellc{hexbin: связь слабая}\\
+\hline
+\tcelll{\hnum{H5.} Атрибуты пишут единообразно} & \tcellc{Нет} & \tcellc{«16гб», «16 gb», «16 ГБ»}\\
+\hline
+\tcelll{\hnum{H6.} Бренд обычно написан в запросе} & \tcellc{Нет} & \tcellc{только 27\% — нужен классификатор}\\
+\hline
+\end{tabular}}
+\vspace{5pt}\par
+\tnote{Красное = подтверждено данными. H5 — атрибуты пишут как попало: одним regex не закрыть, нужен отдельный классификатор типов.}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{обновление · разметка}{Что тогда уже работало: лемматизация}
+\conclusion{К тому моменту подключили лемматизацию (Natasha) — словарь начал ловить любые словоформы: «холодильникАМИ», «краснУЮ», «стиральнУЮ машинУ».}
+\vspace{6pt}\par
+\begin{columns}[T]
+\column{0.5\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Что уже умели}\par\vspace{5pt}
+{\smalltext
+\numdot{1}\ Лемматизация: «холодильникАМИ» становится «холодильник» — категория находится, даже если слово склонено. Это прямо чинило слабый CATEGORY-recall.\par\vspace{4pt}
+\numdot{2}\ Атрибутов regex стало \textbf{18} вместо 7: память, размер, мощность, ток, вес, объём, частота, гарантия и др.\par\vspace{4pt}
+\numdot{3}\ Расклейка склеек: «16гб» превращается в «16 гб», спаны атрибутов стали точными.}
+\column{0.48\textwidth}
+\begin{tikzpicture}
+\node[fill=cardbg, rounded corners=3pt, inner sep=8pt, text width=\dimexpr\textwidth-16pt\relax]{
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Пример разбора}\par\vspace{5pt}
+{\fontsize{8}{11}\selectfont\color{mvdark}
+запрос: «стиральную машину haier белую»\par\vspace{4pt}
+бренд: \textbf{Haier}\par
+категория: \textbf{стиральная машина}\par
+атрибуты: цвет = \textbf{белую}}
+};
+\end{tikzpicture}
+\end{columns}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{архитектура · латентность и SLA}{Как держим SLA $<$ 100 мс с лемматизацией}
+\conclusion{Нейромодель Natasha грузится 1 раз при старте (\textasciitilde{}1 с), а сам разбор запроса — \textbf{$<$1 мс}. Онлайн-лемматизация в SLA укладывается, но голову трафика кэшируем.}
+\vspace{8pt}\par
+\begin{columns}[T]
+\column{0.46\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Замеры (наш семпл)}\par\vspace{5pt}
+\begin{tikzpicture}[st/.style={rounded corners=2pt, fill=cardbg, inner sep=6pt, text width=\dimexpr\textwidth-14pt\relax, font=\smalltext}]
+\node[st]{
+\begin{tabular}{@{}ll@{}}
+Загрузка модели (старт) & \InterBold\color{warnorange}\textasciitilde{}965 мс\\[3pt]
+Лемматизация 1 запроса & \InterBold\color{okgreen}\textasciitilde{}0.6 мс\\[3pt]
+Токенизация & \InterBold\color{okgreen}0.007 мс\\[3pt]
+Бюджет SLA & \InterBold 100 мс\\
+\end{tabular}};
+\end{tikzpicture}
+\par\vspace{5pt}
+{\smalltext\color{mvgray} Модель загружается один раз при инициализации сервиса, а не на каждый запрос — поэтому старт не влияет на латентность ответов.}
+\column{0.5\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Что кэшируем / планируем}\par\vspace{6pt}
+{\smalltext
+\numdot{1}\ \textbf{Леммы словарей} — считаем один раз офлайн при сборке лейблера, а не на каждый запрос.\par\vspace{5pt}
+\numdot{2}\ \textbf{Результат по запросу} (LRU-кэш): голова трафика — это одни и те же запросы; 90\% кликов дают лишь 60\% уникальных строк.\par\vspace{5pt}
+\numdot{3}\ \textbf{Леммы токенов} — кэш «словоформа $\to$ лемма»: слова повторяются, второй раз не считаем.\par\vspace{4pt}
+\numdot{4}\ Фолбэк: без Natasha «голова» каскада (regex + словарь) работает — деградируем мягко.}
+\end{columns}
+\slidefoot
+\end{frame}

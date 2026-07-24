@@ -1,0 +1,168 @@
+\begin{frame}[t]
+\slidehead{пайплайн · прод}{Гибридный каскад, который работает сейчас}
+\pinknote{В ПРОДЕ}{SpellFix, правила и словари, CRF, затем классификаторы бренда, категории и атрибутов. Тот же каскад в Qt .exe, FastAPI и CLI. GLiNER измерен, в сервис пока не вшит.}
+\vspace{4pt}\par
+\begin{center}
+\begin{tikzpicture}[node distance=0pt]
+  \node (a) {\pipestepn{cardbg}{mvdark}{ЗАПРОС\\\fontsize{5}{6}\selectfont «телфон 16гь»}};
+  \node[right=1pt of a] (c1) {\chevron};
+  \node[right=1pt of c1] (b) {\pipestepn{mvred}{white}{SPELLFIX\\\fontsize{5}{6}\selectfont опечатки}};
+  \node[right=1pt of b] (c2) {\chevron};
+  \node[right=1pt of c2] (d) {\pipestepn{cardbg}{mvdark}{ПРАВИЛА\\\fontsize{5}{6}\selectfont словари}};
+  \node[right=1pt of d] (c3) {\chevron};
+  \node[right=1pt of c3] (e) {\pipestepn{cardbg}{mvdark}{CRF\\\fontsize{5}{6}\selectfont BIO-теги}};
+\end{tikzpicture}\\[4pt]
+\begin{tikzpicture}[node distance=0pt]
+  \node (f) {\pipestepn{cardbg}{mvdark}{БРЕНД\\\fontsize{5}{6}\selectfont классификатор}};
+  \node[right=1pt of f] (c4) {\chevron};
+  \node[right=1pt of c4] (g) {\pipestepn{cardbg}{mvdark}{КАТЕГОРИЯ\\\fontsize{5}{6}\selectfont классификатор}};
+  \node[right=1pt of g] (c5) {\chevron};
+  \node[right=1pt of c5] (h) {\pipestepn{mvdark}{white}{АТРИБУТЫ\\\fontsize{5}{6}\selectfont классификатор}};
+\end{tikzpicture}
+\end{center}
+\vspace{5pt}\par
+{\fontsize{7.2}{9.4}\selectfont
+\numdot{1}\ Каждый слой закрывает слабость предыдущего: словарь мгновенный, CRF — морфология, классификаторы — скрытый бренд, категория и тип атрибута.\par\vspace{2pt}
+\numdot{2}\ Один SpellFix и при сборке silver, и в бою — модель не видит «грязный» текст только в проде.\par\vspace{2pt}
+\numdot{3}\ На выходе структурированные факты, а не «чёрный ящик».}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{день 04 · новшества}{Что изменилось после MVP}
+\pinknote{КОРОТКО}{Закрыли шум на входе, завели человекочитаемый журнал экспериментов, прогнали GLiNER как хвост и впервые измерили весь каскад на трёх типах данных.}
+\vspace{10pt}\par
+\begin{center}
+\begin{tikzpicture}[node distance=7pt]
+  \node (o1) {\iconcardsm{SpellFix}{гомоглифы, fuzzy,\\}{алиасы транслита}};
+  \node[right=of o1] (o2) {\iconcardsm{CRF rebuild}{пересборка silver\\}{и рост gold microF1}};
+  \node[right=of o2] (o3) {\iconcardsm{Журнал}{снимки метрик\\}{и честные кейсы}};
+  \node[right=of o3] (o4) {\iconcardsm{GLiNER + joint}{один silver,\\}{метрика пайплайна}};
+\end{tikzpicture}
+\end{center}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{spellfix}{Что сделали в SpellFix}
+\begin{columns}[T]
+\column{0.52\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Три механики}\par\vspace{5pt}
+{\renewcommand{\arraystretch}{1.3}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|L{2.5cm}|L{4.0cm}|}
+\hline
+\theadl{Механика} & \theadl{Пример}\\
+\hline
+\tcelll{\hb{Fuzzy + клавиатура}} & \tcelll{«16гь» становится «16 гб», «телфон» — «телефон»}\\
+\hline
+\tcelll{\hb{Гомоглифы}} & \tcelll{кириллица и латиница-двойники: c/с, a/а, e/е}\\
+\hline
+\tcelll{\hb{Алиасы}} & \tcelll{«сони» становится «sony», «ксяоми» — «xiaomi»}\\
+\hline
+\end{tabular}}
+\column{0.44\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Эффект на CRF}\par\vspace{5pt}
+{\smalltext
+SpellFix тронул \textbf{767 / 5000} silver-запросов до обучения.\par\vspace{5pt}
+Gold micro-F1: \textbf{0{,}582} до правки и \textbf{0{,}594} после.\par\vspace{5pt}
+Сильнее всего вырос ATTR (+0{,}07) — единицы с опечаткой больше не ломают учителя.}
+\end{columns}
+\vspace{6pt}\par
+\conclusion{Одна функция чинит текст и при сборке обучающих данных, и в бою — без отдельного «продакшен-режима».}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{день 04 · журнал}{Честные кейсы и журнал экспериментов}
+\begin{columns}[T]
+\column{0.52\textwidth}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont SpellFix справляется}\par\vspace{4pt}
+{\smalltext\color{mvgray}
+\wplain{телфон 16 гь} \chevron\ \wplain{телефон 16 гб}\par\vspace{3pt}
+\wplain{планше тxiaomi} \chevron\ \wplain{планшет xiaomi}\par\vspace{3pt}
+\wplain{ноутбок asus 16гь} \chevron\ \wplain{ноутбук asus 16 гб}}
+\par\vspace{7pt}
+{\InterSemi\fontsize{8.5}{10.5}\selectfont Пока нет}\par\vspace{4pt}
+{\smalltext\color{mvgray}
+\wplain{моильник 16 гб} — слишком далёкая порча (3 буквы), вне fuzzy}
+\column{0.44\textwidth}
+\graynote{ЖУРНАЛ}{Папка снимков метрик CRF, brand и ATTR плюс \texttt{broken\_queries.md}. Git хранит код; сюда пишем, что поменяли и что получили.}
+\vspace{6pt}\par
+\pinknote{НЕ СПРЯТАЛИ}{На «sony ps5» NER ок, но классификатор категории иногда путает PlayStation с феном или смартфоном — отдельный баг, не SpellFix.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{gliner · zero-shot}{Что даёт модель без дообучения}
+\begin{columns}[T]
+\column{0.46\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.95\textwidth,height=4.7cm,keepaspectratio]{01_zero_shot_f1.png}
+\column{0.5\textwidth}
+\graynote{МОДЕЛЬ}{\texttt{urchade/gliner\_multi-v2.1} — мультиязычный чекпоинт. Роль — гибкий хвост, не замена CRF.}
+\vspace{5pt}\par
+{\smalltext
+\numdot{1}\ Лучшая схема промпта — английские лейблы: micro-F1 \textbf{0{,}35} на gold.\par\vspace{4pt}
+\numdot{2}\ BRAND находится и без обучения (F1 $\approx$0{,}79).\par\vspace{4pt}
+\numdot{3}\ CATEGORY / ATTR почти пустые — домену нужны примеры.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{gliner · fine-tune}{После обучения на gold + silver}
+\begin{columns}[T]
+\column{0.46\textwidth}
+\vspace{2pt}\centering\includegraphics[width=0.95\textwidth,height=4.7cm,keepaspectratio]{02_finetune_f1.png}
+\column{0.5\textwidth}
+\conclusion{micro-F1 \textbf{0{,}39 $\to$ 0{,}74}: CATEGORY подтянулась с 0 до 0{,}88 — модель увидела домен.}
+\vspace{5pt}\par
+{\smalltext
+\numdot{1}\ Порог откалиброван отдельно ($\approx$0{,}35): default 0{,}5 резал верные, но неуверенные спаны.\par\vspace{4pt}
+\numdot{2}\ ATTR остаётся самым слабым (F1 $\approx$0{,}36) — мало и шумно в gold.\par\vspace{4pt}
+\numdot{3}\ В прод не подключён: сначала гейт и latency-бюджет.}
+\end{columns}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{joint study}{Один silver — честное сравнение каскада}
+\pinknote{ИДЕЯ}{CRF и GLiNER на \textbf{одном} silver; gold — held-out. Стадии: rules, затем +CRF, затем +GLiNER.}
+\vspace{2pt}\par
+\begin{columns}[T]
+\column{0.52\textwidth}
+\vspace{0pt}\centering\includegraphics[width=0.95\textwidth,height=3.7cm,keepaspectratio]{02_pipeline_f1.png}
+\column{0.44\textwidth}
+{\fontsize{7}{9}\selectfont
+\numdot{1}\ На \textbf{broken} главный прирост — CRF: \textbf{0{,}58 $\to$ 0{,}85}.\par\vspace{2pt}
+\numdot{2}\ На \textbf{gold} GLiNER сверху: \textbf{0{,}61 $\to$ 0{,}64}.\par\vspace{2pt}
+\numdot{3}\ На шуме «слепой» хвост \textbf{портит} precision (0{,}85$\to$0{,}80).\par\vspace{2pt}
+\numdot{4}\ Silver-val $\approx$1{,}0 — самосогласие teacher, не истина.}
+\end{columns}
+\vspace{2pt}\par
+\conclusion{GLiNER звать только когда rules+CRF ничего не нашли — не для безусловного дозаполнения.}
+\slidefoot
+\end{frame}
+
+\begin{frame}[t]
+\slidehead{метрики · сводка}{Честные ориентиры на одной странице}
+{\renewcommand{\arraystretch}{1.28}\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|L{4.2cm}|C{2.4cm}|C{2.4cm}|L{3.6cm}|}
+\hline
+\theadl{Что} & \thead{было} & \thead{стало} & \theadl{где смотреть}\\
+\hline
+\tcelll{CRF gold micro-F1} & \tcellc{0{,}582} & \tcellc{\hnum{0{,}543}} & \tcelll{n=823, честный eval}\\
+\hline
+\tcelll{Brand clf macro-F1} & \tcellc{—} & \tcellc{\hnum{0{,}94}} & \tcelll{silver-val}\\
+\hline
+\tcelll{Каскад gold (rules+CRF+GL)} & \tcellc{0{,}604} & \tcellc{\hnum{0{,}640}} & \tcelll{joint study}\\
+\hline
+\tcelll{Каскад broken (rules+CRF)} & \tcellc{0{,}578} & \tcellc{\hnum{0{,}846}} & \tcelll{устойчивость к шуму}\\
+\hline
+\tcelll{GLiNER FT gold} & \tcellc{0{,}39} & \tcellc{\hnum{0{,}74}} & \tcelll{изолированный трек}\\
+\hline
+\end{tabular}}
+\vspace{8pt}\par
+\tnote{Главное правило: silver-val красивый, но завышен. Решения принимаем по gold (сейчас 823 запроса) и по broken-кейсам.}
+\slidefoot
+\end{frame}
