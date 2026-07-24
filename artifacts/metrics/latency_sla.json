@@ -1,0 +1,180 @@
+{
+  "base_url": "http://127.0.0.1:8000",
+  "gold_path": "D:/Projects-26-06-2026/mvideo-ner-search/artifacts/gold/bio_liza.jsonl",
+  "suites": [
+    {
+      "n_total": 15,
+      "n_ok": 15,
+      "n_err": 0,
+      "success_rate": 1.0,
+      "server_latency_ms": {
+        "n": 15,
+        "mean_ms": 11.62,
+        "std_ms": 9.264,
+        "min_ms": 2.44,
+        "p50_ms": 8.243,
+        "p90_ms": 28.797,
+        "p95_ms": 29.131,
+        "p99_ms": 29.137,
+        "max_ms": 29.139
+      },
+      "client_rtt_ms": {
+        "n": 15,
+        "mean_ms": 14.023,
+        "std_ms": 9.21,
+        "min_ms": 4.599,
+        "p50_ms": 10.515,
+        "p90_ms": 31.077,
+        "p95_ms": 31.507,
+        "p99_ms": 31.663,
+        "max_ms": 31.702
+      },
+      "sla": {
+        "target_p95_server_ms": 100.0,
+        "p95_server_ok": true,
+        "target_p95_client_ms": 150.0,
+        "p95_client_ok": true
+      },
+      "suite": "demo_easy"
+    },
+    {
+      "n_total": 30,
+      "n_ok": 30,
+      "n_err": 0,
+      "success_rate": 1.0,
+      "server_latency_ms": {
+        "n": 30,
+        "mean_ms": 19.337,
+        "std_ms": 12.572,
+        "min_ms": 4.721,
+        "p50_ms": 15.902,
+        "p90_ms": 40.451,
+        "p95_ms": 42.018,
+        "p99_ms": 45.164,
+        "max_ms": 46.021
+      },
+      "client_rtt_ms": {
+        "n": 30,
+        "mean_ms": 21.587,
+        "std_ms": 12.629,
+        "min_ms": 6.666,
+        "p50_ms": 18.08,
+        "p90_ms": 42.921,
+        "p95_ms": 44.165,
+        "p99_ms": 47.516,
+        "max_ms": 48.5
+      },
+      "sla": {
+        "target_p95_server_ms": 100.0,
+        "p95_server_ok": true,
+        "target_p95_client_ms": 150.0,
+        "p95_client_ok": true
+      },
+      "suite": "demo_medium"
+    },
+    {
+      "n_total": 30,
+      "n_ok": 30,
+      "n_err": 0,
+      "success_rate": 1.0,
+      "server_latency_ms": {
+        "n": 30,
+        "mean_ms": 35.764,
+        "std_ms": 18.171,
+        "min_ms": 6.764,
+        "p50_ms": 35.251,
+        "p90_ms": 60.019,
+        "p95_ms": 61.909,
+        "p99_ms": 64.126,
+        "max_ms": 64.804
+      },
+      "client_rtt_ms": {
+        "n": 30,
+        "mean_ms": 38.005,
+        "std_ms": 18.245,
+        "min_ms": 8.984,
+        "p50_ms": 37.49,
+        "p90_ms": 62.418,
+        "p95_ms": 64.136,
+        "p99_ms": 66.251,
+        "max_ms": 66.945
+      },
+      "sla": {
+        "target_p95_server_ms": 100.0,
+        "p95_server_ok": true,
+        "target_p95_client_ms": 150.0,
+        "p95_client_ok": true
+      },
+      "suite": "demo_hard"
+    },
+    {
+      "n_total": 200,
+      "n_ok": 200,
+      "n_err": 0,
+      "success_rate": 1.0,
+      "server_latency_ms": {
+        "n": 200,
+        "mean_ms": 39.501,
+        "std_ms": 29.072,
+        "min_ms": 2.14,
+        "p50_ms": 36.459,
+        "p90_ms": 83.656,
+        "p95_ms": 97.323,
+        "p99_ms": 119.523,
+        "max_ms": 121.537
+      },
+      "client_rtt_ms": {
+        "n": 200,
+        "mean_ms": 41.832,
+        "std_ms": 29.153,
+        "min_ms": 4.002,
+        "p50_ms": 38.93,
+        "p90_ms": 86.537,
+        "p95_ms": 99.474,
+        "p99_ms": 122.179,
+        "max_ms": 124.513
+      },
+      "sla": {
+        "target_p95_server_ms": 100.0,
+        "p95_server_ok": true,
+        "target_p95_client_ms": 150.0,
+        "p95_client_ok": true
+      },
+      "suite": "gold"
+    }
+  ],
+  "demo_queries": {
+    "easy": [
+      "samsung",
+      "пылесос",
+      "геймпад xbox",
+      "nintendo switch 2",
+      "телевизоры haier 50"
+    ],
+    "medium": [
+      "телевизор samsung 55 дюймов",
+      "ноутбук asus 16 гб",
+      "смартфон xiaomi 128gb",
+      "пылесос dyson v15",
+      "холодильник indesit no frost",
+      "наушники jbl tune 510",
+      "стиральная машина bosch 8 кг",
+      "монитор lg 27",
+      "планшет samsung tab s9",
+      "чайник redmond"
+    ],
+    "hard": [
+      "телфон 16 гь",
+      "сони плейстейшен 5",
+      "ноутбок asus 16гь",
+      "планше тxiaomi",
+      "айфон 16 про макс",
+      "лэптоп ксяоми редми",
+      "playstation5 sony slim",
+      "тв самсунг 65 4k",
+      "морозилка индесит 200л",
+      "х0лодильник bosch"
+    ]
+  },
+  "notes": "server_latency_ms = extractor cascade (SpellFix→rules→CRF→clf); client_rtt_ms = HTTP round-trip. Warmup excluded. Demo suites repeated 3x for stable percentiles."
+}
