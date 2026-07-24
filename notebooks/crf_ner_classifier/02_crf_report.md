@@ -2,7 +2,7 @@
 
 Model: `models\ner_crf.pkl`  
 Silver: `D:\Projects-26-06-2026\mvideo-ner-search\artifacts\silver\ner_bio\silver_bio_slice.parquet`  
-Train/val: **3570** / **893** (seed=42)
+Train/val: **3578** / **895** (seed=42)
 
 ## Features (not TF-IDF)
 
@@ -11,30 +11,30 @@ Typos: weak (no edit-distance).
 
 ## Silver-val (weak↔weak, optimistic)
 
-- token accuracy: **0.875**
-- entity micro-F1: **0.856** (P=0.864 R=0.848)
-- macro-F1: **0.824**
+- token accuracy: **0.876**
+- entity micro-F1: **0.856** (P=0.861 R=0.852)
+- macro-F1: **0.817**
 
 | label | P | R | F1 | support |
 |---|---:|---:|---:|---:|
-| BRAND | 0.958 | 0.947 | 0.953 | 511 |
-| CATEGORY | 0.825 | 0.823 | 0.824 | 791 |
-| MODEL | 0.748 | 0.702 | 0.724 | 114 |
-| ATTR | 0.834 | 0.761 | 0.796 | 159 |
+| BRAND | 0.957 | 0.959 | 0.958 | 510 |
+| CATEGORY | 0.826 | 0.828 | 0.827 | 774 |
+| MODEL | 0.777 | 0.757 | 0.767 | 115 |
+| ATTR | 0.766 | 0.676 | 0.718 | 145 |
 
 ## Gold (`bio_liza.jsonl`) — primary MVP metric
 
 - used **200/200** (tokenize_align=181, skipped=0)
-- token accuracy: **0.578**
-- entity micro-F1: **0.602** (P=0.703 R=0.526)
-- macro-F1: **0.528**
+- token accuracy: **0.579**
+- entity micro-F1: **0.595** (P=0.689 R=0.524)
+- macro-F1: **0.526**
 
 | label | P | R | F1 | support |
 |---|---:|---:|---:|---:|
-| BRAND | 0.793 | 0.830 | 0.811 | 106 |
-| CATEGORY | 0.658 | 0.641 | 0.649 | 153 |
-| MODEL | 0.500 | 0.176 | 0.260 | 74 |
-| ATTR | 0.774 | 0.264 | 0.393 | 91 |
+| BRAND | 0.795 | 0.840 | 0.817 | 106 |
+| CATEGORY | 0.627 | 0.627 | 0.627 | 153 |
+| MODEL | 0.577 | 0.203 | 0.300 | 74 |
+| ATTR | 0.710 | 0.242 | 0.361 | 91 |
 
 ![f1](../../figures/ner/02_crf_entity_f1.png)
 

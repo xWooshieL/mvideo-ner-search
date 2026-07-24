@@ -51,3 +51,26 @@ Gold entity F1 per tag:
 | MODEL | 0.2308 |
 | ATTR | 0.3968 |
 
+## 2026-07-24 16:37 — `spellfix-v2`
+
+**Note:** SpellFix v2 (homoglyphs + spell_aliases.txt). category_clf disabled. silver spellfix 896/5000. Rebuild CRF for demo.
+
+| метрика | значение |
+|---|---:|
+| silver-val micro-F1 | 0.8564 |
+| silver-val tokAcc | 0.8759 |
+| **gold micro-F1** | 0.5870 |
+| gold P / R | 0.6717 / 0.5212 |
+| rules gold micro-F1 | 0.5660 |
+| n_train / n_val | 3578 / 895 |
+| spellfix touched | 896 / 5000 |
+
+Gold entity F1 per tag:
+
+| tag | F1 |
+|---|---:|
+| BRAND | 0.8165 |
+| CATEGORY | 0.6295 |
+| MODEL | 0.2642 |
+| ATTR | 0.3548 |
+

@@ -25,3 +25,18 @@
 
 Extractor spellfix=True, category_clf loaded=True
 
+## 2026-07-24 — after spellfix-v2 + category_clf off
+
+| query | spellfix | brand / cat / model | attrs |
+|---|---|---|---|
+| сони плейстейшен 5 | сони→sony, плейстейшен→playstation | Sony / None / None | {} |
+| sony playstation 5 | — | Sony / None / None | {} |
+| телфон 16 гь | телфон→телефон, гь→гб | None / телефоны / None | {'memory_storage': '16 гб'} |
+| планше тxiaomi | планше→планшет, тxiaomi→xiaomi | Xiaomi / планшет / None | {} |
+| ноутбок asus 16гь | ноутбок→ноутбук, 16гь→16 гб | ASUS / ноутбук / None | {'memory_storage': '16 гб'} |
+| моильник 16 гб | — | None / моильник / None | {'memory_storage': '16 гб'} |
+| laptop ксяоми | ксяоми→xiaomi | Xiaomi / None / None | {} |
+| айфон 16 | айфон→iphone | Apple / None / None | {} |
+
+category_clf loaded=False
+

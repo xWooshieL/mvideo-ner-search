@@ -104,12 +104,12 @@ class QueryEntityExtractor:
         import joblib
 
         brand_path = models_dir / "brand_clf.joblib"
-        cat_path = models_dir / "category_clf.joblib"
         attr_path = models_dir / "attr_type_clf.joblib"
         if brand_path.exists():
             brand_clf = joblib.load(brand_path)
-        if cat_path.exists():
-            cat_clf = joblib.load(cat_path)
+        # category_clf отключён: старая модель выдумывает категории (фен/смартфон на PlayStation).
+        # Категория только из rules/CRF/fuzzy; файл models/category_clf.joblib игнорируем.
+        cat_clf = None
         if attr_path.exists():
             attr_pipe = joblib.load(attr_path)
             from src.ner.attr_type_clf import load_policy

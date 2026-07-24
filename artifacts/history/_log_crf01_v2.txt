@@ -1,0 +1,29 @@
+dicts brands=1609 cats=1431 models=6130
+unique queries for silver slice: 5000
+spellfix touched 896/5000 queries
+  labeled 500/5000
+  labeled 1000/5000
+  labeled 1500/5000
+  labeled 2000/5000
+  labeled 2500/5000
+  labeled 3000/5000
+  labeled 3500/5000
+  labeled 4000/5000
+  labeled 4500/5000
+silver rows=5000 with_entity=4473
+A/B on 1k: full has more MODEL in 119 queries; legacy MODEL hits=0
+saved D:\Projects-26-06-2026\mvideo-ner-search\artifacts\silver\ner_bio\silver_bio_slice.parquet (+ legacy mirror)
+Статистика сохранена: D:\Projects-26-06-2026\mvideo-ner-search\artifacts\metrics\ner_eda_stats.json
+DONE report=D:\Projects-26-06-2026\mvideo-ner-search\notebooks\crf_ner_classifier\01_crf_eda_report.md
+               metric     value
+      queries_sampled 5000.0000
+          silver_rows 5000.0000
+   silver_with_entity 4473.0000
+    share_with_entity    0.8946
+          mean_tokens    3.1076
+           p95_tokens    6.0000
+              n_BRAND 2578.0000
+           n_CATEGORY 3771.0000
+              n_MODEL  645.0000
+               n_ATTR  770.0000
+model_gain_queries_4k  119.0000

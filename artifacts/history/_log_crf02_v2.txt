@@ -1,0 +1,24 @@
+﻿python.exe : D:\Projects-26-06-2026\mvideo-ner-search\.venv\Lib\site-packages\pymorphy2\analyzer.py:114: UserWarning: p
+kg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources pa
+ckage is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+C:\Users\user\AppData\Local\Temp\ps-script-6af91110-84aa-406d-ac95-9bdb2f235b32.ps1:100 знак:79
++ ... NG='utf-8'; & .venv/Scripts/python.exe -u notebooks/crf_ner_classifie ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Projects-26-... Setuptools<81.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  import pkg_resources
+silver=D:\Projects-26-06-2026\mvideo-ner-search\artifacts\silver\ner_bio\silver_bio_slice.parquet rows=5000
+train pool with entities: 4473
+sents train=3578 val=895
+train B-* {'CATEGORY': 2996, 'BRAND': 2068, 'MODEL': 530, 'ATTR': 624}
+fit CRF max_iterations=80
+silver-val microF1=0.856 tokAcc=0.876 macroF1=0.817
+gold microF1=0.595 tokAcc=0.579 used=200/200 tokenize_align=181
+saved D:\Projects-26-06-2026\mvideo-ner-search\models\ner_crf.pkl
+╨б╤В╨░╤В╨╕╤Б╤В╨╕╨║╨░ ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨░: D:\Projects-26-06-2026\mvideo-ner-search\artifacts\metrics\ner_crf_metrics.json
+DEMO asus tuf gaming a15 16 ╨│╨▒ -> asus/B-BRAND tuf/B-MODEL gaming/I-MODEL a15/I-MODEL 16/B-ATTR ╨│╨▒/I-ATTR
+DEMO ╨╜╨╛╤Г╤В╨▒╤Г╨║ asus 16 ╨│╨▒ -> ╨╜╨╛╤Г╤В╨▒╤Г╨║/B-CATEGORY asus/B-BRAND 16/B-ATTR ╨│╨▒/I-ATTR
+DEMO iphone 15 pro max -> iphone/B-BRAND 15/B-MODEL pro/I-MODEL max/B-BRAND
+DEMO ╨▒╨╡╤Б╨┐╤А╨╛╨▓╨╛╨┤╨╜╤Л╨╡ ╨╜╨░╤Г╤И╨╜╨╕╨║╨╕ sony -> ╨▒╨╡╤Б╨┐╤А╨╛╨▓╨╛╨┤╨╜╤Л╨╡/B-CATEGORY ╨╜╨░╤Г╤И╨╜╨╕╨║╨╕/I-CATEGORY sony/B-BRAND
+DONE report=D:\Projects-26-06-2026\mvideo-ner-search\notebooks\crf_ner_classifier\02_crf_report.md

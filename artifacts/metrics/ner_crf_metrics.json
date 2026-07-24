@@ -1,5 +1,5 @@
 {
-  "ner_crf_silver_micro_f1": 0.8561,
-  "ner_crf_gold_micro_f1": 0.6019,
-  "n_train": 3570
+  "ner_crf_silver_micro_f1": 0.8564,
+  "ner_crf_gold_micro_f1": 0.5952,
+  "n_train": 3578
 }

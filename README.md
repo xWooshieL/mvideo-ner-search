@@ -325,6 +325,10 @@ ex = QueryEntityExtractor.from_artifacts()
 print(ex.extract('пылесос dyson v15'))
 "
 
+# HTTP API (тот же каскад): GET/POST /extract → факты
+fastapi run src/server/app.py --port 8000
+# curl "http://127.0.0.1:8000/extract?query=телфон%2016%20гь"
+
 # слабая разметка правилами (labeling.py)
 python -c "
 from src.ner.labeling import WeakLabeler
