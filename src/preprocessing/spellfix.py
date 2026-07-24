@@ -20,9 +20,61 @@
 from __future__ import annotations
 
 import re
+import string
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+
+# ---------------------------------------------------------------------------
+# 0. Гомоглифы: кириллица/латиница выглядят одинаково (с/c, а/a, о/o, р/p, е/e, х/x, у/y
+#    и их пары в верхнем регистре: A/А, B/В, C/С, E/Е, H/Н, K/К, M/М, O/О, P/Р, T/Т, X/Х, Y/У).
+#    Смешанная раскладка внутри слова ("аsus" с кириллической «а», "тxiaomi") — типичная
+#    опечатка при случайном переключении языка на 1-2 буквы. Трогаем ТОЛЬКО такие слова:
+#    внутри есть буквы обоих алфавитов, и хотя бы одна однозначная буква второго алфавита
+#    (не входящая в гомоглиф-множество) задаёт, к какому алфавиту переводить остальные.
+# ---------------------------------------------------------------------------
+
+_CYRILLIC_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+_LATIN_ALPHABET = string.ascii_lowercase
+
+_HOMOGLYPH_LOWER = {"a": "а", "c": "с", "e": "е", "o": "о", "p": "р", "x": "х", "y": "у"}
+_HOMOGLYPH_UPPER = {
+    "A": "А", "B": "В", "C": "С", "E": "Е", "H": "Н", "K": "К",
+    "M": "М", "O": "О", "P": "Р", "T": "Т", "X": "Х", "Y": "У",
+}
+_LAT_TO_CYR_HOMOGLYPH: Dict[str, str] = {**_HOMOGLYPH_LOWER, **_HOMOGLYPH_UPPER}
+_CYR_TO_LAT_HOMOGLYPH: Dict[str, str] = {v: k for k, v in _LAT_TO_CYR_HOMOGLYPH.items()}
+
+_CYR_ONLY_LETTERS = set(_CYRILLIC_ALPHABET + _CYRILLIC_ALPHABET.upper()) - set(_LAT_TO_CYR_HOMOGLYPH.values())
+_LAT_ONLY_LETTERS = set(_LATIN_ALPHABET + _LATIN_ALPHABET.upper()) - set(_LAT_TO_CYR_HOMOGLYPH.keys())
+
+_CYRILLIC_ANY_RE = re.compile(r"[а-яёА-ЯЁ]")
+_LATIN_ANY_RE = re.compile(r"[a-zA-Z]")
+
+
+def has_mixed_script(token: str) -> bool:
+    """Есть и кириллица, и латиница в одном токене (потенциальная гомоглиф-опечатка)."""
+    return bool(_CYRILLIC_ANY_RE.search(token)) and bool(_LATIN_ANY_RE.search(token))
+
+
+def normalize_homoglyphs(token: str) -> str:
+    """
+    Приводит смешанный кириллица/латиница токен к одному алфавиту там, где буквы
+    визуально идентичны ("аsus" -> "asus", "cамсунг" -> "самсунг").
+
+    Направление определяем по однозначным буквам (не входящим в гомоглиф-множество):
+    каких больше — туда и переводим. Если однозначных букв нет вообще (слово целиком
+    из гомоглифов, типа "рeaco") — не трогаем, угадать направление нечем.
+    """
+    if not token or not has_mixed_script(token):
+        return token
+    cyr_only = sum(1 for ch in token if ch in _CYR_ONLY_LETTERS)
+    lat_only = sum(1 for ch in token if ch in _LAT_ONLY_LETTERS)
+    if cyr_only == 0 and lat_only == 0:
+        return token
+    table = _LAT_TO_CYR_HOMOGLYPH if cyr_only >= lat_only else _CYR_TO_LAT_HOMOGLYPH
+    return "".join(table.get(ch, ch) for ch in token)
+
 
 # ---------------------------------------------------------------------------
 # 1. Близость букв на клавиатуре (ЙЦУКЕН + qwerty) — «б» рядом с «ь», «о» с «р»
@@ -121,6 +173,31 @@ def _norm(s: str) -> str:
     return (s or "").strip().lower().replace("ё", "е")
 
 
+def load_alias_map(path: Path | str) -> Dict[str, List[str]]:
+    """
+    Читает `canonical\talias1,alias2,...` (одна строка — один канон).
+    Комментарии (`# ...`) и пустые строки пропускаются.
+
+    Для явных случаев транслитерации "на слух" (сони -> sony, ксяоми -> xiaomi),
+    где буквы кириллицы/латиницы не похожи друг на друга — обычный fuzzy-Левенштейн
+    их не поймает, а точный whitelist — надёжно и без ложных срабатываний.
+    """
+    p = Path(path)
+    out: Dict[str, List[str]] = {}
+    if not p.exists():
+        return out
+    for line in p.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "\t" not in line:
+            continue
+        canon, rest = line.split("\t", 1)
+        canon = canon.strip()
+        aliases = [a.strip() for a in rest.split(",") if a.strip()]
+        if canon and aliases:
+            out.setdefault(canon, []).extend(aliases)
+    return out
+
+
 @dataclass
 class SpellFixer:
     """
@@ -132,15 +209,20 @@ class SpellFixer:
     """
 
     vocab: List[str] = field(default_factory=list)
+    # явные алиасы: canonical -> [alias, ...] (транслитерация "на слух": сони -> sony)
+    aliases: Dict[str, List[str]] = field(default_factory=dict)
     # порог принятия замены (0..1). Ниже — оставляем токен как есть.
     accept_score: float = 0.8
     # не трогать токены короче этого (слишком легко «перекорректировать»)
     min_len: int = 4
     # максимум правок относительно длины (чтобы не менять слово целиком)
     max_edit_ratio: float = 0.34
+    # ширина окна кандидатов по длине (±N символов) для fuzzy-подбора
+    len_window: int = 2
 
     _by_len: Dict[int, List[str]] = field(default_factory=dict, repr=False)
     _vocab_set: set = field(default_factory=set, repr=False)
+    _alias_to_canon: Dict[str, str] = field(default_factory=dict, repr=False)
 
     def __post_init__(self) -> None:
         words = {_norm(w) for w in self.vocab if _norm(w)}
@@ -151,16 +233,24 @@ class SpellFixer:
         self._by_len = {}
         for w in single:
             self._by_len.setdefault(len(w), []).append(w)
+        self._alias_to_canon = {}
+        for canon, alist in self.aliases.items():
+            c = _norm(canon)
+            for a in alist:
+                a = _norm(a)
+                if a:
+                    self._alias_to_canon[a] = c
 
     # ---- фабрики -----------------------------------------------------------
     @classmethod
-    def from_files(cls, *paths: Path | str, **kwargs) -> "SpellFixer":
+    def from_files(cls, *paths: Path | str, aliases_path: Path | str | None = None, **kwargs) -> "SpellFixer":
         vocab: List[str] = []
         for p in paths:
             p = Path(p)
             if p.exists():
                 vocab += [ln.strip() for ln in p.read_text(encoding="utf-8").splitlines() if ln.strip()]
-        return cls(vocab=vocab, **kwargs)
+        aliases = load_alias_map(aliases_path) if aliases_path else {}
+        return cls(vocab=vocab, aliases=aliases, **kwargs)
 
     @classmethod
     def from_artifacts(cls, artifacts_dir: Path | str = "artifacts", **kwargs) -> "SpellFixer":
@@ -171,7 +261,10 @@ class SpellFixer:
             cats = d / "categories.txt"
         if not brands.exists():
             brands = d / "brands.txt"
-        return cls.from_files(cats, brands, **kwargs)
+        aliases_path = d / "dicts" / "spell_aliases.txt"
+        if not aliases_path.exists():
+            aliases_path = d / "spell_aliases.txt"
+        return cls.from_files(cats, brands, aliases_path=aliases_path, **kwargs)
 
     # ---- ядро --------------------------------------------------------------
     def best_candidate(self, token: str) -> Tuple[Optional[str], float]:
@@ -182,9 +275,9 @@ class SpellFixer:
         if t in self._vocab_set:
             return t, 1.0  # уже правильное слово
 
-        # кандидаты: длина ±2 (опечатки редко меняют длину сильно)
+        # кандидаты: длина ±len_window (опечатки редко меняют длину сильно)
         cand: List[str] = []
-        for L in range(len(t) - 2, len(t) + 3):
+        for L in range(len(t) - self.len_window, len(t) + self.len_window + 1):
             cand.extend(self._by_len.get(L, ()))
         if not cand:
             return None, 0.0
@@ -200,19 +293,47 @@ class SpellFixer:
         """
         Возвращает (исправленный_токен, инфо_или_None).
         Если замена не прошла порог — токен без изменений, инфо None.
+
+        Порядок проверок:
+          1) явный алиас (сони -> sony) — точный whitelist, без fuzzy;
+          2) гомоглифы (аsus -> asus) — детерминированная замена смешанного алфавита;
+          3) обычный fuzzy по словарю (категории/бренды/юниты).
         """
+        original = token
         t = _norm(token)
+        homoglyph_fallback: Optional[str] = None
+
+        # 1) алиасы — самое надёжное, без порогов
+        alias_canon = self._alias_to_canon.get(t)
+        if alias_canon and alias_canon != t:
+            return alias_canon, {"from": original, "to": alias_canon, "score": 1.0, "kind": "alias"}
+
+        # 2) гомоглифы: смешанный алфавит внутри слова почти никогда не бывает "нарочно" —
+        # применяем нормализацию сразу, не дожидаясь подтверждения по словарю
+        # (словарь короткий и однословный, реальных слов там на порядок меньше, чем в языке).
+        homo = normalize_homoglyphs(token)
+        homo_norm = _norm(homo)
+        if homo_norm != t:
+            alias_canon = self._alias_to_canon.get(homo_norm)
+            if alias_canon and alias_canon != homo_norm:
+                return alias_canon, {"from": original, "to": alias_canon, "score": 1.0, "kind": "homoglyph+alias"}
+            # дальше пробуем ещё и обычный fuzzy на нормализованном токене (вдруг там
+            # ещё и обычная опечатка сверху), но в любом случае возвращать будем
+            # минимум гомоглиф-нормализованный вариант
+            homoglyph_fallback = homo
+            token = homo
+            t = homo_norm
+
+        # 3) обычный fuzzy по словарю (продолжаем с гомоглиф-нормализованного токена)
         cand, score = self.best_candidate(token)
-        if cand is None or cand == t:
-            return token, None
-        if score < self.accept_score:
-            return token, None
-        # не переписываем слово целиком: ограничение по числу правок
-        dist = weighted_edit_distance(t, cand)
-        if dist > max(1.0, len(t) * self.max_edit_ratio):
-            return token, None
-        info = {"from": token, "to": cand, "score": round(score, 3)}
-        return cand, info
+        if cand is not None and cand != t and score >= self.accept_score:
+            dist = weighted_edit_distance(t, cand)
+            if dist <= max(1.0, len(t) * self.max_edit_ratio):
+                return cand, {"from": original, "to": cand, "score": round(score, 3)}
+
+        if homoglyph_fallback is not None:
+            return homoglyph_fallback, {"from": original, "to": homoglyph_fallback, "score": 1.0, "kind": "homoglyph"}
+        return original, None
 
     # опечатка единицы, приклеенной к числу: 16гь -> 16 гб
     _GLUED_RE = re.compile(r"^(?P<num>\d+)(?P<unit>[а-яёa-z]{1,5})$", re.IGNORECASE)
@@ -306,4 +427,7 @@ __all__ = [
     "weighted_edit_distance",
     "similarity_score",
     "keyboard_adjacent",
+    "normalize_homoglyphs",
+    "has_mixed_script",
+    "load_alias_map",
 ]

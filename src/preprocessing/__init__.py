@@ -18,7 +18,10 @@ from .pipeline import (
 )
 from .spellfix import (
     SpellFixer,
+    has_mixed_script,
     keyboard_adjacent,
+    load_alias_map,
+    normalize_homoglyphs,
     similarity_score,
     weighted_edit_distance,
 )
@@ -34,4 +37,7 @@ __all__ = [
     "weighted_edit_distance",
     "similarity_score",
     "keyboard_adjacent",
+    "normalize_homoglyphs",
+    "has_mixed_script",
+    "load_alias_map",
 ]

@@ -1,0 +1,196 @@
+{
+  "model_id": "urchade/gliner_multi-v2.1",
+  "threshold": 0.3,
+  "gold_n": 181,
+  "schemes": {
+    "en": {
+      "micro": {
+        "precision": 0.7217,
+        "recall": 0.2287,
+        "f1": 0.3473,
+        "tp": 83,
+        "fp": 32,
+        "fn": 280
+      },
+      "per_label": {
+        "ATTR": {
+          "precision": 0.25,
+          "recall": 0.013,
+          "f1": 0.0247,
+          "tp": 1,
+          "fp": 3,
+          "fn": 76
+        },
+        "BRAND": {
+          "precision": 0.75,
+          "recall": 0.8333,
+          "f1": 0.7895,
+          "tp": 75,
+          "fp": 25,
+          "fn": 15
+        },
+        "CATEGORY": {
+          "precision": 0.7143,
+          "recall": 0.0362,
+          "f1": 0.069,
+          "tp": 5,
+          "fp": 2,
+          "fn": 133
+        },
+        "MODEL": {
+          "precision": 0.5,
+          "recall": 0.0345,
+          "f1": 0.0645,
+          "tp": 2,
+          "fp": 2,
+          "fn": 56
+        }
+      },
+      "avg_latency_ms": 196.16
+    },
+    "ru": {
+      "micro": {
+        "precision": 0.5686,
+        "recall": 0.2397,
+        "f1": 0.3372,
+        "tp": 87,
+        "fp": 66,
+        "fn": 276
+      },
+      "per_label": {
+        "ATTR": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 3,
+          "fn": 77
+        },
+        "BRAND": {
+          "precision": 0.8506,
+          "recall": 0.8222,
+          "f1": 0.8362,
+          "tp": 74,
+          "fp": 13,
+          "fn": 16
+        },
+        "CATEGORY": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 1,
+          "fn": 138
+        },
+        "MODEL": {
+          "precision": 0.2097,
+          "recall": 0.2241,
+          "f1": 0.2167,
+          "tp": 13,
+          "fp": 49,
+          "fn": 45
+        }
+      },
+      "avg_latency_ms": 197.9
+    }
+  },
+  "best_scheme": "en",
+  "edge_cases": [
+    {
+      "query": "асус тюф гейминг а15",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 0,
+          "end": 4,
+          "text": "асус",
+          "score": 0.7445641160011292
+        }
+      ]
+    },
+    {
+      "query": "iphone 16 pro max 256",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 0,
+          "end": 6,
+          "text": "iphone",
+          "score": 0.3034118115901947
+        }
+      ]
+    },
+    {
+      "query": "чехол для айфон 15 синий силиконовый",
+      "entities": []
+    },
+    {
+      "query": "наушники",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 0,
+          "end": 8,
+          "text": "наушники",
+          "score": 0.3549424409866333
+        }
+      ]
+    },
+    {
+      "query": "xiaomi",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 0,
+          "end": 6,
+          "text": "xiaomi",
+          "score": 0.9370140433311462
+        }
+      ]
+    },
+    {
+      "query": "телевизор 65 дюймов 4к",
+      "entities": []
+    },
+    {
+      "query": "холодильник lg no frost 300 л",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 12,
+          "end": 14,
+          "text": "lg",
+          "score": 0.9424998760223389
+        }
+      ]
+    },
+    {
+      "query": "плойка д/волос",
+      "entities": []
+    },
+    {
+      "query": "смартфон samsung galaxy s24 ultra 512gb черный",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 9,
+          "end": 16,
+          "text": "samsung",
+          "score": 0.9745866060256958
+        },
+        {
+          "label": "ATTR",
+          "start": 34,
+          "end": 39,
+          "text": "512gb",
+          "score": 0.3783856928348541
+        }
+      ]
+    },
+    {
+      "query": "非小米平板",
+      "entities": []
+    }
+  ],
+  "note": "zero-shot baseline (без fine-tune) — точка отсчёта для notebook 02"
+}

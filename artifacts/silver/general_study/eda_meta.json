@@ -1,0 +1,15 @@
+{
+  "seed": 42,
+  "max_queries": 6000,
+  "n_silver": 6000,
+  "n_with_entity": 5324,
+  "n_broken_queries": 270,
+  "n_spell_fixed": 1068,
+  "entity_counts": {
+    "BRAND": 3124,
+    "CATEGORY": 4452,
+    "MODEL": 810,
+    "ATTR": 937
+  },
+  "note": "joint silver для _run_02 (CRF + GLiNER); spellfix v2 = typo+units+homoglyphs+aliases"
+}

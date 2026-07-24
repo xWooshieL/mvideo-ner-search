@@ -44,6 +44,8 @@ desktop.ini
 
 # Models / caches (large)
 models/checkpoints/
+models/gliner_ner/
+models/general_study/
 *.pt
 *.bin
 *.onnx

@@ -1,0 +1,423 @@
+{
+  "gliner_model_id": "urchade/gliner_multi-v2.1",
+  "gliner_threshold": 0.5,
+  "n_silver_train": 4525,
+  "n_silver_val": 799,
+  "n_gold": 181,
+  "n_broken_queries": 270,
+  "n_gliner_train_examples": 500,
+  "results": {
+    "gold": {
+      "rules": {
+        "micro": {
+          "precision": 0.7074,
+          "recall": 0.5262,
+          "f1": 0.6035,
+          "tp": 191,
+          "fp": 79,
+          "fn": 172
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 0.7097,
+            "recall": 0.2857,
+            "f1": 0.4074,
+            "tp": 22,
+            "fp": 9,
+            "fn": 55
+          },
+          "BRAND": {
+            "precision": 0.8736,
+            "recall": 0.8444,
+            "f1": 0.8588,
+            "tp": 76,
+            "fp": 11,
+            "fn": 14
+          },
+          "CATEGORY": {
+            "precision": 0.6165,
+            "recall": 0.5942,
+            "f1": 0.6052,
+            "tp": 82,
+            "fp": 51,
+            "fn": 56
+          },
+          "MODEL": {
+            "precision": 0.5789,
+            "recall": 0.1897,
+            "f1": 0.2857,
+            "tp": 11,
+            "fp": 8,
+            "fn": 47
+          }
+        },
+        "avg_latency_ms": 20.83
+      },
+      "rules_crf": {
+        "micro": {
+          "precision": 0.6899,
+          "recall": 0.5455,
+          "f1": 0.6092,
+          "tp": 198,
+          "fp": 89,
+          "fn": 165
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 0.6875,
+            "recall": 0.2857,
+            "f1": 0.4037,
+            "tp": 22,
+            "fp": 10,
+            "fn": 55
+          },
+          "BRAND": {
+            "precision": 0.837,
+            "recall": 0.8556,
+            "f1": 0.8462,
+            "tp": 77,
+            "fp": 15,
+            "fn": 13
+          },
+          "CATEGORY": {
+            "precision": 0.6071,
+            "recall": 0.6159,
+            "f1": 0.6115,
+            "tp": 85,
+            "fp": 55,
+            "fn": 53
+          },
+          "MODEL": {
+            "precision": 0.6087,
+            "recall": 0.2414,
+            "f1": 0.3457,
+            "tp": 14,
+            "fp": 9,
+            "fn": 44
+          }
+        },
+        "avg_latency_ms": 15.36
+      },
+      "rules_crf_gliner": {
+        "micro": {
+          "precision": 0.6738,
+          "recall": 0.6088,
+          "f1": 0.6397,
+          "tp": 221,
+          "fp": 107,
+          "fn": 142
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 0.6923,
+            "recall": 0.3506,
+            "f1": 0.4655,
+            "tp": 27,
+            "fp": 12,
+            "fn": 50
+          },
+          "BRAND": {
+            "precision": 0.7885,
+            "recall": 0.9111,
+            "f1": 0.8454,
+            "tp": 82,
+            "fp": 22,
+            "fn": 8
+          },
+          "CATEGORY": {
+            "precision": 0.6,
+            "recall": 0.6522,
+            "f1": 0.625,
+            "tp": 90,
+            "fp": 60,
+            "fn": 48
+          },
+          "MODEL": {
+            "precision": 0.6286,
+            "recall": 0.3793,
+            "f1": 0.4731,
+            "tp": 22,
+            "fp": 13,
+            "fn": 36
+          }
+        },
+        "avg_latency_ms": 249.26
+      }
+    },
+    "broken_queries": {
+      "rules": {
+        "micro": {
+          "precision": 0.831,
+          "recall": 0.4436,
+          "f1": 0.5784,
+          "tp": 236,
+          "fp": 48,
+          "fn": 296
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 0.7073,
+            "recall": 0.58,
+            "f1": 0.6374,
+            "tp": 29,
+            "fp": 12,
+            "fn": 21
+          },
+          "BRAND": {
+            "precision": 0.9859,
+            "recall": 0.4046,
+            "f1": 0.5738,
+            "tp": 70,
+            "fp": 1,
+            "fn": 103
+          },
+          "CATEGORY": {
+            "precision": 0.7634,
+            "recall": 0.3937,
+            "f1": 0.5195,
+            "tp": 100,
+            "fp": 31,
+            "fn": 154
+          },
+          "MODEL": {
+            "precision": 0.9024,
+            "recall": 0.6727,
+            "f1": 0.7708,
+            "tp": 37,
+            "fp": 4,
+            "fn": 18
+          }
+        },
+        "avg_latency_ms": 24.4
+      },
+      "rules_crf": {
+        "micro": {
+          "precision": 0.8708,
+          "recall": 0.8233,
+          "f1": 0.8464,
+          "tp": 438,
+          "fp": 65,
+          "fn": 94
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 0.7292,
+            "recall": 0.7,
+            "f1": 0.7143,
+            "tp": 35,
+            "fp": 13,
+            "fn": 15
+          },
+          "BRAND": {
+            "precision": 0.9695,
+            "recall": 0.9191,
+            "f1": 0.9436,
+            "tp": 159,
+            "fp": 5,
+            "fn": 14
+          },
+          "CATEGORY": {
+            "precision": 0.8292,
+            "recall": 0.7835,
+            "f1": 0.8057,
+            "tp": 199,
+            "fp": 41,
+            "fn": 55
+          },
+          "MODEL": {
+            "precision": 0.8824,
+            "recall": 0.8182,
+            "f1": 0.8491,
+            "tp": 45,
+            "fp": 6,
+            "fn": 10
+          }
+        },
+        "avg_latency_ms": 23.08
+      },
+      "rules_crf_gliner": {
+        "micro": {
+          "precision": 0.7568,
+          "recall": 0.8365,
+          "f1": 0.7946,
+          "tp": 445,
+          "fp": 143,
+          "fn": 87
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 0.614,
+            "recall": 0.7,
+            "f1": 0.6542,
+            "tp": 35,
+            "fp": 22,
+            "fn": 15
+          },
+          "BRAND": {
+            "precision": 0.799,
+            "recall": 0.9422,
+            "f1": 0.8647,
+            "tp": 163,
+            "fp": 41,
+            "fn": 10
+          },
+          "CATEGORY": {
+            "precision": 0.7791,
+            "recall": 0.7913,
+            "f1": 0.7852,
+            "tp": 201,
+            "fp": 57,
+            "fn": 53
+          },
+          "MODEL": {
+            "precision": 0.6667,
+            "recall": 0.8364,
+            "f1": 0.7419,
+            "tp": 46,
+            "fp": 23,
+            "fn": 9
+          }
+        },
+        "avg_latency_ms": 273.56
+      }
+    },
+    "silver_val": {
+      "rules": {
+        "micro": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 1396,
+          "fp": 0,
+          "fn": 0
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "tp": 144,
+            "fp": 0,
+            "fn": 0
+          },
+          "BRAND": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "tp": 460,
+            "fp": 0,
+            "fn": 0
+          },
+          "CATEGORY": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "tp": 694,
+            "fp": 0,
+            "fn": 0
+          },
+          "MODEL": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "tp": 98,
+            "fp": 0,
+            "fn": 0
+          }
+        },
+        "avg_latency_ms": 19.31
+      },
+      "rules_crf": {
+        "micro": {
+          "precision": 0.9742,
+          "recall": 1.0,
+          "f1": 0.9869,
+          "tp": 1396,
+          "fp": 37,
+          "fn": 0
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 0.973,
+            "recall": 1.0,
+            "f1": 0.9863,
+            "tp": 144,
+            "fp": 4,
+            "fn": 0
+          },
+          "BRAND": {
+            "precision": 0.9808,
+            "recall": 1.0,
+            "f1": 0.9903,
+            "tp": 460,
+            "fp": 9,
+            "fn": 0
+          },
+          "CATEGORY": {
+            "precision": 0.9816,
+            "recall": 1.0,
+            "f1": 0.9907,
+            "tp": 694,
+            "fp": 13,
+            "fn": 0
+          },
+          "MODEL": {
+            "precision": 0.8991,
+            "recall": 1.0,
+            "f1": 0.9469,
+            "tp": 98,
+            "fp": 11,
+            "fn": 0
+          }
+        },
+        "avg_latency_ms": 18.36
+      },
+      "rules_crf_gliner": {
+        "micro": {
+          "precision": 0.8709,
+          "recall": 1.0,
+          "f1": 0.931,
+          "tp": 1396,
+          "fp": 207,
+          "fn": 0
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 0.8471,
+            "recall": 1.0,
+            "f1": 0.9172,
+            "tp": 144,
+            "fp": 26,
+            "fn": 0
+          },
+          "BRAND": {
+            "precision": 0.8949,
+            "recall": 1.0,
+            "f1": 0.9446,
+            "tp": 460,
+            "fp": 54,
+            "fn": 0
+          },
+          "CATEGORY": {
+            "precision": 0.9366,
+            "recall": 1.0,
+            "f1": 0.9672,
+            "tp": 694,
+            "fp": 47,
+            "fn": 0
+          },
+          "MODEL": {
+            "precision": 0.5506,
+            "recall": 1.0,
+            "f1": 0.7101,
+            "tp": 98,
+            "fp": 80,
+            "fn": 0
+          }
+        },
+        "avg_latency_ms": 263.32
+      }
+    }
+  },
+  "note": "CRF+GLiNER обучены ТОЛЬКО на general silver (gold не в train, чистый held-out)"
+}

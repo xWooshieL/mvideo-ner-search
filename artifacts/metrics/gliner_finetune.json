@@ -1,0 +1,509 @@
+{
+  "model_id": "urchade/gliner_multi-v2.1",
+  "scheme": "ru",
+  "gold_train_n": 154,
+  "gold_val_n": 27,
+  "silver_n": 200,
+  "baseline_val": {
+    "micro": {
+      "precision": 0.7,
+      "recall": 0.2745,
+      "f1": 0.3944,
+      "tp": 14,
+      "fp": 6,
+      "fn": 37
+    },
+    "per_label": {
+      "ATTR": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 7
+      },
+      "BRAND": {
+        "precision": 0.7692,
+        "recall": 0.7692,
+        "f1": 0.7692,
+        "tp": 10,
+        "fp": 3,
+        "fn": 3
+      },
+      "CATEGORY": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 20
+      },
+      "MODEL": {
+        "precision": 0.5714,
+        "recall": 0.3636,
+        "f1": 0.4444,
+        "tp": 4,
+        "fp": 3,
+        "fn": 7
+      }
+    },
+    "avg_latency_ms": 186.17
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "epochs": 3,
+      "lr": 1e-05,
+      "seconds": 510.5,
+      "metrics": {
+        "micro": {
+          "precision": 0.74,
+          "recall": 0.7255,
+          "f1": 0.7327,
+          "tp": 37,
+          "fp": 13,
+          "fn": 14
+        },
+        "per_label": {
+          "ATTR": {
+            "precision": 0.5,
+            "recall": 0.2857,
+            "f1": 0.3636,
+            "tp": 2,
+            "fp": 2,
+            "fn": 5
+          },
+          "BRAND": {
+            "precision": 0.8125,
+            "recall": 1.0,
+            "f1": 0.8966,
+            "tp": 13,
+            "fp": 3,
+            "fn": 0
+          },
+          "CATEGORY": {
+            "precision": 0.8571,
+            "recall": 0.9,
+            "f1": 0.878,
+            "tp": 18,
+            "fp": 3,
+            "fn": 2
+          },
+          "MODEL": {
+            "precision": 0.4444,
+            "recall": 0.3636,
+            "f1": 0.4,
+            "tp": 4,
+            "fp": 5,
+            "fn": 7
+          }
+        },
+        "avg_latency_ms": 212.73
+      }
+    }
+  ],
+  "best_round": 1,
+  "threshold_calibration": [
+    {
+      "threshold": 0.5,
+      "micro_f1": 0.7473
+    },
+    {
+      "threshold": 0.4,
+      "micro_f1": 0.7368
+    },
+    {
+      "threshold": 0.35,
+      "micro_f1": 0.74
+    },
+    {
+      "threshold": 0.3,
+      "micro_f1": 0.7327
+    },
+    {
+      "threshold": 0.25,
+      "micro_f1": 0.7184
+    },
+    {
+      "threshold": 0.2,
+      "micro_f1": 0.7308
+    },
+    {
+      "threshold": 0.15,
+      "micro_f1": 0.7308
+    }
+  ],
+  "final_threshold": 0.35,
+  "final_val": {
+    "micro": {
+      "precision": 0.7551,
+      "recall": 0.7255,
+      "f1": 0.74,
+      "tp": 37,
+      "fp": 12,
+      "fn": 14
+    },
+    "per_label": {
+      "ATTR": {
+        "precision": 0.5,
+        "recall": 0.2857,
+        "f1": 0.3636,
+        "tp": 2,
+        "fp": 2,
+        "fn": 5
+      },
+      "BRAND": {
+        "precision": 0.8125,
+        "recall": 1.0,
+        "f1": 0.8966,
+        "tp": 13,
+        "fp": 3,
+        "fn": 0
+      },
+      "CATEGORY": {
+        "precision": 0.8571,
+        "recall": 0.9,
+        "f1": 0.878,
+        "tp": 18,
+        "fp": 3,
+        "fn": 2
+      },
+      "MODEL": {
+        "precision": 0.5,
+        "recall": 0.3636,
+        "f1": 0.4211,
+        "tp": 4,
+        "fp": 4,
+        "fn": 7
+      }
+    },
+    "avg_latency_ms": 187.53
+  },
+  "auto_retrain_triggered": false,
+  "edge_cases_before": [
+    {
+      "query": "асус тюф гейминг а15",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 0,
+          "end": 4,
+          "text": "асус",
+          "score": 0.7080777287483215
+        },
+        {
+          "label": "MODEL",
+          "start": 17,
+          "end": 20,
+          "text": "а15",
+          "score": 0.3941457271575928
+        }
+      ]
+    },
+    {
+      "query": "iphone 16 pro max 256",
+      "entities": []
+    },
+    {
+      "query": "чехол для айфон 15 синий силиконовый",
+      "entities": [
+        {
+          "label": "MODEL",
+          "start": 19,
+          "end": 24,
+          "text": "синий",
+          "score": 0.3199601471424103
+        }
+      ]
+    },
+    {
+      "query": "наушники",
+      "entities": [
+        {
+          "label": "MODEL",
+          "start": 0,
+          "end": 8,
+          "text": "наушники",
+          "score": 0.3790021240711212
+        }
+      ]
+    },
+    {
+      "query": "xiaomi",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 0,
+          "end": 6,
+          "text": "xiaomi",
+          "score": 0.9624316096305847
+        }
+      ]
+    },
+    {
+      "query": "телевизор 65 дюймов 4к",
+      "entities": [
+        {
+          "label": "MODEL",
+          "start": 0,
+          "end": 9,
+          "text": "телевизор",
+          "score": 0.3390568494796753
+        },
+        {
+          "label": "MODEL",
+          "start": 20,
+          "end": 22,
+          "text": "4к",
+          "score": 0.3377786874771118
+        }
+      ]
+    },
+    {
+      "query": "холодильник lg no frost 300 л",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 12,
+          "end": 14,
+          "text": "lg",
+          "score": 0.8540927767753601
+        }
+      ]
+    },
+    {
+      "query": "плойка д/волос",
+      "entities": []
+    },
+    {
+      "query": "смартфон samsung galaxy s24 ultra 512gb черный",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 9,
+          "end": 16,
+          "text": "samsung",
+          "score": 0.9607740044593811
+        },
+        {
+          "label": "MODEL",
+          "start": 40,
+          "end": 46,
+          "text": "черный",
+          "score": 0.32616832852363586
+        }
+      ]
+    },
+    {
+      "query": "非小米平板",
+      "entities": []
+    }
+  ],
+  "edge_cases_after": [
+    {
+      "query": "асус тюф гейминг а15",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 0,
+          "end": 4,
+          "text": "асус",
+          "score": 0.9993267059326172
+        },
+        {
+          "label": "MODEL",
+          "start": 17,
+          "end": 20,
+          "text": "а15",
+          "score": 0.5054112672805786
+        }
+      ]
+    },
+    {
+      "query": "iphone 16 pro max 256",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 0,
+          "end": 6,
+          "text": "iphone",
+          "score": 0.9978854060173035
+        },
+        {
+          "label": "ATTR",
+          "start": 18,
+          "end": 21,
+          "text": "256",
+          "score": 0.4427657425403595
+        }
+      ]
+    },
+    {
+      "query": "чехол для айфон 15 синий силиконовый",
+      "entities": [
+        {
+          "label": "CATEGORY",
+          "start": 0,
+          "end": 5,
+          "text": "чехол",
+          "score": 0.9812650084495544
+        },
+        {
+          "label": "BRAND",
+          "start": 10,
+          "end": 15,
+          "text": "айфон",
+          "score": 0.9833974242210388
+        },
+        {
+          "label": "MODEL",
+          "start": 19,
+          "end": 24,
+          "text": "синий",
+          "score": 0.7539069652557373
+        },
+        {
+          "label": "ATTR",
+          "start": 25,
+          "end": 36,
+          "text": "силиконовый",
+          "score": 0.5869473218917847
+        }
+      ]
+    },
+    {
+      "query": "наушники",
+      "entities": [
+        {
+          "label": "CATEGORY",
+          "start": 0,
+          "end": 8,
+          "text": "наушники",
+          "score": 0.9910436868667603
+        }
+      ]
+    },
+    {
+      "query": "xiaomi",
+      "entities": [
+        {
+          "label": "BRAND",
+          "start": 0,
+          "end": 6,
+          "text": "xiaomi",
+          "score": 0.9995928406715393
+        }
+      ]
+    },
+    {
+      "query": "телевизор 65 дюймов 4к",
+      "entities": [
+        {
+          "label": "CATEGORY",
+          "start": 0,
+          "end": 9,
+          "text": "телевизор",
+          "score": 0.9941118359565735
+        },
+        {
+          "label": "MODEL",
+          "start": 10,
+          "end": 19,
+          "text": "65 дюймов",
+          "score": 0.7169685363769531
+        },
+        {
+          "label": "MODEL",
+          "start": 20,
+          "end": 22,
+          "text": "4к",
+          "score": 0.6174677610397339
+        }
+      ]
+    },
+    {
+      "query": "холодильник lg no frost 300 л",
+      "entities": [
+        {
+          "label": "CATEGORY",
+          "start": 0,
+          "end": 11,
+          "text": "холодильник",
+          "score": 0.99114590883255
+        },
+        {
+          "label": "BRAND",
+          "start": 12,
+          "end": 14,
+          "text": "lg",
+          "score": 0.999568521976471
+        },
+        {
+          "label": "ATTR",
+          "start": 15,
+          "end": 23,
+          "text": "no frost",
+          "score": 0.464106947183609
+        },
+        {
+          "label": "ATTR",
+          "start": 24,
+          "end": 29,
+          "text": "300 л",
+          "score": 0.8265685439109802
+        }
+      ]
+    },
+    {
+      "query": "плойка д/волос",
+      "entities": [
+        {
+          "label": "CATEGORY",
+          "start": 0,
+          "end": 6,
+          "text": "плойка",
+          "score": 0.9895550012588501
+        }
+      ]
+    },
+    {
+      "query": "смартфон samsung galaxy s24 ultra 512gb черный",
+      "entities": [
+        {
+          "label": "CATEGORY",
+          "start": 0,
+          "end": 8,
+          "text": "смартфон",
+          "score": 0.9500277042388916
+        },
+        {
+          "label": "BRAND",
+          "start": 9,
+          "end": 16,
+          "text": "samsung",
+          "score": 0.9994578957557678
+        },
+        {
+          "label": "ATTR",
+          "start": 34,
+          "end": 39,
+          "text": "512gb",
+          "score": 0.6625898480415344
+        },
+        {
+          "label": "MODEL",
+          "start": 40,
+          "end": 46,
+          "text": "черный",
+          "score": 0.44096970558166504
+        }
+      ]
+    },
+    {
+      "query": "非小米平板",
+      "entities": []
+    }
+  ],
+  "model_dir": "models\\gliner_ner",
+  "note": "fine-tune поверх zero-shot; silver — из CRF-пайплайна (уже со spellfix)"
+}
